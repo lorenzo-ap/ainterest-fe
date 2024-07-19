@@ -17,18 +17,28 @@ const CreatePost = () => {
     const [generatingImage, setGeneratingImage] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    const generateImage = () => {
+    const generateImage = async () => {
         if (!form.prompt.trim()) return;
 
         setGeneratingImage(true);
 
-        axios
-            .post('http://localhost:9999/api/v1/image-generator', { prompt: form.prompt })
-            .then((response) => {
-                const data = response.data;
+        const headers = {
+            'x-rapidapi-key': import.meta.env.VITE_X_RAPIDAPI_KEY,
+            'x-rapidapi-host': 'imageai-generator.p.rapidapi.com',
+            'Content-Type': 'application/json',
+        };
 
-                setForm({ ...form, photo: `data:image/png;base64,${data.photo}` });
-            })
+        const data = {
+            negative_prompt: 'white',
+            prompt: form.prompt,
+            width: 512,
+            height: 512,
+            hr_scale: 2,
+        };
+
+        axios
+            .post('https://imageai-generator.p.rapidapi.com/image', data, { headers })
+            .then((response) => setForm({ ...form, photo: `data:image/png;base64,${response.data}` }))
             .catch((error) => console.error(error))
             .finally(() => setGeneratingImage(false));
     };
@@ -41,7 +51,7 @@ const CreatePost = () => {
         setIsLoading(true);
 
         axios
-            .post<Post>('http://localhost:9999/api/v1/post', form)
+            .post<Post>(`${import.meta.env.VITE_API_URL}/api/v1/post`, form)
             .then(() => navigate('/'))
             .catch((error) => console.error(error))
             .finally(() => setIsLoading(false));

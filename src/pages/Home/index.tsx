@@ -30,7 +30,7 @@ const Home = () => {
             setIsLoading(true);
 
             axios
-                .get<PostAPIResponse>('http://localhost:9999/api/v1/post')
+                .get<PostAPIResponse>(`${import.meta.env.VITE_API_URL}/api/v1/post`)
                 .then((response) => {
                     setPosts(response.data.data.reverse());
                 })
