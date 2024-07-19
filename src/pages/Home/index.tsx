@@ -59,7 +59,7 @@ const Home = () => {
 
     return (
         <section className="max-w-7xl mx-auto">
-            <div className="flex justify-between items-start">
+            <div className="flex md:flex-row gap-5 flex-col justify-between items-start">
                 <div>
                     <h1 className="font-extrabold text-[#222328] text-[32px]">The Community Showcase</h1>
 
@@ -68,9 +68,7 @@ const Home = () => {
                     </p>
                 </div>
 
-                <Link
-                    className="font-inter font-medium bg-[#6469FF] text-white px-5 py-2.5 rounded-md"
-                    to="/create-post">
+                <Link className="font-inter font-medium bg-[#6469FF] text-white px-6 py-3 rounded-md" to="/create-post">
                     Create image
                 </Link>
             </div>
