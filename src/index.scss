@@ -3,56 +3,56 @@
 @tailwind utilities;
 
 * {
-    font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 @media screen and (min-width: 480px) {
-    .card:nth-child(7n + 1) {
-        grid-column: auto/span 2;
-        grid-row: auto/span 2;
-    }
+  .card:nth-child(7n + 1) {
+    grid-column: auto/span 2;
+    grid-row: auto/span 2;
+  }
 }
 
 .prompt::-webkit-scrollbar {
-    width: 5px;
+  width: 5px;
 }
 
 .prompt::-webkit-scrollbar-thumb {
-    background-color: #666e75;
-    border-radius: 5px;
+  background-color: #666e75;
+  border-radius: 5px;
 }
 
 button {
-    transition: transform 0.15s ease;
+  transition: transform 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
 
     &:hover {
-        transform: translateY(-2px);
+      transform: none;
     }
-
-    &[disabled] {
-        cursor: not-allowed;
-        opacity: 0.5;
-
-        &:hover {
-            transform: none;
-        }
-    }
+  }
 }
 
 a {
-    transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease;
 
-    &:hover {
-        opacity: 0.9;
-    }
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
 @media screen and (max-width: 767px) {
-    button,
-    a {
-        &:hover {
-            opacity: 1;
-            transform: none;
-        }
+  button,
+  a {
+    &:hover {
+      opacity: 1;
+      transform: none;
     }
+  }
 }
