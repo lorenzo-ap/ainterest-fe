@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { LuImagePlus } from 'react-icons/lu';
 import axios from 'axios';
 
 import { Card, FormField, Loader } from '../../components';
@@ -68,8 +69,10 @@ const Home = () => {
                     </p>
                 </div>
 
-                <Link className="font-inter font-medium bg-[#6469FF] text-white px-6 py-3 rounded-md" to="/create-post">
-                    Create image
+                <Link
+                    className="font-inter font-medium bg-[#6469FF] text-white px-6 py-3 rounded-md flex items-center gap-x-2"
+                    to="/create-post">
+                    Create image <LuImagePlus className="inline-block text-lg" />
                 </Link>
             </div>
 

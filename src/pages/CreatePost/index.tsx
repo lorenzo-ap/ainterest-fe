@@ -1,5 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import axios from 'axios';
+import { IoIosArrowBack } from 'react-icons/io';
+import { RiAiGenerate, RiShareBoxLine } from 'react-icons/ri';
 
 import { preview } from '../../assets';
 import { FormField, Loader } from '../../components';
@@ -68,8 +70,11 @@ const CreatePost = () => {
     };
 
     return (
-        <section className="max-w-7xl mx-auto">
-            <Link className="inline-block font-inter font-medium bg-[#6469FF] text-white px-4 py-2 rounded-md" to="/">
+        <section className="max-w-7xl mx-auto flex flex-col items-start">
+            <Link
+                className=" font-inter font-medium bg-[#6469FF] text-white px-3.5 py-2 rounded-md flex items-center gap-x-1"
+                to="/">
+                <IoIosArrowBack className="inline-block" />
                 Go back
             </Link>
 
@@ -81,9 +86,9 @@ const CreatePost = () => {
                 </p>
             </div>
 
-            <form className="mt-10 max-w-3xl" onSubmit={handleSubmit}>
+            <form className="mt-10 max-w-4xl" onSubmit={handleSubmit}>
                 <div className="flex flex-col md:flex-row justify-between gap-5">
-                    <div className="flex flex-col gap-5 flex-grow md:order-1 order-0">
+                    <div className="flex flex-col gap-5 flex-grow md:order-1 order-0 min-w-96">
                         <FormField
                             labelName="Your name"
                             type="text"
@@ -104,12 +109,35 @@ const CreatePost = () => {
                             handleSurpriseMe={handleSurpriseMe}
                         />
 
-                        <button
-                            className="text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                            type="button"
-                            onClick={generateImage}>
-                            {generatingImage ? 'Generating...' : 'Generate'}
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <button
+                                className="text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center flex-grow flex justify-center items-center"
+                                type="button"
+                                onClick={generateImage}
+                                disabled={generatingImage}>
+                                {generatingImage ? (
+                                    'Generating...'
+                                ) : (
+                                    <>
+                                        Generate <RiAiGenerate className="inline-block ms-1.5 text-lg" />
+                                    </>
+                                )}
+                            </button>
+
+                            <button
+                                className="text-white bg-[#6469FF] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center xs:flex hidden flex-grow justify-center items-center"
+                                type="submit"
+                                disabled={isLoading}>
+                                {isLoading ? (
+                                    'Sharing...'
+                                ) : (
+                                    <>
+                                        Share with the community{' '}
+                                        <RiShareBoxLine className="inline-block ms-1.5 text-lg" />
+                                    </>
+                                )}
+                            </button>
+                        </div>
                     </div>
 
                     <div>
@@ -133,17 +161,23 @@ const CreatePost = () => {
                     </div>
                 </div>
 
-                <div className="mt-10">
-                    <p className="mt-2 text-[#666E75] text-[14px]">
-                        Once you have created the image you want, you can share it with others in the community
+                <div className="mt-6">
+                    <p className="mt-2 text-[#666E75] text-sm">
+                        Once you have created the image you want, you can share it with others in the community.
+                        <span className="text-red-500">*</span>
                     </p>
 
                     <button
-                        className={
-                            'mt-3 text-white bg-[#6469FF] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center'
-                        }
-                        type="submit">
-                        {isLoading ? 'Sharing...' : 'Share with the community'}
+                        className="mt-4 text-white bg-[#6469FF] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center inline-block xs:hidden"
+                        type="submit"
+                        disabled={isLoading}>
+                        {isLoading ? (
+                            'Sharing...'
+                        ) : (
+                            <>
+                                Share with the community <RiShareBoxLine className="inline-block ms-1.5 text-lg" />
+                            </>
+                        )}
                     </button>
                 </div>
             </form>
