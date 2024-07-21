@@ -1,25 +1,44 @@
-import { ChangeEvent } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface FormFieldProps {
+  register?: UseFormRegisterReturn<'name' | 'prompt' | 'image'>;
   labelName: string;
   type: string;
   name: string;
   placeholder: string;
-  value: string;
   isSurpriseMe?: boolean;
-  handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleSurpriseMe?: () => void;
+  value?: string;
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  hasError?: boolean;
+  error?: string | undefined;
 }
 
 const FormField = (props: FormFieldProps) => {
-  const { labelName, type, name, placeholder, value, handleChange, isSurpriseMe, handleSurpriseMe } = props;
+  const {
+    register,
+    labelName,
+    type,
+    name,
+    placeholder,
+    isSurpriseMe,
+    handleSurpriseMe,
+    value,
+    handleChange,
+    hasError,
+    error
+  } = props;
 
   return (
     <div className={`${isSurpriseMe ? 'h-full' : ''}`}>
-      <div className='flex items-center gap-2 mb-2'>
-        <label className='block text-sm font-medium text-gray-900' htmlFor={name}>
-          {labelName}
-        </label>
+      <div className='flex justify-between items-center gap-2 mb-2'>
+        <div className='flex items-baseline gap-x-1.5'>
+          <label className='block text-sm font-medium text-gray-900' htmlFor={name}>
+            {labelName}
+          </label>
+
+          {error && <span className='text-red-500 text-xs'>{error}</span>}
+        </div>
 
         {isSurpriseMe && (
           <button
@@ -35,23 +54,22 @@ const FormField = (props: FormFieldProps) => {
       {isSurpriseMe ? (
         <textarea
           id={name}
-          className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#6469FF] focus:border-[#6469FF] outline-none block w-full p-3 resize-none h-32 md:h-[calc(100%-32px)] prompt'
+          className={`'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ${hasError ? 'border-red-500' : 'focus:ring-[#6469FF] focus:border-[#6469FF]'} outline-none block w-full p-3 resize-none h-32 md:h-[calc(100%-32px)] prompt'`}
           name={name}
           placeholder={placeholder}
-          value={value}
-          onChange={handleChange}
           autoComplete='off'
+          {...register}
         />
       ) : (
         <input
           id={name}
-          className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#6469FF] focus:border-[#6469FF] outline-none block w-full p-3 prompt'
+          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ${hasError ? 'border-red-500' : 'focus:ring-[#6469FF] focus:border-[#6469FF]'} outline-none block w-full p-3 prompt`}
           type={type}
-          name={name}
           placeholder={placeholder}
+          autoComplete='off'
           value={value}
           onChange={handleChange}
-          autoComplete='off'
+          {...register}
         />
       )}
     </div>

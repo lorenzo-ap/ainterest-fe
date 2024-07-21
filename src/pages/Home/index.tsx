@@ -17,7 +17,7 @@ interface RenderCardsProps {
 }
 
 const RenderCards = ({ data, title }: RenderCardsProps) => {
-  if (data?.length > 0) return data.map((post) => <Card key={post._id} {...post} />);
+  if (data.length) return data.map((post) => <Card key={post._id} {...post} />);
 
   return <h2 className='mt-5 font-bold text-[#6469FF] text-xl uppercase'>{title}</h2>;
 };
@@ -34,9 +34,7 @@ const Home = () => {
 
       axios
         .get<PostAPIResponse>(`${import.meta.env.VITE_API_URL}/api/v1/post`)
-        .then((response) => {
-          setPosts(response.data.data.reverse());
-        })
+        .then((response) => setPosts(response.data.data.reverse()))
         .catch((error) => console.error(error))
         .finally(() => setIsLoading(false));
     };
