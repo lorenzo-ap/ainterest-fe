@@ -6,28 +6,16 @@ interface FormFieldProps {
   type: string;
   name: string;
   placeholder: string;
-  isSurpriseMe?: boolean;
-  handleSurpriseMe?: () => void;
-  value?: string;
-  handleChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  hasError?: boolean;
   error?: string | undefined;
+  value?: string;
+  isSurpriseMe?: boolean;
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleSurpriseMe?: () => void;
 }
 
 const FormField = (props: FormFieldProps) => {
-  const {
-    register,
-    labelName,
-    type,
-    name,
-    placeholder,
-    isSurpriseMe,
-    handleSurpriseMe,
-    value,
-    handleChange,
-    hasError,
-    error
-  } = props;
+  const { register, labelName, type, name, placeholder, isSurpriseMe, handleSurpriseMe, value, handleChange, error } =
+    props;
 
   return (
     <div className={`${isSurpriseMe ? 'h-full' : ''}`}>
@@ -54,7 +42,7 @@ const FormField = (props: FormFieldProps) => {
       {isSurpriseMe ? (
         <textarea
           id={name}
-          className={`'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ${hasError ? 'border-red-500' : 'focus:ring-[#6469FF] focus:border-[#6469FF]'} outline-none block w-full p-3 resize-none h-32 md:h-[calc(100%-32px)] prompt'`}
+          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ${error ? 'border-red-500' : 'focus:ring-[#6469FF] focus:border-[#6469FF]'} outline-none block w-full p-3 resize-none h-32 md:h-[calc(100%-32px)] prompt`}
           name={name}
           placeholder={placeholder}
           autoComplete='off'
@@ -63,7 +51,7 @@ const FormField = (props: FormFieldProps) => {
       ) : (
         <input
           id={name}
-          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ${hasError ? 'border-red-500' : 'focus:ring-[#6469FF] focus:border-[#6469FF]'} outline-none block w-full p-3 prompt`}
+          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ${error ? 'border-red-500' : 'focus:ring-[#6469FF] focus:border-[#6469FF]'} outline-none block w-full p-3 prompt`}
           type={type}
           placeholder={placeholder}
           autoComplete='off'

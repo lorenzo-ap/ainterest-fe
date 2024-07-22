@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { FormEvent, useState } from 'react';
-import { RiAiGenerate, RiShareBoxLine } from 'react-icons/ri';
+import { RiAiGenerate } from 'react-icons/ri';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import * as yup from 'yup';
+import { TbPhotoShare } from 'react-icons/tb';
 
 import { preview } from '../../../../assets';
 import { FormField, Loader } from '../../../../components';
@@ -25,7 +26,7 @@ interface TranslateApiResponse {
 const CreatePostForm = () => {
   const navigate = useNavigate();
 
-  const [generatedImageData, setGeneratedImageData] = useState<Omit<Post, '_id' | 'name'> | null>(null);
+  const [generatedImageData, setGeneratedImageData] = useState<Omit<Post, '_id' | 'name'> | null>();
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [isImageMissing, setIsImageMissing] = useState(false);
@@ -137,7 +138,6 @@ const CreatePostForm = () => {
             type='text'
             placeholder='John Doe'
             register={register('name')}
-            hasError={!!formState.errors.name?.message}
             error={formState.errors.name?.message}
           />
 
@@ -149,13 +149,12 @@ const CreatePostForm = () => {
             isSurpriseMe
             handleSurpriseMe={handleSurpriseMe}
             register={register('prompt')}
-            hasError={!!formState.errors.prompt?.message}
             error={formState.errors.prompt?.message}
           />
 
           <div className='flex items-center gap-3'>
             <button
-              className='text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center flex-grow flex justify-center items-center'
+              className='text-white bg-pink-500 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center flex-grow flex justify-center items-center'
               type='button'
               onClick={onGenerate}
               disabled={isGenerating}
@@ -178,7 +177,7 @@ const CreatePostForm = () => {
                 'Sharing...'
               ) : (
                 <>
-                  Share with the community <RiShareBoxLine className='inline-block ms-1.5 text-lg' />
+                  Share with the community <TbPhotoShare className='inline-block ms-1.5 text-lg' />
                 </>
               )}
             </button>
@@ -224,7 +223,7 @@ const CreatePostForm = () => {
             'Sharing...'
           ) : (
             <>
-              Share with the community <RiShareBoxLine className='inline-block ms-1.5 text-lg' />
+              Share with the community <TbPhotoShare className='inline-block ms-1.5 text-lg' />
             </>
           )}
         </button>
