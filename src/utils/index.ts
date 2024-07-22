@@ -17,4 +17,12 @@ const downloadImage = async (_id: string, photo: string) => {
   FileSaver.saveAs(photo, `download-${_id}.jpg`);
 };
 
-export { getRandomPrompt, downloadImage };
+const getRapidApiHeaders = (host: string) => {
+  return {
+    'x-rapidapi-key': import.meta.env.VITE_X_RAPIDAPI_KEY,
+    'x-rapidapi-host': host,
+    'Content-Type': 'application/json'
+  };
+};
+
+export { getRandomPrompt, downloadImage, getRapidApiHeaders };

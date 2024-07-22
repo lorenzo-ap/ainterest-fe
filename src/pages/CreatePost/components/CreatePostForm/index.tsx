@@ -9,20 +9,23 @@ import * as yup from 'yup';
 import { preview } from '../../../../assets';
 import { FormField, Loader } from '../../../../components';
 import { Post } from '../../../../types/post.interface';
-import { getRandomPrompt } from '../../../../utils';
+import { getRapidApiHeaders, getRandomPrompt } from '../../../../utils';
 
 export interface Form {
   name: string;
   prompt: string;
 }
 
+interface TranslateApiResponse {
+  code: number;
+  texts: string;
+  tl: string;
+}
+
 const CreatePostForm = () => {
   const navigate = useNavigate();
 
-  const [generatedImageData, setGeneratedImageData] = useState<Omit<Post, '_id' | 'name'>>({
-    prompt: '',
-    photo: ''
-  });
+  const [generatedImageData, setGeneratedImageData] = useState<Omit<Post, '_id' | 'name'> | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [isImageMissing, setIsImageMissing] = useState(false);
@@ -47,53 +50,65 @@ const CreatePostForm = () => {
 
   const form = watch();
 
-  const generateImage = () => {
-    clearErrors(['name']);
-    setIsImageMissing(false);
-
-    if (!form.prompt?.trim()) {
-      trigger('prompt');
-
-      return;
-    }
-
-    setIsGenerating(true);
-
+  const generateAndSetImage = (prompt: string, translatedPrompt: string) => {
+    const headers = getRapidApiHeaders('imageai-generator.p.rapidapi.com');
     const body = {
       negative_prompt: 'white',
-      prompt: form.prompt,
+      prompt: translatedPrompt,
       width: 512,
       height: 512,
       hr_scale: 2
     };
 
-    const headers = {
-      'x-rapidapi-key': import.meta.env.VITE_X_RAPIDAPI_KEY,
-      'x-rapidapi-host': 'imageai-generator.p.rapidapi.com',
-      'Content-Type': 'application/json'
-    };
-
     axios
-      .post('https://imageai-generator.p.rapidapi.com/image', body, { headers })
+      .post<string>('https://imageai-generator.p.rapidapi.com/image', body, { headers })
       .then((response) => {
-        setGeneratedImageData({ prompt: form.prompt, photo: `data:image/png;base64,${response.data}` });
+        setGeneratedImageData({ prompt, photo: `data:image/png;base64,${response.data}` });
         setIsImageMissing(false);
       })
       .catch((error) => console.error(error))
       .finally(() => setIsGenerating(false));
   };
 
+  const onGenerate = () => {
+    clearErrors(['name']);
+    setIsImageMissing(false);
+
+    if (!form.prompt?.trim()) {
+      trigger('prompt');
+      return;
+    }
+
+    setIsGenerating(true);
+
+    const prompt = form.prompt;
+    const headers = getRapidApiHeaders('ai-translate.p.rapidapi.com');
+    const body = {
+      texts: [form.prompt],
+      tls: ['en'],
+      sl: 'auto'
+    };
+
+    axios
+      .post<TranslateApiResponse[]>('https://ai-translate.p.rapidapi.com/translates', body, {
+        headers
+      })
+      .then((response) => generateAndSetImage(prompt, response.data[0].texts))
+      .catch((error) => console.error(error));
+  };
+
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!generatedImageData.photo) setIsImageMissing(true);
+    if (!generatedImageData?.photo) {
+      setIsImageMissing(true);
+      return;
+    }
 
     handleSubmit(sharePost)();
   };
 
   const sharePost: SubmitHandler<Form> = (formData) => {
-    if (!generatedImageData.photo) return;
-
     setIsSharing(true);
     setIsImageMissing(false);
 
@@ -142,7 +157,7 @@ const CreatePostForm = () => {
             <button
               className='text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center flex-grow flex justify-center items-center'
               type='button'
-              onClick={generateImage}
+              onClick={onGenerate}
               disabled={isGenerating}
             >
               {isGenerating ? (
@@ -174,8 +189,12 @@ const CreatePostForm = () => {
           <div
             className={`relative bg-gray-50 border text-gray-900 text-sm rounded-xl ${isImageMissing ? 'border-red-500' : 'border-gray-300'} w-full md:w-96 md:h-96 flex justify-center items-center`}
           >
-            {generatedImageData.photo ? (
-              <img className='w-full h-full object-cover rounded-lg' src={generatedImageData.photo} alt={form.prompt} />
+            {generatedImageData?.photo ? (
+              <img
+                className='w-full h-full object-cover rounded-lg'
+                src={generatedImageData?.photo}
+                alt={form.prompt}
+              />
             ) : (
               <img className='w-9/12 h-9/12 object-contain opacity-40' src={preview} alt='Preview' />
             )}
@@ -186,15 +205,14 @@ const CreatePostForm = () => {
               </div>
             )}
           </div>
-
-          {isImageMissing && <span className='text-red-500 text-xs'>* an image should be successfully generated</span>}
         </div>
       </div>
+
+      {isImageMissing && <p className='text-red-500 text-xs mt-1.5'>* an image should be successfully generated</p>}
 
       <div className='mt-6'>
         <p className='mt-2 text-[#666E75] text-sm'>
           Once you have created the image you want, you can share it with others in the community.
-          <span className='text-red-500'>*</span>
         </p>
 
         <button
