@@ -6,22 +6,6 @@
   font-family: 'Inter', sans-serif;
 }
 
-@media screen and (min-width: 480px) {
-  .card:nth-child(7n + 1) {
-    grid-column: auto/span 2;
-    grid-row: auto/span 2;
-  }
-}
-
-.prompt::-webkit-scrollbar {
-  width: 5px;
-}
-
-.prompt::-webkit-scrollbar-thumb {
-  background-color: #666e75;
-  border-radius: 5px;
-}
-
 button {
   transition: transform 0.15s ease;
 
@@ -47,6 +31,17 @@ a {
   }
 }
 
+.prompt {
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #666e75;
+    border-radius: 5px;
+  }
+}
+
 @media screen and (max-width: 767px) {
   button,
   a {
@@ -54,5 +49,12 @@ a {
       opacity: 1;
       transform: none;
     }
+  }
+}
+
+@media screen and (min-width: 480px) {
+  .card:nth-child(7n + 1) {
+    grid-column: auto/span 2;
+    grid-row: auto/span 2;
   }
 }

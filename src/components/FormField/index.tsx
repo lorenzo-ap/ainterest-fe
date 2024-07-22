@@ -18,7 +18,7 @@ const FormField = (props: FormFieldProps) => {
     props;
 
   return (
-    <div className={`${isSurpriseMe ? 'h-full' : ''}`}>
+    <div className={isSurpriseMe ? 'h-full' : ''}>
       <div className='flex justify-between items-center gap-2 mb-2'>
         <div className='flex items-baseline gap-x-1.5'>
           <label className='block text-sm font-medium text-gray-900' htmlFor={name}>
@@ -42,8 +42,7 @@ const FormField = (props: FormFieldProps) => {
       {isSurpriseMe ? (
         <textarea
           id={name}
-          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ${error ? 'border-red-500' : 'focus:ring-[#6469FF] focus:border-[#6469FF]'} outline-none block w-full p-3 resize-none h-32 md:h-[calc(100%-32px)] prompt`}
-          name={name}
+          className={`prompt bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ${error ? 'border-red-500' : 'focus:ring-[#6469FF] focus:border-[#6469FF]'} outline-none block w-full p-3 resize-none h-32 md:h-[calc(100%-32px)]`}
           placeholder={placeholder}
           autoComplete='off'
           {...register}
@@ -51,12 +50,12 @@ const FormField = (props: FormFieldProps) => {
       ) : (
         <input
           id={name}
-          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ${error ? 'border-red-500' : 'focus:ring-[#6469FF] focus:border-[#6469FF]'} outline-none block w-full p-3 prompt`}
+          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ${error ? 'border-red-500' : 'focus:ring-[#6469FF] focus:border-[#6469FF]'} outline-none block w-full p-3`}
           type={type}
           placeholder={placeholder}
-          autoComplete='off'
           value={value}
           onChange={handleChange}
+          autoComplete='off'
           {...register}
         />
       )}

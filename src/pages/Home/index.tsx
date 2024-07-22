@@ -1,15 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LuImagePlus } from 'react-icons/lu';
-import axios from 'axios';
 
 import { Card, FormField, Loader } from '../../components';
 import { Post } from '../../types/post.interface';
-
-interface PostAPIResponse {
-  success: boolean;
-  data: Post[];
-}
+import useFetchPosts from '../../hooks/useFetchPosts';
 
 interface RenderCardsProps {
   data: Post[];
@@ -23,24 +18,10 @@ const RenderCards = ({ data, title }: RenderCardsProps) => {
 };
 
 const Home = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>('');
-  const [posts, setPosts] = useState<Post[]>([]);
   const [searchedPosts, setSearchedPosts] = useState<Post[]>([]);
 
-  useEffect(() => {
-    const fetchPosts = () => {
-      setIsLoading(true);
-
-      axios
-        .get<PostAPIResponse>(`${import.meta.env.VITE_API_URL}/api/v1/post`)
-        .then((response) => setPosts(response.data.data.reverse()))
-        .catch((error) => console.error(error))
-        .finally(() => setIsLoading(false));
-    };
-
-    fetchPosts();
-  }, []);
+  const { posts, isLoading } = useFetchPosts();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = e.target.value;

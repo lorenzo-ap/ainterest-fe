@@ -12,7 +12,7 @@ import { FormField, Loader } from '../../../../components';
 import { Post } from '../../../../types/post.interface';
 import { getRapidApiHeaders, getRandomPrompt } from '../../../../utils';
 
-export interface Form {
+interface Form {
   name: string;
   prompt: string;
 }
