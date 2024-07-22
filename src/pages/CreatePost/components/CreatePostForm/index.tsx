@@ -37,10 +37,10 @@ const CreatePostForm = () => {
       .string()
       .required('this field is required')
       .min(3, 'must be at least 3 characters')
-      .max(100, 'must be at most 100 characters')
+      .max(150, 'must be at most 150 characters')
   });
 
-  const { register, handleSubmit, setValue, watch, formState, trigger } = useForm<Form>({
+  const { register, handleSubmit, setValue, watch, formState, trigger, clearErrors } = useForm<Form>({
     mode: 'onChange',
     resolver: yupResolver(schema)
   });
@@ -48,6 +48,9 @@ const CreatePostForm = () => {
   const form = watch();
 
   const generateImage = () => {
+    clearErrors(['name']);
+    setIsImageMissing(false);
+
     if (!form.prompt?.trim()) {
       trigger('prompt');
 
@@ -154,7 +157,7 @@ const CreatePostForm = () => {
             <button
               className='text-white bg-[#6469FF] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center xs:flex hidden flex-grow justify-center items-center'
               type='submit'
-              disabled={isSharing}
+              disabled={isSharing || isGenerating}
             >
               {isSharing ? (
                 'Sharing...'
@@ -169,7 +172,7 @@ const CreatePostForm = () => {
 
         <div>
           <div
-            className={`relative bg-gray-50 border text-gray-900 text-sm rounded-lg ${isImageMissing ? 'border-red-500' : 'border-gray-300'} w-full md:w-96 md:h-96 flex justify-center items-center`}
+            className={`relative bg-gray-50 border text-gray-900 text-sm rounded-xl ${isImageMissing ? 'border-red-500' : 'border-gray-300'} w-full md:w-96 md:h-96 flex justify-center items-center`}
           >
             {generatedImageData.photo ? (
               <img className='w-full h-full object-cover rounded-lg' src={generatedImageData.photo} alt={form.prompt} />
@@ -183,6 +186,8 @@ const CreatePostForm = () => {
               </div>
             )}
           </div>
+
+          {isImageMissing && <span className='text-red-500 text-xs'>* an image should be successfully generated</span>}
         </div>
       </div>
 
@@ -195,7 +200,7 @@ const CreatePostForm = () => {
         <button
           className='mt-4 text-white bg-[#6469FF] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center inline-block xs:hidden'
           type='submit'
-          disabled={isSharing}
+          disabled={isSharing || isGenerating}
         >
           {isSharing ? (
             'Sharing...'
