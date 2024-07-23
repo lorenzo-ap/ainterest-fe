@@ -25,14 +25,14 @@ const Card = ({ _id, name, prompt, photo }: Post) => {
         }}
       >
         {showInfo ? (
-          <RxCrossCircled className='text-3xl text-slate-300' />
+          <RxCrossCircled className='text-4xl text-slate-300' />
         ) : (
-          <FiInfo className='text-3xl text-slate-300' />
+          <FiInfo className='text-4xl text-slate-300' />
         )}
       </button>
 
       <div
-        className={`-bottom-full md:group-hover:bottom-0 flex flex-col max-h-[75%] absolute ${showInfo ? '-bottom-0' : ''} left-0 right-0 bg-[#10131F] m-2 p-4 rounded-md transition-all duration-300`}
+        className={`md:-bottom-full md:group-hover:bottom-0 flex flex-col max-h-[75%] absolute ${showInfo ? '-bottom-0' : '-bottom-full'} left-0 right-0 bg-[#10131F] m-2 p-4 rounded-md transition-all duration-300`}
       >
         <p className='text-white text-md overflow-y-auto prompt max-h-[50%]'>{prompt}</p>
 
