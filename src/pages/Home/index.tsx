@@ -56,7 +56,7 @@ const Home = () => {
         </Link>
       </div>
 
-      <div className='mt-16'>
+      <div className='mt-8 md:mt-16'>
         <FormField
           labelName='Search posts'
           type='text'

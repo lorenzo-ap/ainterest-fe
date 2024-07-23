@@ -1,15 +1,40 @@
-import { Post } from '../../types/post.interface';
+import { useState } from 'react';
+import { FiInfo } from 'react-icons/fi';
 
+import { Post } from '../../types/post.interface';
 import { download } from '../../assets';
 import { downloadImage } from '../../utils';
+import { RxCrossCircled } from 'react-icons/rx';
 
 const Card = ({ _id, name, prompt, photo }: Post) => {
+  const [showInfo, setShowInfo] = useState(false);
+
   return (
     <div className='rounded-xl group relative shadow-card hover:shadow-card-hover card overflow-y-hidden'>
+      <div
+        className={`absolute top-0 left-0 w-full h-full ${showInfo ? 'bg-slate-800' : 'bg-transparent'} bg-opacity-50 transition-colors duration-300`}
+      />
+
       <img className='w-full h-auto object-cover rounded-xl' src={photo} alt={prompt} />
 
-      <div className='group-hover:bottom-0 flex flex-col max-h-[94.5%] absolute -bottom-3/4 left-0 right-0 bg-[#10131F] m-2 p-4 rounded-md transition-all duration-300'>
-        <p className='text-white text-md overflow-y-auto prompt'>{prompt}</p>
+      <button
+        className='absolute top-3 right-3 md:hidden z-10'
+        type='button'
+        onClick={() => {
+          setShowInfo((prev) => !prev);
+        }}
+      >
+        {showInfo ? (
+          <RxCrossCircled className='text-3xl text-slate-300' />
+        ) : (
+          <FiInfo className='text-3xl text-slate-300' />
+        )}
+      </button>
+
+      <div
+        className={`-bottom-full md:group-hover:bottom-0 flex flex-col max-h-[75%] absolute ${showInfo ? '-bottom-0' : ''} left-0 right-0 bg-[#10131F] m-2 p-4 rounded-md transition-all duration-300`}
+      >
+        <p className='text-white text-md overflow-y-auto prompt max-h-[50%]'>{prompt}</p>
 
         <div className='mt-5 flex justify-between items-center gap-2'>
           <div className='flex items-center gap-2'>
