@@ -1,16 +1,20 @@
+import axios from 'axios';
+import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { FormEvent, useState } from 'react';
 import { RiAiGenerate } from 'react-icons/ri';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
-import * as yup from 'yup';
 import { TbPhotoShare } from 'react-icons/tb';
+import { useDispatch } from 'react-redux';
 
 import { preview } from '../../../../assets';
 import { FormField, Loader } from '../../../../components';
 import { Post } from '../../../../types/post.interface';
 import { getRapidApiHeaders, getRandomPrompt } from '../../../../utils';
+import { AppDispatch } from '../../../../redux/store';
+import { addPost } from '../../../../redux/slices/postsSlice';
+import { PostAPIResponse } from '../../../../hooks/useFetchPosts';
 
 interface Form {
   name: string;
@@ -30,6 +34,8 @@ const CreatePostForm = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [isImageMissing, setIsImageMissing] = useState(false);
+
+  const dispatch: AppDispatch = useDispatch();
 
   const schema = yup.object().shape({
     name: yup
@@ -116,8 +122,11 @@ const CreatePostForm = () => {
     const body = { ...generatedImageData, name: formData.name };
 
     axios
-      .post<Post>(`${import.meta.env.VITE_API_URL}/api/v1/post`, body)
-      .then(() => navigate('/'))
+      .post<PostAPIResponse<Post>>(`${import.meta.env.VITE_API_URL}/api/v1/post`, body)
+      .then((post) => {
+        dispatch(addPost(post.data.data));
+        navigate('/');
+      })
       .catch((error) => console.error(error))
       .finally(() => setIsSharing(false));
   };
@@ -157,7 +166,7 @@ const CreatePostForm = () => {
               className='text-white bg-pink-500 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center flex-grow flex justify-center items-center'
               type='button'
               onClick={onGenerate}
-              disabled={isGenerating}
+              disabled={isGenerating || isSharing}
             >
               {isGenerating ? (
                 'Generating...'

@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LuImagePlus } from 'react-icons/lu';
+import { TbRefresh } from 'react-icons/tb';
+import { useSelector } from 'react-redux';
 
 import { Card, FormField, Loader } from '../../components';
 import { Post } from '../../types/post.interface';
 import useFetchPosts from '../../hooks/useFetchPosts';
+import { RootState } from '../../redux/store';
 
 interface RenderCardsProps {
   data: Post[];
@@ -21,7 +24,9 @@ const Home = () => {
   const [searchText, setSearchText] = useState<string>('');
   const [searchedPosts, setSearchedPosts] = useState<Post[]>([]);
 
-  const { posts, isLoading } = useFetchPosts();
+  const { isLoading, fetchPosts } = useFetchPosts();
+
+  const posts = useSelector((state: RootState) => state.posts.posts);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -56,8 +61,9 @@ const Home = () => {
         </Link>
       </div>
 
-      <div className='mt-8 md:mt-16'>
+      <div className='mt-8 md:mt-16 flex items-end gap-x-2'>
         <FormField
+          className='flex-grow'
           labelName='Search posts'
           type='text'
           name='name'
@@ -65,6 +71,15 @@ const Home = () => {
           value={searchText}
           handleChange={handleSearchChange}
         />
+
+        <button
+          className='text-white bg-[#6469FF] font-medium rounded-md text-sm w-[46px] h-[46px] text-center justify-center items-center'
+          type='button'
+          onClick={fetchPosts}
+          disabled={isLoading}
+        >
+          <TbRefresh className='inline-block text-lg' />
+        </button>
       </div>
 
       <div className='mt-10'>

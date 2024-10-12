@@ -1,6 +1,7 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface FormFieldProps {
+  className?: string;
   register?: UseFormRegisterReturn<'name' | 'prompt' | 'image'>;
   labelName: string;
   type: string;
@@ -14,11 +15,22 @@ interface FormFieldProps {
 }
 
 const FormField = (props: FormFieldProps) => {
-  const { register, labelName, type, name, placeholder, isSurpriseMe, handleSurpriseMe, value, handleChange, error } =
-    props;
+  const {
+    className,
+    register,
+    labelName,
+    type,
+    name,
+    placeholder,
+    isSurpriseMe,
+    handleSurpriseMe,
+    value,
+    handleChange,
+    error
+  } = props;
 
   return (
-    <div className={isSurpriseMe ? 'h-full' : ''}>
+    <div className={isSurpriseMe ? 'h-full' : '' + ` ${className}`}>
       <div className='flex justify-between items-center gap-2 mb-2'>
         <div className='flex items-baseline gap-x-1.5'>
           <label className='block text-sm font-medium text-gray-900' htmlFor={name}>
