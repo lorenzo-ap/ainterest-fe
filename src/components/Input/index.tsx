@@ -1,6 +1,6 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
 
-interface FormFieldProps {
+interface InputProps {
   className?: string;
   register?: UseFormRegisterReturn<'name' | 'prompt' | 'image'>;
   labelName: string;
@@ -14,7 +14,7 @@ interface FormFieldProps {
   handleSurpriseMe?: () => void;
 }
 
-const FormField = (props: FormFieldProps) => {
+const Input = (props: InputProps) => {
   const {
     className,
     register,
@@ -75,4 +75,4 @@ const FormField = (props: FormFieldProps) => {
   );
 };
 
-export default FormField;
+export default Input;

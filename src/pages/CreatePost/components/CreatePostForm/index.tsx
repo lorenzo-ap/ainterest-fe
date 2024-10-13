@@ -9,22 +9,16 @@ import { TbPhotoShare } from 'react-icons/tb';
 import { useDispatch } from 'react-redux';
 
 import { preview } from '../../../../assets';
-import { FormField, Loader } from '../../../../components';
+import { Input, Loader } from '../../../../components';
 import { Post } from '../../../../types/post.interface';
 import { getRapidApiHeaders, getRandomPrompt } from '../../../../utils';
 import { AppDispatch } from '../../../../redux/store';
 import { addPost } from '../../../../redux/slices/postsSlice';
-import { PostAPIResponse } from '../../../../hooks/useFetchPosts';
+import { APIResponse, TranslateAPIResponse } from '../../../../types/api-response.interface';
 
-interface Form {
+interface CreatePostForm {
   name: string;
   prompt: string;
-}
-
-interface TranslateApiResponse {
-  code: number;
-  texts: string;
-  tl: string;
 }
 
 const CreatePostForm = () => {
@@ -34,8 +28,6 @@ const CreatePostForm = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [isImageMissing, setIsImageMissing] = useState(false);
-
-  const dispatch: AppDispatch = useDispatch();
 
   const schema = yup.object().shape({
     name: yup
@@ -50,12 +42,13 @@ const CreatePostForm = () => {
       .max(150, 'must be at most 150 characters')
   });
 
-  const { register, handleSubmit, setValue, watch, formState, trigger, clearErrors } = useForm<Form>({
+  const { register, handleSubmit, setValue, watch, formState, trigger, clearErrors } = useForm<CreatePostForm>({
     mode: 'onChange',
     resolver: yupResolver(schema)
   });
 
   const form = watch();
+  const dispatch: AppDispatch = useDispatch();
 
   const generateAndSetImage = (prompt: string, translatedPrompt: string) => {
     const headers = getRapidApiHeaders('imageai-generator.p.rapidapi.com');
@@ -97,7 +90,7 @@ const CreatePostForm = () => {
     };
 
     axios
-      .post<TranslateApiResponse[]>('https://ai-translate.p.rapidapi.com/translates', body, {
+      .post<TranslateAPIResponse[]>('https://ai-translate.p.rapidapi.com/translates', body, {
         headers
       })
       .then((response) => generateAndSetImage(prompt, response.data[0].texts))
@@ -115,14 +108,14 @@ const CreatePostForm = () => {
     handleSubmit(sharePost)();
   };
 
-  const sharePost: SubmitHandler<Form> = (formData) => {
+  const sharePost: SubmitHandler<CreatePostForm> = (formData) => {
     setIsSharing(true);
     setIsImageMissing(false);
 
     const body = { ...generatedImageData, name: formData.name };
 
     axios
-      .post<PostAPIResponse<Post>>(`${import.meta.env.VITE_API_URL}/api/v1/post`, body)
+      .post<APIResponse<Post>>(`${import.meta.env.VITE_API_URL}/api/v1/post`, body)
       .then((post) => {
         dispatch(addPost(post.data.data));
         navigate('/');
@@ -141,7 +134,7 @@ const CreatePostForm = () => {
     <form className='mt-10 max-w-4xl' onSubmit={submitForm}>
       <div className='flex flex-col md:flex-row justify-between gap-5'>
         <div className='flex flex-col gap-5 flex-grow md:order-1 order-0 md:min-w-96'>
-          <FormField
+          <Input
             name='name'
             labelName='Your name'
             type='text'
@@ -150,7 +143,7 @@ const CreatePostForm = () => {
             error={formState.errors.name?.message}
           />
 
-          <FormField
+          <Input
             name='prompt'
             labelName='Prompt'
             type='text'

@@ -5,11 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Post } from '../types/post.interface';
 import { setPosts } from '../redux/slices/postsSlice';
 import { AppDispatch, RootState } from '../redux/store';
-
-export interface PostAPIResponse<T> {
-  success: boolean;
-  data: T;
-}
+import { APIResponse } from '../types/api-response.interface';
 
 const useFetchPosts = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -21,7 +17,7 @@ const useFetchPosts = () => {
     setIsLoading(true);
 
     axios
-      .get<PostAPIResponse<Post[]>>(`${import.meta.env.VITE_API_URL}/api/v1/post`)
+      .get<APIResponse<Post[]>>(`${import.meta.env.VITE_API_URL}/api/v1/post`)
       .then((response) => dispatch(setPosts(response.data.data.reverse())))
       .catch((error) => console.error(error))
       .finally(() => setIsLoading(false));

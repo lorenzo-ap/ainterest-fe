@@ -4,21 +4,11 @@ import { LuImagePlus } from 'react-icons/lu';
 import { TbRefresh } from 'react-icons/tb';
 import { useSelector } from 'react-redux';
 
-import { Card, FormField, Loader } from '../../components';
+import { Input } from '../../components';
 import { Post } from '../../types/post.interface';
 import useFetchPosts from '../../hooks/useFetchPosts';
 import { RootState } from '../../redux/store';
-
-interface RenderCardsProps {
-  data: Post[];
-  title: string;
-}
-
-const RenderCards = ({ data, title }: RenderCardsProps) => {
-  if (data.length) return data.map((post) => <Card key={post._id} {...post} />);
-
-  return <h2 className='mt-5 font-bold text-[#6469FF] text-xl uppercase'>{title}</h2>;
-};
+import RenderCards from './components/RenderCards';
 
 const Home = () => {
   const [searchText, setSearchText] = useState<string>('');
@@ -62,7 +52,7 @@ const Home = () => {
       </div>
 
       <div className='mt-8 md:mt-16 flex items-end gap-x-2'>
-        <FormField
+        <Input
           className='flex-grow'
           labelName='Search posts'
           type='text'
@@ -75,6 +65,7 @@ const Home = () => {
         <button
           className='text-white bg-[#6469FF] font-medium rounded-md text-sm w-[46px] h-[46px] text-center justify-center items-center'
           type='button'
+          aria-label='Refresh'
           onClick={fetchPosts}
           disabled={isLoading}
         >
@@ -83,27 +74,19 @@ const Home = () => {
       </div>
 
       <div className='mt-10'>
-        {isLoading ? (
-          <div className='flex justify-center items-center'>
-            <Loader />
-          </div>
-        ) : (
-          <>
-            {searchText && (
-              <h2 className='font-medium text-[#666E75] text-xl mb-3'>
-                Showing results for <span className='text-[#222328]'>{searchText}</span>
-              </h2>
-            )}
-
-            <div className='grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3'>
-              {searchText ? (
-                <RenderCards data={searchedPosts} title='No search results found' />
-              ) : (
-                <RenderCards data={posts} title='No posts found' />
-              )}
-            </div>
-          </>
+        {searchText && (
+          <h2 className='font-medium text-[#666E75] text-xl mb-3'>
+            Showing results for <span className='text-[#222328]'>{searchText}</span>
+          </h2>
         )}
+
+        <div className='grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3'>
+          {searchText ? (
+            <RenderCards posts={searchedPosts} title='No search results found' isLoading={isLoading} />
+          ) : (
+            <RenderCards posts={posts} title='No posts found' isLoading={isLoading} />
+          )}
+        </div>
       </div>
     </section>
   );
