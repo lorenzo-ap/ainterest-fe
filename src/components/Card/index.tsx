@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { FiInfo } from 'react-icons/fi';
+import { IconDownload, IconInfoSquareRounded, IconSquareRoundedXFilled } from '@tabler/icons-react';
 
 import { Post } from '../../types/post.interface';
-import { download } from '../../assets';
 import { downloadImage } from '../../utils';
-import { RxCrossCircled } from 'react-icons/rx';
+import { Tooltip } from '@mantine/core';
 
 const Card = ({ _id, name, prompt, photo }: Post) => {
   const [showInfo, setShowInfo] = useState(false);
@@ -25,9 +24,9 @@ const Card = ({ _id, name, prompt, photo }: Post) => {
         }}
       >
         {showInfo ? (
-          <RxCrossCircled className='text-4xl text-slate-300' />
+          <IconSquareRoundedXFilled className='text-slate-300' size={40} />
         ) : (
-          <FiInfo className='text-4xl text-slate-300' />
+          <IconInfoSquareRounded className='text-slate-300' size={40} />
         )}
       </button>
 
@@ -45,12 +44,10 @@ const Card = ({ _id, name, prompt, photo }: Post) => {
             <p className='text-white text-sm'>{name}</p>
           </div>
 
-          <button
-            className='outline-none bg-transparent border-none'
-            type='button'
-            onClick={() => downloadImage(_id, photo)}
-          >
-            <img className='w-6 h-6 object-contain invert' src={download} alt='Download' />
+          <button type='button' onClick={() => downloadImage(_id, photo)}>
+            <Tooltip label='Download image' withArrow>
+              <IconDownload className='text-slate-300' size={24} />
+            </Tooltip>
           </button>
         </div>
       </div>

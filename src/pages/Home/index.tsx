@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LuImagePlus } from 'react-icons/lu';
-import { TbRefresh } from 'react-icons/tb';
 import { useSelector } from 'react-redux';
+import { ActionIcon, Button, TextInput, Tooltip } from '@mantine/core';
+import { IconPhotoAi, IconRefresh } from '@tabler/icons-react';
 
-import { Input } from '../../components';
 import { Post } from '../../types/post.interface';
 import useFetchPosts from '../../hooks/useFetchPosts';
 import { RootState } from '../../redux/store';
@@ -43,37 +42,37 @@ const Home = () => {
           </p>
         </div>
 
-        <Link
-          className='font-inter font-medium bg-[#6469FF] text-white px-6 py-3 rounded-md flex items-center gap-x-2'
-          to='/create-post'
-        >
-          Create image <LuImagePlus className='inline-block text-lg' />
-        </Link>
+        <Button component={Link} to='/create-post' color='violet' size='lg' rightSection={<IconPhotoAi size={20} />}>
+          Create image
+        </Button>
       </div>
 
       <div className='mt-8 md:mt-16 flex items-end gap-x-2'>
-        <Input
-          className='flex-grow'
-          labelName='Search posts'
-          type='text'
-          name='name'
+        <TextInput
+          flex={1}
+          size='md'
+          radius='md'
+          label='Search posts'
           placeholder='Enter name or prompt'
           value={searchText}
-          handleChange={handleSearchChange}
+          onChange={handleSearchChange}
         />
 
-        <button
-          className='text-white bg-[#6469FF] font-medium rounded-md text-sm w-[46px] h-[46px] text-center justify-center items-center'
-          type='button'
-          aria-label='Refresh'
-          onClick={fetchPosts}
-          disabled={isLoading}
-        >
-          <TbRefresh className='inline-block text-lg' />
-        </button>
+        <Tooltip label='Refresh posts' withArrow>
+          <ActionIcon
+            size={42}
+            color='violet'
+            radius='md'
+            onClick={fetchPosts}
+            disabled={isLoading}
+            aria-label='Refresh'
+          >
+            <IconRefresh size={18} />
+          </ActionIcon>
+        </Tooltip>
       </div>
 
-      <div className='mt-10'>
+      <div className='mt-5'>
         {searchText && (
           <h2 className='font-medium text-[#666E75] text-xl mb-3'>
             Showing results for <span className='text-[#222328]'>{searchText}</span>

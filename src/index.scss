@@ -29,30 +29,30 @@ body {
   }
 }
 
-button {
-  transition: transform 0.15s ease;
+// button {
+//   transition: transform 0.15s ease;
 
-  &:hover {
-    transform: translateY(-2px);
-  }
+//   &:hover {
+//     transform: translateY(-2px);
+//   }
 
-  &[disabled] {
-    cursor: not-allowed;
-    opacity: 0.5;
+//   &[disabled] {
+//     cursor: not-allowed;
+//     opacity: 0.5;
 
-    &:hover {
-      transform: none;
-    }
-  }
-}
+//     &:hover {
+//       transform: none;
+//     }
+//   }
+// }
 
-a {
-  transition: opacity 0.15s ease;
+// a {
+//   transition: opacity 0.15s ease;
 
-  &:hover {
-    opacity: 0.9;
-  }
-}
+//   &:hover {
+//     opacity: 0.9;
+//   }
+// }
 
 .prompt {
   &::-webkit-scrollbar {

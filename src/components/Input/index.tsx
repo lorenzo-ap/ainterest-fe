@@ -1,3 +1,4 @@
+import { Button } from '@mantine/core';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface InputProps {
@@ -41,13 +42,9 @@ const Input = (props: InputProps) => {
         </div>
 
         {isSurpriseMe && (
-          <button
-            className='font-semibold text-xs bg-[#ECECF1] py-1 px-2 rounded-[5px] text-black'
-            type='button'
-            onClick={handleSurpriseMe}
-          >
+          <Button size='compact-xs' variant='light' color='dark' onClick={handleSurpriseMe}>
             Surprise me
-          </button>
+          </Button>
         )}
       </div>
 
