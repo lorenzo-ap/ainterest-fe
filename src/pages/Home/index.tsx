@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { ActionIcon, Button, TextInput, Tooltip } from '@mantine/core';
+import { ActionIcon, Button, CloseButton, TextInput, Tooltip } from '@mantine/core';
 import { IconPhotoAi, IconRefresh } from '@tabler/icons-react';
 
 import { Post } from '../../types/post.interface';
@@ -17,8 +17,13 @@ const Home = () => {
 
   const posts = useSelector((state: RootState) => state.posts.posts);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+
+    if (!value.trim()) {
+      setSearchText('');
+      return;
+    }
 
     setSearchText(value);
 
@@ -56,6 +61,7 @@ const Home = () => {
           placeholder='Enter name or prompt'
           value={searchText}
           onChange={handleSearchChange}
+          rightSection={searchText && <CloseButton onClick={() => setSearchText('')} />}
         />
 
         <Tooltip label='Refresh posts' withArrow>

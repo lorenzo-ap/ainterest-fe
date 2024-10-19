@@ -1,12 +1,10 @@
-import * as yup from 'yup';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Textarea, TextInput } from '@mantine/core';
 import { FormEvent, useState } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch } from 'react-redux';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { IconBrandOpenai, IconChevronLeft, IconPhotoUp } from '@tabler/icons-react';
+import { useForm } from '@mantine/form';
 
 import { Post } from '../../types/post.interface';
 import { AppDispatch } from '../../redux/store';
@@ -18,38 +16,65 @@ import GeneratedImage from './components/GeneratedImage';
 export interface CreatePostForm {
   name: string;
   prompt: string;
+  generatedImage: Omit<Post, '_id' | 'name'>;
 }
 
 const CreatePost = () => {
-  const navigate = useNavigate();
-
-  const [generatedImageData, setGeneratedImageData] = useState<Omit<Post, '_id' | 'name'> | null>();
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [isImageMissing, setIsImageMissing] = useState(false);
 
-  const schema = yup.object().shape({
-    name: yup
-      .string()
-      .required('this field is required')
-      .min(2, 'must be at least 2 characters')
-      .max(50, 'must be at most 50 characters'),
-    prompt: yup
-      .string()
-      .required('this field is required')
-      .min(3, 'must be at least 3 characters')
-      .max(150, 'must be at most 150 characters')
-  });
-
-  const { register, handleSubmit, setValue, watch, formState, trigger, clearErrors } = useForm<CreatePostForm>({
-    mode: 'onChange',
-    resolver: yupResolver(schema)
-  });
-
-  const form = watch();
   const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const generateAndSetImage = (prompt: string, translatedPrompt: string) => {
+  const form = useForm<CreatePostForm>({
+    mode: 'uncontrolled',
+    initialValues: {
+      name: '',
+      prompt: '',
+      generatedImage: {
+        prompt: '',
+        photo: ''
+      }
+    },
+
+    validate: {
+      name: (value) => {
+        if (!value.trim()) {
+          return 'Name is required';
+        }
+
+        if (value.length < 3) {
+          return 'Name should be at least 3 characters long';
+        }
+
+        if (value.length > 20) {
+          return 'Name should be at most 20 characters long';
+        }
+      },
+      prompt: (value) => {
+        if (!value.trim()) {
+          return 'Prompt is required';
+        }
+
+        if (value.length < 5) {
+          return 'Prompt should be at least 5 characters long';
+        }
+
+        if (value.length > 200) {
+          return 'Prompt should be at most 200 characters long';
+        }
+      }
+    }
+  });
+
+  const handleSurpriseMe = () => {
+    const randomPrompt = getRandomPrompt(form.getValues().prompt);
+
+    form.setFieldValue('prompt', randomPrompt);
+  };
+
+  const generateImage = (prompt: string, translatedPrompt: string) => {
     const headers = getRapidApiHeaders('imageai-generator.p.rapidapi.com');
     const body = {
       negative_prompt: 'white',
@@ -62,7 +87,7 @@ const CreatePost = () => {
     axios
       .post<string>('https://imageai-generator.p.rapidapi.com/image', body, { headers })
       .then((response) => {
-        setGeneratedImageData({ prompt, photo: `data:image/png;base64,${response.data}` });
+        form.setFieldValue('generatedImage', { prompt, photo: `data:image/png;base64,${response.data}` });
         setIsImageMissing(false);
       })
       .catch((error) => console.error(error))
@@ -70,20 +95,22 @@ const CreatePost = () => {
   };
 
   const onGenerate = () => {
-    clearErrors(['name']);
+    const promptValidation = form.validateField('prompt');
+
+    form.clearFieldError('name');
     setIsImageMissing(false);
 
-    if (!form.prompt?.trim()) {
-      trigger('prompt');
+    if (promptValidation.hasError) {
+      form.validateField('prompt');
       return;
     }
 
     setIsGenerating(true);
 
-    const prompt = form.prompt;
+    const { prompt } = form.getValues();
     const headers = getRapidApiHeaders('ai-translate.p.rapidapi.com');
     const body = {
-      texts: [form.prompt],
+      texts: [prompt],
       tls: ['en'],
       sl: 'auto'
     };
@@ -92,26 +119,24 @@ const CreatePost = () => {
       .post<TranslateAPIResponse[]>('https://ai-translate.p.rapidapi.com/translates', body, {
         headers
       })
-      .then((response) => generateAndSetImage(prompt, response.data[0].texts))
+      .then((response) => generateImage(prompt, response.data[0].texts))
       .catch((error) => console.error(error));
   };
 
-  const submitForm = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const sharePost = (formData: CreatePostForm) => {
+    const nameValidation = form.validateField('name');
 
-    if (!generatedImageData?.photo) {
-      setIsImageMissing(true);
+    form.clearFieldError('prompt');
+
+    if (nameValidation.hasError) {
+      form.validateField('name');
       return;
     }
 
-    handleSubmit(sharePost)();
-  };
-
-  const sharePost: SubmitHandler<CreatePostForm> = (formData) => {
     setIsSharing(true);
     setIsImageMissing(false);
 
-    const body = { ...generatedImageData, name: formData.name };
+    const body = { ...formData.generatedImage, name: formData.name };
 
     axios
       .post<APIResponse<Post>>(`${import.meta.env.VITE_API_URL}/api/v1/post`, body)
@@ -123,10 +148,16 @@ const CreatePost = () => {
       .finally(() => setIsSharing(false));
   };
 
-  const handleSurpriseMe = () => {
-    const randomPrompt = getRandomPrompt(form.prompt);
+  const submitForm = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    setValue('prompt', randomPrompt, { shouldValidate: true });
+    if (!form.getValues().generatedImage.photo) {
+      form.clearFieldError('prompt');
+      setIsImageMissing(true);
+      return;
+    }
+
+    sharePost(form.getValues());
   };
 
   return (
@@ -140,15 +171,15 @@ const CreatePost = () => {
           <div className='mt-8'>
             <h1 className='font-extrabold text-[#222328] text-[32px]'>Create</h1>
 
-            <p className='mt-2 mb-5 md:mb-8 text-[#666E75] text-[16px] max-w-[500px]'>
+            <p className='mt-2 mb-5 lg:mb-8 text-[#666E75] text-[16px] max-w-[500px]'>
               Create imaginative and visually stunning images through AI and share them with the community
             </p>
           </div>
 
           <GeneratedImage
             {...{
-              imageSource: generatedImageData?.photo,
-              imageAlt: form.prompt,
+              imageSource: form.getValues().generatedImage.photo,
+              imageAlt: form.getValues().prompt,
               isGenerating,
               isImageMissing,
               hiddenOnLargeScreen: true
@@ -158,11 +189,11 @@ const CreatePost = () => {
           <div className='flex flex-col md:flex-row justify-between gap-5'>
             <div className='flex flex-col gap-5 flex-grow md:min-w-96'>
               <TextInput
-                className='relative'
+                withAsterisk
                 label='Your name'
                 placeholder='John Doe'
-                error={formState.errors.name?.message}
-                {...register('name')}
+                key={form.key('name')}
+                {...form.getInputProps('name')}
               />
 
               <Textarea
@@ -170,8 +201,8 @@ const CreatePost = () => {
                 rows={8}
                 label='Prompt'
                 placeholder='The long-lost Star Wars 1990 Japanese Anime'
-                error={formState.errors.prompt?.message}
-                {...register('prompt')}
+                key={form.key('prompt')}
+                {...form.getInputProps('prompt')}
                 inputContainer={(children) => (
                   <>
                     {children}
@@ -221,8 +252,8 @@ const CreatePost = () => {
 
         <GeneratedImage
           {...{
-            imageSource: generatedImageData?.photo,
-            imageAlt: form.prompt,
+            imageSource: form.getValues().generatedImage.photo,
+            imageAlt: form.getValues().prompt,
             isGenerating,
             isImageMissing
           }}
