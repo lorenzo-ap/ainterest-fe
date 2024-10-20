@@ -25,4 +25,9 @@ const getRapidApiHeaders = (host: string) => {
   };
 };
 
-export { getRandomPrompt, downloadImage, getRapidApiHeaders };
+const getColorSchemeFromLocalStorage = () => {
+  const scheme = localStorage.getItem('mantine-color-scheme-value');
+  return scheme === 'dark' || scheme === 'light' ? scheme : 'light';
+};
+
+export { getRandomPrompt, downloadImage, getRapidApiHeaders, getColorSchemeFromLocalStorage };

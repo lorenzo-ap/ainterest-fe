@@ -3,7 +3,7 @@ import { IconDownload, IconInfoSquareRounded, IconSquareRoundedXFilled } from '@
 
 import { Post } from '../../types/post.interface';
 import { downloadImage } from '../../utils';
-import { Tooltip } from '@mantine/core';
+import { Text, Tooltip } from '@mantine/core';
 
 const Card = ({ _id, name, prompt, photo }: Post) => {
   const [showInfo, setShowInfo] = useState(false);
@@ -33,7 +33,7 @@ const Card = ({ _id, name, prompt, photo }: Post) => {
       <div
         className={`md:-bottom-full md:group-hover:bottom-0 flex flex-col max-h-[75%] absolute ${showInfo ? '-bottom-0' : '-bottom-full'} left-0 right-0 bg-[#10131F] m-2 p-4 rounded-md transition-all duration-300`}
       >
-        <p className='text-white text-md overflow-y-auto prompt max-h-[50%]'>{prompt}</p>
+        <Text className='text-white text-md overflow-y-auto prompt max-h-[50%]'>{prompt}</Text>
 
         <div className='mt-5 flex justify-between items-center gap-2'>
           <div className='flex items-center gap-2'>
@@ -41,7 +41,7 @@ const Card = ({ _id, name, prompt, photo }: Post) => {
               {name[0]}
             </div>
 
-            <p className='text-white text-sm'>{name}</p>
+            <Text className='text-white text-sm'>{name}</Text>
           </div>
 
           <button type='button' onClick={() => downloadImage(_id, photo)}>

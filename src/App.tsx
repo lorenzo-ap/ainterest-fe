@@ -8,11 +8,11 @@ import { Header, Page } from './components';
 
 const App = () => {
   return (
-    <MantineProvider>
+    <MantineProvider defaultColorScheme='light' withCssVariables>
       <BrowserRouter>
         <Header />
 
-        <main className='sm:px-8 px-4 py-8 w-full bg-[#F9FAFE] min-h-[calc(100vh-73px)]'>
+        <main className='sm:px-8 px-4 py-8 w-full min-h-[calc(100vh-77px)]'>
           <Routes>
             <Route
               path='/'

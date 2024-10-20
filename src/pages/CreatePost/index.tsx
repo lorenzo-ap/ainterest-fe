@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, Textarea, TextInput } from '@mantine/core';
+import { Button, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { IconBrandOpenai, IconChevronLeft, IconPhotoUp } from '@tabler/icons-react';
@@ -77,7 +77,7 @@ const CreatePost = () => {
   const generateImage = (prompt: string, translatedPrompt: string) => {
     const headers = getRapidApiHeaders('imageai-generator.p.rapidapi.com');
     const body = {
-      negative_prompt: 'white',
+      negative_prompt: null,
       prompt: translatedPrompt,
       width: 512,
       height: 512,
@@ -169,11 +169,11 @@ const CreatePost = () => {
           </Button>
 
           <div className='mt-8'>
-            <h1 className='font-extrabold text-[#222328] text-[32px]'>Create</h1>
+            <Title order={1}>Create</Title>
 
-            <p className='mt-2 mb-5 lg:mb-8 text-[#666E75] text-[16px] max-w-[500px]'>
+            <Text className='mt-2 mb-5 lg:mb-8 max-w-[500px] opacity-60'>
               Create imaginative and visually stunning images through AI and share them with the community
-            </p>
+            </Text>
           </div>
 
           <GeneratedImage
@@ -208,9 +208,9 @@ const CreatePost = () => {
                     {children}
 
                     <Button
-                      className='absolute top-0 right-0'
+                      className='absolute -top-0.5 right-0'
                       size='compact-xs'
-                      variant='light'
+                      variant='default'
                       color='dark'
                       onClick={handleSurpriseMe}
                     >
@@ -245,9 +245,9 @@ const CreatePost = () => {
             </div>
           </div>
 
-          <p className='mt-3 md:mt-6 text-[#666E75] text-sm'>
+          <Text className='mt-3 md:mt-6 text-sm opacity-60'>
             Once you have created the image you want, you can share it with others in the community.
-          </p>
+          </Text>
         </form>
 
         <GeneratedImage

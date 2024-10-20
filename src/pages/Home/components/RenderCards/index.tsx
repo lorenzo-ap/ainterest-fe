@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Card } from '../../../../components';
 import { Post } from '../../../../types/post.interface';
 import CardSkeleton from '../../../../components/Card/components/CardSkeleton';
+import { Title } from '@mantine/core';
 
 interface RenderCardsProps {
   posts: Post[];
@@ -51,7 +52,11 @@ const RenderCards = ({ posts: data, title, isLoading }: RenderCardsProps) => {
     return displayedPosts.map((post) => <Card key={post._id} {...post} />);
   }
 
-  return <h2 className='mt-5 font-bold text-[#6469FF] text-xl uppercase'>{title}</h2>;
+  return (
+    <Title className='uppercase text-[#6469FF]' order={2} size={'h3'}>
+      {title}
+    </Title>
+  );
 };
 
 export default RenderCards;
