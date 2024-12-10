@@ -1,16 +1,16 @@
-import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
 import { Button, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { IconBrandOpenai, IconChevronLeft, IconPhotoUp } from '@tabler/icons-react';
+import axios from 'axios';
 import { FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { IconBrandOpenai, IconChevronLeft, IconPhotoUp } from '@tabler/icons-react';
-import { useForm } from '@mantine/form';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { Post } from '../../types/post.interface';
-import { AppDispatch } from '../../redux/store';
-import { getRandomPrompt, getRapidApiHeaders } from '../../utils';
-import { APIResponse, TranslateAPIResponse } from '../../types/api-response.interface';
 import { addPost } from '../../redux/slices/postsSlice';
+import { AppDispatch } from '../../redux/store';
+import { APIResponse, TranslateAPIResponse } from '../../types/api-response.interface';
+import { Post } from '../../types/post.interface';
+import { getRandomPrompt, getRapidApiHeaders } from '../../utils';
 import GeneratedImage from './components/GeneratedImage';
 
 export interface CreatePostForm {
@@ -119,7 +119,7 @@ const CreatePost = () => {
       .post<TranslateAPIResponse[]>('https://ai-translate.p.rapidapi.com/translates', body, {
         headers
       })
-      .then((response) => generateImage(prompt, response.data[0].texts))
+      .then((response) => generateImage(prompt, response.data[0].texts[0]))
       .catch((error) => console.error(error));
   };
 
