@@ -161,8 +161,8 @@ const CreatePost = () => {
   };
 
   return (
-    <section className='max-w-7xl mx-auto flex flex-col items-start'>
-      <div className='flex flex-col lg:flex-row justify-between items-center lg:items-start w-full gap-5'>
+    <section className='mx-auto flex max-w-7xl flex-col items-start'>
+      <div className='flex w-full flex-col items-center justify-between gap-5 lg:flex-row lg:items-start'>
         <form className='max-w-xl lg:max-w-md xl:max-w-lg' onSubmit={submitForm}>
           <Button component={Link} to='/' color='violet' size='compact-md' leftSection={<IconChevronLeft size={18} />}>
             Go back
@@ -171,7 +171,7 @@ const CreatePost = () => {
           <div className='mt-8'>
             <Title order={1}>Create</Title>
 
-            <Text className='mt-2 mb-5 lg:mb-8 max-w-[500px] opacity-60'>
+            <Text className='mb-5 mt-2 max-w-[500px] opacity-60 lg:mb-8'>
               Create imaginative and visually stunning images through AI and share them with the community
             </Text>
           </div>
@@ -186,10 +186,9 @@ const CreatePost = () => {
             }}
           />
 
-          <div className='flex flex-col md:flex-row justify-between gap-5'>
-            <div className='flex flex-col gap-5 flex-grow md:min-w-96'>
+          <div className='flex flex-col justify-between gap-5 md:flex-row'>
+            <div className='flex flex-grow flex-col gap-5 md:min-w-96'>
               <TextInput
-                withAsterisk
                 label='Your name'
                 placeholder='John Doe'
                 key={form.key('name')}
@@ -220,7 +219,7 @@ const CreatePost = () => {
                 )}
               />
 
-              <div className='flex flex-col sm:flex-row items-stretch sm:items-center gap-3'>
+              <div className='flex flex-col items-stretch gap-3 sm:flex-row sm:items-center'>
                 <Button
                   color='teal'
                   size='md'
@@ -245,7 +244,7 @@ const CreatePost = () => {
             </div>
           </div>
 
-          <Text className='mt-3 md:mt-6 text-sm opacity-60'>
+          <Text className='mt-3 text-sm opacity-60 md:mt-4'>
             Once you have created the image you want, you can share it with others in the community.
           </Text>
         </form>

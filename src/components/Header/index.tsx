@@ -19,14 +19,14 @@ const Header = () => {
   };
 
   return (
-    <header className={`${styles.header} w-full flex justify-between items-center sm:px-8 px-4 py-5 border-b`}>
-      <div className='w-full max-w-7xl mx-auto flex justify-between items-center'>
+    <header className={`${styles.header} flex w-full items-center justify-between border-b px-4 py-5 sm:px-8`}>
+      <div className='mx-auto flex w-full max-w-7xl items-center justify-between'>
         <Link to='/'>
-          <Text className='text-2xl font-semibold'>
-            <Text className='font-bold text-2xl' c='violet' span>
+          <Text className='group text-2xl font-semibold transition-colors duration-150 hover:text-violet-200'>
+            <Text className='text-2xl font-bold' c='violet' span>
               AI
             </Text>
-            mage Generator
+            nterest
           </Text>
         </Link>
 
