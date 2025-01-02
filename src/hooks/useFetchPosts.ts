@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPosts } from '../redux/slices/postsSlice';
 import { AppDispatch, RootState } from '../redux/store';
@@ -12,9 +12,7 @@ const useFetchPosts = () => {
   const dispatch: AppDispatch = useDispatch();
   const posts = useSelector((state: RootState) => state.posts.posts);
 
-  useEffect(() => {
-    if (posts.length) return;
-
+  const fetchPosts = useCallback(() => {
     setIsLoading(true);
 
     axios
@@ -22,9 +20,15 @@ const useFetchPosts = () => {
       .then((response) => dispatch(setPosts(response.data.data.reverse())))
       .catch((error) => console.error(error))
       .finally(() => setIsLoading(false));
-  }, [dispatch, posts.length]);
+  }, [dispatch]);
 
-  return { isLoading };
+  useEffect(() => {
+    if (posts.length) return;
+
+    fetchPosts();
+  }, [posts.length, fetchPosts]);
+
+  return { isLoading, fetchPosts };
 };
 
 export default useFetchPosts;
