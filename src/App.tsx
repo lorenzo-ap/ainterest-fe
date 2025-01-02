@@ -1,10 +1,10 @@
 import '@mantine/core/styles.css';
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { Home, CreatePost } from './pages';
 import { Header, Page } from './components';
+import { CreatePost, Home } from './pages';
 
 const App = () => {
   return (
@@ -12,21 +12,21 @@ const App = () => {
       <BrowserRouter>
         <Header />
 
-        <main className='sm:px-8 px-4 py-8 w-full min-h-[calc(100vh-77px)]'>
+        <main className='min-h-[calc(100vh-77px)] w-full px-4 py-8 sm:px-8'>
           <Routes>
             <Route
               path='/'
               element={
-                <Page title='AImage Generator'>
+                <Page title='AInterest'>
                   <Home />
                 </Page>
               }
             />
 
             <Route
-              path='/create-post'
+              path='/generate-image'
               element={
-                <Page title='Create post'>
+                <Page title='Generate image'>
                   <CreatePost />
                 </Page>
               }

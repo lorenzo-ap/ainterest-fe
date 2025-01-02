@@ -1,12 +1,11 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { ActionIcon, Button, CloseButton, Text, TextInput, Title, Tooltip } from '@mantine/core';
 import { IconPhotoAi, IconRefresh } from '@tabler/icons-react';
-
-import { Post } from '../../types/post.interface';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import useFetchPosts from '../../hooks/useFetchPosts';
 import { RootState } from '../../redux/store';
+import { Post } from '../../types/post.interface';
 import RenderCards from './components/RenderCards';
 
 const Home = () => {
@@ -37,8 +36,8 @@ const Home = () => {
   };
 
   return (
-    <section className='max-w-7xl mx-auto'>
-      <div className='flex md:flex-row gap-5 flex-col justify-between items-start'>
+    <section className='mx-auto max-w-7xl'>
+      <div className='flex flex-col items-start justify-between gap-5 md:flex-row'>
         <div>
           <Title order={1}>The Community Showcase</Title>
 
@@ -47,12 +46,12 @@ const Home = () => {
           </Text>
         </div>
 
-        <Button component={Link} to='/create-post' color='violet' size='lg' rightSection={<IconPhotoAi size={20} />}>
-          Create image
+        <Button component={Link} to='/generate-image' color='violet' size='lg' rightSection={<IconPhotoAi size={20} />}>
+          Generate image
         </Button>
       </div>
 
-      <div className='mt-8 md:mt-16 flex items-end gap-x-2'>
+      <div className='mt-8 flex items-end gap-x-2 md:mt-16'>
         <TextInput
           flex={1}
           size='md'
@@ -86,12 +85,12 @@ const Home = () => {
 
       <div className='mt-5'>
         {searchText && (
-          <Title className='font-medium mb-3' order={2} size={'h3'}>
+          <Title className='mb-3 font-medium' order={2} size={'h3'}>
             <span className='opacity-60'>Showing results for</span> <span className='opacity-100'>{searchText}</span>
           </Title>
         )}
 
-        <div className='grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3'>
+        <div className='grid grid-cols-1 gap-3 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'>
           {searchText ? (
             <RenderCards posts={searchedPosts} title='No search results found' isLoading={isLoading} />
           ) : (

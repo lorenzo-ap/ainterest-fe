@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-
-import { Card } from '../../../../components';
-import { Post } from '../../../../types/post.interface';
-import CardSkeleton from '../../../../components/Card/components/CardSkeleton';
 import { Title } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { Card } from '../../../../components';
+import CardSkeleton from '../../../../components/Card/components/CardSkeleton';
+import { Post } from '../../../../types/post.interface';
 
 interface RenderCardsProps {
   posts: Post[];
@@ -19,7 +18,7 @@ const RenderCards = ({ posts: data, title, isLoading }: RenderCardsProps) => {
   }, [data]);
 
   const handleScroll = () => {
-    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight) {
+    if (Math.ceil(window.innerHeight + document.documentElement.scrollTop) >= document.documentElement.offsetHeight) {
       loadMoreData();
     }
   };

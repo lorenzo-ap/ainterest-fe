@@ -1,11 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { Post } from '../types/post.interface';
 import { setPosts } from '../redux/slices/postsSlice';
 import { AppDispatch, RootState } from '../redux/store';
 import { APIResponse } from '../types/api-response.interface';
+import { Post } from '../types/post.interface';
 
 const useFetchPosts = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
