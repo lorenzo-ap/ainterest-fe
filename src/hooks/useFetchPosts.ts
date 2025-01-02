@@ -12,7 +12,9 @@ const useFetchPosts = () => {
   const dispatch: AppDispatch = useDispatch();
   const posts = useSelector((state: RootState) => state.posts.posts);
 
-  const fetchPosts = () => {
+  useEffect(() => {
+    if (posts.length) return;
+
     setIsLoading(true);
 
     axios
@@ -20,15 +22,9 @@ const useFetchPosts = () => {
       .then((response) => dispatch(setPosts(response.data.data.reverse())))
       .catch((error) => console.error(error))
       .finally(() => setIsLoading(false));
-  };
+  }, [dispatch, posts.length]);
 
-  useEffect(() => {
-    if (posts.length) return;
-
-    fetchPosts();
-  });
-
-  return { isLoading, fetchPosts };
+  return { isLoading };
 };
 
 export default useFetchPosts;
