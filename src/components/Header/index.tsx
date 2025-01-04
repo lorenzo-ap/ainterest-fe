@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { setUser } from '../../redux/slices/userSlice';
 import { RootState, store } from '../../redux/store';
 import { getColorSchemeFromLocalStorage } from '../../utils';
+import ConfirmModal from '../ConfirmModal';
 import SignInModal from './components/SignInModal';
 import SignUpModal from './components/SignUpModal';
 import styles from './index.module.scss';
@@ -20,6 +21,8 @@ const Header = () => {
 
   const [signInModalOpened, { open: openSignInModal, close: closeSignInModal }] = useDisclosure(false);
   const [signUpModalOpened, { open: openSignUpModal, close: closeSignUpModal }] = useDisclosure(false);
+  const [signOutConfirmModalOpened, { open: openSignOutConfirmModal, close: closeSignOutConfirmModal }] =
+    useDisclosure(false);
 
   const toggleColorScheme = () => {
     setColorScheme(computedColorScheme === 'dark' ? 'light' : 'dark');
@@ -30,6 +33,7 @@ const Header = () => {
   };
 
   const signOut = () => {
+    closeSignOutConfirmModal();
     localStorage.removeItem('jwt-token');
     store.dispatch(setUser(null));
     navigate('/');
@@ -59,8 +63,8 @@ const Header = () => {
                   variant='light'
                   radius={'md'}
                   size={36}
-                  color='cyan'
-                  onClick={signOut}
+                  color='red'
+                  onClick={openSignOutConfirmModal}
                   aria-label='Sign Out'
                 >
                   <IconLogout size={18} />
@@ -85,6 +89,13 @@ const Header = () => {
 
       <SignInModal opened={signInModalOpened} close={closeSignInModal} openSignUpModal={openSignUpModal} />
       <SignUpModal opened={signUpModalOpened} close={closeSignUpModal} openSignInModal={openSignInModal} />
+      <ConfirmModal
+        title='Sign Out'
+        message='Are you sure you want to sign out?'
+        opened={signOutConfirmModalOpened}
+        confirm={signOut}
+        close={closeSignOutConfirmModal}
+      />
     </>
   );
 };

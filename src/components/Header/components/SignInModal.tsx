@@ -75,19 +75,21 @@ const SignInModal = ({ opened, close, openSignUpModal }: SignInModalProps) => {
       opened={opened}
       onClose={closeModal}
       title={<Text className='text-center text-2xl font-bold'>Sign In</Text>}
-      centered
-      radius={10}
-      padding={20}
+      radius='md'
+      padding='lg'
+      overlayProps={{
+        blur: 2
+      }}
     >
       <form className='flex flex-col gap-y-3' onSubmit={form.onSubmit(submit)}>
         <TextInput label='Email' key={form.key('email')} {...form.getInputProps('email')} />
         <TextInput label='Password' type='password' key={form.key('password')} {...form.getInputProps('password')} />
-        <Button className='mt-1' color='teal' size='sm' type='submit' loading={loading}>
+        <Button className='mt-2' color='teal' size='sm' type='submit' loading={loading}>
           Sign In
         </Button>
       </form>
 
-      <Text className='mt-3 flex items-center justify-center gap-x-1' size='sm'>
+      <Text className='mt-4 flex items-center justify-center gap-x-1' size='sm'>
         <span>Don't have an account?</span>{' '}
         <Button
           className='p-0 underline-offset-2 hover:underline'
