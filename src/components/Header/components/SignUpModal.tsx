@@ -1,5 +1,7 @@
 import { Button, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useState } from 'react';
+import { authService } from '../../../services/auth';
 
 interface SignUpModalProps {
   opened: boolean;
@@ -74,13 +76,24 @@ const SignUpModal = ({ opened, close, openSignInModal }: SignUpModalProps) => {
     }
   });
 
+  const [loading, setLoading] = useState(false);
+
   const closeModal = () => {
     close();
     form.reset();
   };
 
   const submit = (values: SignUpForm) => {
-    console.log(values);
+    setLoading(true);
+
+    authService
+      .signUp(values)
+      .then(() => {
+        closeModal();
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -106,7 +119,7 @@ const SignUpModal = ({ opened, close, openSignInModal }: SignUpModalProps) => {
           {...form.getInputProps('confirmPassword')}
         />
 
-        <Button className='mt-1' color='teal' size='sm' type='submit'>
+        <Button className='mt-1' color='teal' size='sm' type='submit' loading={loading}>
           Sign Up
         </Button>
       </form>

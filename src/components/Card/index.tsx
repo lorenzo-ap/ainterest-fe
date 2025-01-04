@@ -5,7 +5,7 @@ import { Text, Tooltip } from '@mantine/core';
 import { Post } from '../../types/post.interface';
 import { downloadImage } from '../../utils';
 
-const Card = ({ _id, name, prompt, photo }: Post) => {
+const Card = ({ _id, prompt, photo, user }: Post) => {
   const [showInfo, setShowInfo] = useState(false);
 
   return (
@@ -38,10 +38,10 @@ const Card = ({ _id, name, prompt, photo }: Post) => {
         <div className='mt-3 flex items-center justify-between gap-2'>
           <div className='flex items-center gap-2'>
             <div className='flex h-7 w-7 items-center justify-center rounded-full bg-green-700 object-cover text-xs font-bold text-white'>
-              {name[0]}
+              {user.username[0].toUpperCase()}
             </div>
 
-            <Text className='text-sm text-white'>{name}</Text>
+            <Text className='text-sm text-white'>{user.username}</Text>
           </div>
 
           <button type='button' onClick={() => downloadImage(_id, photo)}>

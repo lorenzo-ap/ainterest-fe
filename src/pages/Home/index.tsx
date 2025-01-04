@@ -14,7 +14,8 @@ const Home = () => {
 
   const { isLoading, fetchPosts } = useFetchPosts();
 
-  const posts = useSelector((state: RootState) => state.posts.posts);
+  const posts = useSelector((state: RootState) => state.posts);
+  const user = useSelector((state: RootState) => state.user);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -28,7 +29,7 @@ const Home = () => {
 
     const searchResults = posts.filter(
       (post) =>
-        post.name.toLowerCase().includes(value.trim().toLowerCase()) ||
+        post.user.username.toLowerCase().includes(value.trim().toLowerCase()) ||
         post.prompt.toLowerCase().includes(value.trim().toLowerCase())
     );
 
@@ -46,9 +47,17 @@ const Home = () => {
           </Text>
         </div>
 
-        <Button component={Link} to='/generate-image' color='violet' size='lg' rightSection={<IconPhotoAi size={20} />}>
-          Generate image
-        </Button>
+        {user && (
+          <Button
+            component={Link}
+            to='/generate-image'
+            color='violet'
+            size='lg'
+            rightSection={<IconPhotoAi size={20} />}
+          >
+            Generate image
+          </Button>
+        )}
       </div>
 
       <div className='mt-8 flex items-end gap-x-2 md:mt-16'>
@@ -75,7 +84,7 @@ const Home = () => {
             color='violet'
             radius='md'
             onClick={fetchPosts}
-            disabled={isLoading}
+            loading={isLoading}
             aria-label='Refresh'
           >
             <IconRefresh size={18} />

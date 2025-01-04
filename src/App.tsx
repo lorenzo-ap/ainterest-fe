@@ -1,12 +1,14 @@
-import '@mantine/core/styles.css';
-
 import { MantineProvider } from '@mantine/core';
+import '@mantine/core/styles.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
 import { Header, Page } from './components';
+import ProtectedRoute from './components/ProtectedRoute';
+import useAuth from './hooks/useAuth';
 import { CreatePost, Home } from './pages';
 
 const App = () => {
+  useAuth();
+
   return (
     <MantineProvider defaultColorScheme='light' withCssVariables>
       <BrowserRouter>
@@ -23,14 +25,16 @@ const App = () => {
               }
             />
 
-            <Route
-              path='/generate-image'
-              element={
-                <Page title='Generate image'>
-                  <CreatePost />
-                </Page>
-              }
-            />
+            <Route element={<ProtectedRoute />}>
+              <Route
+                path='/generate-image'
+                element={
+                  <Page title='Generate image'>
+                    <CreatePost />
+                  </Page>
+                }
+              />
+            </Route>
           </Routes>
         </main>
       </BrowserRouter>

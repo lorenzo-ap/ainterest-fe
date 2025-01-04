@@ -1,5 +1,7 @@
 import { Button, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useState } from 'react';
+import { authService } from '../../../services/auth';
 
 interface SignInModalProps {
   opened: boolean;
@@ -8,7 +10,7 @@ interface SignInModalProps {
 }
 
 export interface SignInForm {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -16,22 +18,19 @@ const SignInModal = ({ opened, close, openSignUpModal }: SignInModalProps) => {
   const form = useForm<SignInForm>({
     mode: 'uncontrolled',
     initialValues: {
-      username: '',
+      email: '',
       password: ''
     },
 
     validate: {
-      username: (value) => {
-        if (!value.trim()) {
-          return 'Username is required';
+      email: (value) => {
+        if (!value) {
+          return 'Email is required';
         }
 
-        if (value.length < 3) {
-          return 'Username should be at least 3 characters long';
-        }
-
-        if (value.length > 20) {
-          return 'Username should be at most 20 characters long';
+        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        if (!emailRegex.test(value)) {
+          return 'Invalid email address';
         }
       },
       password: (value) => {
@@ -51,13 +50,24 @@ const SignInModal = ({ opened, close, openSignUpModal }: SignInModalProps) => {
     }
   });
 
+  const [loading, setLoading] = useState(false);
+
   const closeModal = () => {
     close();
     form.reset();
   };
 
   const submit = (values: SignInForm) => {
-    console.log(values);
+    setLoading(true);
+
+    authService
+      .signIn(values)
+      .then(() => {
+        closeModal();
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -70,9 +80,9 @@ const SignInModal = ({ opened, close, openSignUpModal }: SignInModalProps) => {
       padding={20}
     >
       <form className='flex flex-col gap-y-3' onSubmit={form.onSubmit(submit)}>
-        <TextInput label='Username' key={form.key('username')} {...form.getInputProps('username')} />
+        <TextInput label='Email' key={form.key('email')} {...form.getInputProps('email')} />
         <TextInput label='Password' type='password' key={form.key('password')} {...form.getInputProps('password')} />
-        <Button className='mt-1' color='teal' size='sm' type='submit'>
+        <Button className='mt-1' color='teal' size='sm' type='submit' loading={loading}>
           Sign In
         </Button>
       </form>

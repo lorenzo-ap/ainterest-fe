@@ -1,18 +1,25 @@
 import { ActionIcon, Button, Text, Tooltip, useComputedColorScheme, useMantineColorScheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconMoon, IconSun } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import { IconLogout, IconMoon, IconSun } from '@tabler/icons-react';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { setUser } from '../../redux/slices/userSlice';
+import { RootState, store } from '../../redux/store';
 import { getColorSchemeFromLocalStorage } from '../../utils';
 import SignInModal from './components/SignInModal';
 import SignUpModal from './components/SignUpModal';
 import styles from './index.module.scss';
 
 const Header = () => {
-  const [signInModalOpened, { open: openSignInModal, close: closeSignInModal }] = useDisclosure(false);
-  const [signUpModalOpened, { open: openSignUpModal, close: closeSignUpModal }] = useDisclosure(false);
+  const navigate = useNavigate();
 
   const { setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme(getColorSchemeFromLocalStorage());
+
+  const user = useSelector((state: RootState) => state.user);
+
+  const [signInModalOpened, { open: openSignInModal, close: closeSignInModal }] = useDisclosure(false);
+  const [signUpModalOpened, { open: openSignUpModal, close: closeSignUpModal }] = useDisclosure(false);
 
   const toggleColorScheme = () => {
     setColorScheme(computedColorScheme === 'dark' ? 'light' : 'dark');
@@ -20,6 +27,12 @@ const Header = () => {
       computedColorScheme === 'dark' ? 'var(--mantine-color-gray-0)' : 'var(--mantine-color-dark-7)';
     document.body.style.color =
       computedColorScheme === 'dark' ? 'var(--mantine-color-black)' : 'var(--mantine-color-dark-0)';
+  };
+
+  const signOut = () => {
+    localStorage.removeItem('jwt-token');
+    store.dispatch(setUser(null));
+    navigate('/');
   };
 
   return (
@@ -36,9 +49,24 @@ const Header = () => {
           </Link>
 
           <div className='flex items-center gap-x-4'>
-            <Button onClick={openSignInModal} color='cyan' variant='light'>
-              Sign In
-            </Button>
+            {!user ? (
+              <Button onClick={openSignInModal} color='cyan' variant='light'>
+                Sign In
+              </Button>
+            ) : (
+              <Tooltip withArrow label='Sign Out'>
+                <ActionIcon
+                  variant='light'
+                  radius={'md'}
+                  size={36}
+                  color='cyan'
+                  onClick={signOut}
+                  aria-label='Sign Out'
+                >
+                  <IconLogout size={18} />
+                </ActionIcon>
+              </Tooltip>
+            )}
 
             <Tooltip withArrow label={computedColorScheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
               <ActionIcon

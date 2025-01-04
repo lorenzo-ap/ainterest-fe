@@ -1,22 +1,18 @@
-import { Button, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Button, Text, Textarea, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconBrandOpenai, IconChevronLeft, IconPhotoUp } from '@tabler/icons-react';
 import axios from 'axios';
 import { FormEvent, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-
-import { addPost } from '../../redux/slices/postsSlice';
-import { AppDispatch } from '../../redux/store';
-import { APIResponse, TranslateAPIResponse } from '../../types/api-response.interface';
-import { Post } from '../../types/post.interface';
+import { postService } from '../../services/post';
+import { TranslateAPIResponse } from '../../types/api-response.interface';
+import { GeneratedImage } from '../../types/post.interface';
 import { getRandomPrompt, getRapidApiHeaders } from '../../utils';
-import GeneratedImage from './components/GeneratedImage';
+import GeneratedImageComponent from './components/GeneratedImage';
 
 export interface CreatePostForm {
-  name: string;
   prompt: string;
-  generatedImage: Omit<Post, '_id' | 'name'>;
+  generatedImage: GeneratedImage;
 }
 
 const CreatePost = () => {
@@ -24,13 +20,11 @@ const CreatePost = () => {
   const [isSharing, setIsSharing] = useState(false);
   const [isImageMissing, setIsImageMissing] = useState(false);
 
-  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
   const form = useForm<CreatePostForm>({
     mode: 'uncontrolled',
     initialValues: {
-      name: '',
       prompt: '',
       generatedImage: {
         prompt: '',
@@ -39,19 +33,6 @@ const CreatePost = () => {
     },
 
     validate: {
-      name: (value) => {
-        if (!value.trim()) {
-          return 'Name is required';
-        }
-
-        if (value.length < 3) {
-          return 'Name should be at least 3 characters long';
-        }
-
-        if (value.length > 20) {
-          return 'Name should be at most 20 characters long';
-        }
-      },
       prompt: (value) => {
         if (!value.trim()) {
           return 'Prompt is required';
@@ -97,7 +78,6 @@ const CreatePost = () => {
   const onGenerate = () => {
     const promptValidation = form.validateField('prompt');
 
-    form.clearFieldError('name');
     setIsImageMissing(false);
 
     if (promptValidation.hasError) {
@@ -124,24 +104,16 @@ const CreatePost = () => {
   };
 
   const sharePost = (formData: CreatePostForm) => {
-    const nameValidation = form.validateField('name');
-
     form.clearFieldError('prompt');
-
-    if (nameValidation.hasError) {
-      form.validateField('name');
-      return;
-    }
 
     setIsSharing(true);
     setIsImageMissing(false);
 
-    const body = { ...formData.generatedImage, name: formData.name };
+    const body = { ...formData.generatedImage };
 
-    axios
-      .post<APIResponse<Post>>(`${import.meta.env.VITE_API_URL}/api/v1/post`, body)
-      .then((post) => {
-        dispatch(addPost(post.data.data));
+    postService
+      .createPost(body)
+      .then(() => {
         navigate('/');
       })
       .catch((error) => console.error(error))
@@ -176,7 +148,7 @@ const CreatePost = () => {
             </Text>
           </div>
 
-          <GeneratedImage
+          <GeneratedImageComponent
             {...{
               imageSource: form.getValues().generatedImage.photo,
               imageAlt: form.getValues().prompt,
@@ -188,13 +160,6 @@ const CreatePost = () => {
 
           <div className='flex flex-col justify-between gap-5 md:flex-row'>
             <div className='flex flex-grow flex-col gap-5 md:min-w-96'>
-              <TextInput
-                label='Your name'
-                placeholder='John Doe'
-                key={form.key('name')}
-                {...form.getInputProps('name')}
-              />
-
               <Textarea
                 className='relative'
                 rows={8}
@@ -227,7 +192,7 @@ const CreatePost = () => {
                   onClick={onGenerate}
                   disabled={isGenerating || isSharing}
                 >
-                  {isGenerating ? 'Generating...' : 'Generate'}
+                  Generate
                 </Button>
 
                 <Button
@@ -236,9 +201,10 @@ const CreatePost = () => {
                   size='md'
                   type='submit'
                   rightSection={!isSharing && <IconPhotoUp size={20} />}
-                  disabled={isGenerating || isSharing}
+                  loading={isSharing}
+                  disabled={isGenerating}
                 >
-                  {isSharing ? 'Sharing...' : 'Share with the community'}
+                  Share with the community
                 </Button>
               </div>
             </div>
@@ -249,7 +215,7 @@ const CreatePost = () => {
           </Text>
         </form>
 
-        <GeneratedImage
+        <GeneratedImageComponent
           {...{
             imageSource: form.getValues().generatedImage.photo,
             imageAlt: form.getValues().prompt,
