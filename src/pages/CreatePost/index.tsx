@@ -5,6 +5,7 @@ import axios from 'axios';
 import { FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { postService } from '../../services/post';
+import { toastService } from '../../services/toast';
 import { TranslateAPIResponse } from '../../types/api-response.interface';
 import { GeneratedImage } from '../../types/post.interface';
 import { getRandomPrompt, getRapidApiHeaders } from '../../utils';
@@ -115,6 +116,8 @@ const CreatePost = () => {
       .createPost(body)
       .then(() => {
         navigate('/');
+
+        toastService.success('Post shared successfully');
       })
       .catch((error) => console.error(error))
       .finally(() => setIsSharing(false));

@@ -2,6 +2,7 @@ import { Button, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { authService } from '../../../services/auth';
+import { toastService } from '../../../services/toast';
 
 interface SignInModalProps {
   opened: boolean;
@@ -64,6 +65,8 @@ const SignInModal = ({ opened, close, openSignUpModal }: SignInModalProps) => {
       .signIn(values)
       .then(() => {
         closeModal();
+
+        toastService.success('Signed in successfully');
       })
       .finally(() => {
         setLoading(false);
@@ -77,9 +80,6 @@ const SignInModal = ({ opened, close, openSignUpModal }: SignInModalProps) => {
       title={<Text className='text-center text-2xl font-bold'>Sign In</Text>}
       radius='md'
       padding='lg'
-      overlayProps={{
-        blur: 2
-      }}
     >
       <form className='flex flex-col gap-y-3' onSubmit={form.onSubmit(submit)}>
         <TextInput label='Email' key={form.key('email')} {...form.getInputProps('email')} />

@@ -1,5 +1,7 @@
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
+import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Header, Page } from './components';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -11,6 +13,8 @@ const App = () => {
 
   return (
     <MantineProvider defaultColorScheme='light' withCssVariables>
+      <Notifications position='bottom-right' zIndex={1000} autoClose={3000} />
+
       <BrowserRouter>
         <Header />
 

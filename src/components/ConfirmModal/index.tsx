@@ -26,9 +26,6 @@ const ConfirmModal = ({
       title={<Text className='text-center text-2xl font-bold'>{title}</Text>}
       radius='md'
       padding='lg'
-      overlayProps={{
-        blur: 2
-      }}
     >
       <Text className='mb-5' c='dimmed'>
         {message}

@@ -44,7 +44,12 @@ const Card = ({ _id, prompt, photo, user }: Post) => {
             <Text className='text-sm text-white'>{user.username}</Text>
           </div>
 
-          <button type='button' onClick={() => downloadImage(_id, photo)}>
+          <button
+            type='button'
+            onClick={() => {
+              downloadImage(_id, photo);
+            }}
+          >
             <Tooltip label='Download image' withArrow>
               <IconDownload className='text-slate-300' size={24} />
             </Tooltip>

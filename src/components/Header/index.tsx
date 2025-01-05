@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { setUser } from '../../redux/slices/userSlice';
 import { RootState, store } from '../../redux/store';
+import { toastService } from '../../services/toast';
 import { getColorSchemeFromLocalStorage } from '../../utils';
 import ConfirmModal from '../ConfirmModal';
 import SignInModal from './components/SignInModal';
@@ -34,9 +35,12 @@ const Header = () => {
 
   const signOut = () => {
     closeSignOutConfirmModal();
+
     localStorage.removeItem('jwt-token');
     store.dispatch(setUser(null));
+
     navigate('/');
+    toastService.success('Signed out successfully');
   };
 
   return (
