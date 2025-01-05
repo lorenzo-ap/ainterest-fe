@@ -7,7 +7,8 @@
 }
 
 body {
-  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7));
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
 
   &::-webkit-scrollbar {
     width: 10px;

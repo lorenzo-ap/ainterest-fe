@@ -27,10 +27,6 @@ const Header = () => {
 
   const toggleColorScheme = () => {
     setColorScheme(computedColorScheme === 'dark' ? 'light' : 'dark');
-    document.body.style.background =
-      computedColorScheme === 'dark' ? 'var(--mantine-color-gray-0)' : 'var(--mantine-color-dark-7)';
-    document.body.style.color =
-      computedColorScheme === 'dark' ? 'var(--mantine-color-black)' : 'var(--mantine-color-dark-0)';
   };
 
   const signOut = () => {
