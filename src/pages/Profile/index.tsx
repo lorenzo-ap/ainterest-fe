@@ -52,7 +52,7 @@ const ProfilePage = () => {
   return (
     <>
       <div className='relative mx-auto max-w-7xl'>
-        <div className='mb-5 flex items-start justify-between'>
+        <div className='mb-5 flex flex-wrap items-start justify-between gap-y-4'>
           <div className='flex items-center gap-x-3'>
             <div className='flex h-16 w-16 items-center justify-center rounded-full bg-green-700 object-cover text-3xl font-bold text-white'>
               {stateUser?.username[0].toUpperCase()}
@@ -81,7 +81,7 @@ const ProfilePage = () => {
         </div>
 
         <TextInput
-          className='mt-8'
+          className='m5-4 md:mt-8'
           flex={1}
           size='md'
           radius='md'

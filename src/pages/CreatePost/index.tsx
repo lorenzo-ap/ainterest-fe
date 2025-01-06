@@ -150,7 +150,7 @@ const CreatePost = () => {
             Back
           </Button>
 
-          <div className='mt-8'>
+          <div className='mt-4 md:mt-8'>
             <Title order={1}>Create</Title>
 
             <Text className='mb-5 mt-2 max-w-[500px] opacity-60 lg:mb-8'>
