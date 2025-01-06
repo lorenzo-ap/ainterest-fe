@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toastService } from '../services/toast';
 
 const api = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}/api/v1`
@@ -27,6 +28,8 @@ api.interceptors.response.use(
 
       window.location.href = '/';
     }
+
+    toastService.error(error.response.data.message);
 
     return Promise.reject(error);
   }

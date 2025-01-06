@@ -1,12 +1,16 @@
+import { Text, Tooltip } from '@mantine/core';
 import { IconDownload, IconInfoSquareRounded, IconSquareRoundedXFilled } from '@tabler/icons-react';
 import { useState } from 'react';
-
-import { Text, Tooltip } from '@mantine/core';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { RootState } from '../../redux/store';
 import { Post } from '../../types/post.interface';
 import { downloadImage } from '../../utils';
 
 const Card = ({ _id, prompt, photo, user }: Post) => {
   const [showInfo, setShowInfo] = useState(false);
+
+  const currentUser = useSelector((state: RootState) => state.user);
 
   return (
     <div className='card group relative overflow-y-hidden rounded-xl shadow-card'>
@@ -36,13 +40,18 @@ const Card = ({ _id, prompt, photo, user }: Post) => {
         <Text className='text-md prompt max-h-[50%] overflow-y-auto text-white'>{prompt}</Text>
 
         <div className='mt-3 flex items-center justify-between gap-2'>
-          <div className='flex items-center gap-2'>
+          <Link
+            className='flex items-center gap-2'
+            to='/account'
+            state={user}
+            style={{ pointerEvents: currentUser?._id === user._id ? 'none' : 'auto' }}
+          >
             <div className='flex h-7 w-7 items-center justify-center rounded-full bg-green-700 object-cover text-xs font-bold text-white'>
               {user.username[0].toUpperCase()}
             </div>
 
             <Text className='text-sm text-white'>{user.username}</Text>
-          </div>
+          </Link>
 
           <button
             type='button'

@@ -5,6 +5,8 @@ import { setUser } from '../redux/slices/userSlice';
 import { store } from '../redux/store';
 import { User } from '../types/user.interface';
 
+const slug = 'users';
+
 const authUser = (user: User) => {
   store.dispatch(setUser(user));
   localStorage.setItem('jwt-token', user.token);
@@ -12,13 +14,13 @@ const authUser = (user: User) => {
 
 export const authService = {
   signIn: async (values: SignInForm) => {
-    return api.post<User>('users/login', values).then((res) => {
+    return api.post<User>(`${slug}/login`, values).then((res) => {
       authUser(res.data);
     });
   },
 
   signUp: async (values: SignUpForm) => {
-    return api.post<User>('users', values).then((res) => {
+    return api.post<User>(slug, values).then((res) => {
       authUser(res.data);
     });
   }

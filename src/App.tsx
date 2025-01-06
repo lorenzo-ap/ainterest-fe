@@ -7,6 +7,7 @@ import { Header, Page } from './components';
 import ProtectedRoute from './components/ProtectedRoute';
 import useAuth from './hooks/useAuth';
 import { CreatePost, Home } from './pages';
+import ProfilePage from './pages/Profile';
 
 const App = () => {
   useAuth();
@@ -35,6 +36,15 @@ const App = () => {
                 element={
                   <Page title='Generate image'>
                     <CreatePost />
+                  </Page>
+                }
+              />
+
+              <Route
+                path='/account'
+                element={
+                  <Page title='Profile'>
+                    <ProfilePage />
                   </Page>
                 }
               />
