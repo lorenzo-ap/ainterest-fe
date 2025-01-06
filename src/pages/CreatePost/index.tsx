@@ -1,9 +1,9 @@
 import { Button, Text, Textarea, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconBrandOpenai, IconChevronLeft, IconPhotoUp } from '@tabler/icons-react';
+import { IconArrowLeft, IconBrandOpenai, IconPhotoUp } from '@tabler/icons-react';
 import axios from 'axios';
 import { FormEvent, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { postService } from '../../services/post';
 import { toastService } from '../../services/toast';
 import { TranslateAPIResponse } from '../../types/api-response.interface';
@@ -115,7 +115,7 @@ const CreatePost = () => {
     postService
       .createPost(body)
       .then(() => {
-        navigate('/');
+        navigate(-1);
 
         toastService.success('Post shared successfully');
       })
@@ -139,8 +139,15 @@ const CreatePost = () => {
     <section className='mx-auto flex max-w-7xl flex-col items-start'>
       <div className='flex w-full flex-col items-center justify-between gap-5 lg:flex-row lg:items-start'>
         <form className='max-w-xl lg:max-w-md xl:max-w-lg' onSubmit={submitForm}>
-          <Button component={Link} to='/' color='violet' size='compact-md' leftSection={<IconChevronLeft size={18} />}>
-            Go back
+          <Button
+            color='violet'
+            size='compact-md'
+            onClick={() => {
+              navigate(-1);
+            }}
+            leftSection={<IconArrowLeft size={18} />}
+          >
+            Back
           </Button>
 
           <div className='mt-8'>
@@ -191,7 +198,7 @@ const CreatePost = () => {
                 <Button
                   color='teal'
                   size='md'
-                  rightSection={!isGenerating && <IconBrandOpenai size={20} />}
+                  rightSection={<IconBrandOpenai size={20} />}
                   onClick={onGenerate}
                   disabled={isGenerating || isSharing}
                 >

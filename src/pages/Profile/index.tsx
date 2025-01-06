@@ -1,24 +1,19 @@
-import { ActionIcon, Text, Title, Tooltip } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { IconLogout2 } from '@tabler/icons-react';
+import { Button, CloseButton, Text, TextInput, Title, Tooltip } from '@mantine/core';
+import { IconArrowRight, IconPhotoAi } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
-import ConfirmModal from '../../components/ConfirmModal';
-import { setUser } from '../../redux/slices/userSlice';
-import { RootState, store } from '../../redux/store';
+import { Link, useLocation } from 'react-router-dom';
+import { RootState } from '../../redux/store';
 import { postService } from '../../services/post';
-import { toastService } from '../../services/toast';
 import { Post } from '../../types/post.interface';
 import RenderCards from '../Home/components/RenderCards';
 
 const ProfilePage = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const stateUser = location.state;
 
-  const [signOutConfirmModalOpened, { open: openSignOutConfirmModal, close: closeSignOutConfirmModal }] =
-    useDisclosure(false);
+  const [searchText, setSearchText] = useState<string>('');
+  const [searchedPosts, setSearchedPosts] = useState<Post[]>([]);
 
   const user = useSelector((state: RootState) => state.user);
 
@@ -35,57 +30,91 @@ const ProfilePage = () => {
 
     postService
       .getUserPosts(stateUser._id || user?._id)
-      .then((res) => setPosts(res.data))
+      .then((res) => setPosts(res.data.reverse()))
       .finally(() => setLoading(false));
   }, [user, stateUser._id]);
 
-  const signOut = () => {
-    closeSignOutConfirmModal();
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
 
-    localStorage.removeItem('jwt-token');
-    store.dispatch(setUser(null));
+    if (!value.trim()) {
+      setSearchText('');
+      return;
+    }
 
-    navigate('/');
-    toastService.success('Signed out successfully');
+    setSearchText(value);
+
+    const searchResults = posts.filter((post) => post.prompt.toLowerCase().includes(value.trim().toLowerCase()));
+
+    setSearchedPosts(searchResults);
   };
 
   return (
     <>
       <div className='relative mx-auto max-w-7xl'>
         <div className='mb-5 flex items-start justify-between'>
-          <div>
-            <Title className='mb-1'>@{stateUser.username}</Title>
-            {isCurrentUser && <Text>{user?.email}</Text>}
+          <div className='flex items-center gap-x-3'>
+            <div className='flex h-16 w-16 items-center justify-center rounded-full bg-green-700 object-cover text-3xl font-bold text-white'>
+              {stateUser?.username[0].toUpperCase()}
+            </div>
+
+            <div>
+              <Title className='mb-1'>@{stateUser.username}</Title>
+              {isCurrentUser && <Text>{user?.email}</Text>}
+            </div>
           </div>
 
           {isCurrentUser && (
-            <Tooltip withArrow label='Sign Out'>
-              <ActionIcon
-                variant='light'
-                radius={'md'}
-                size={36}
-                color='red'
-                onClick={openSignOutConfirmModal}
-                aria-label='Sign Out'
+            <div className='flex gap-x-3'>
+              <Button
+                component={Link}
+                to='/generate-image'
+                color='violet'
+                size='lg'
+                rightSection={<IconArrowRight size={20} />}
+                leftSection={<IconPhotoAi size={20} />}
               >
-                <IconLogout2 size={18} />
-              </ActionIcon>
-            </Tooltip>
+                Generate image
+              </Button>
+            </div>
           )}
         </div>
 
-        <div className='grid grid-cols-1 gap-3 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'>
-          <RenderCards posts={posts} title='No posts found' isLoading={loading} />
+        <TextInput
+          className='mt-8'
+          flex={1}
+          size='md'
+          radius='md'
+          label='Search posts'
+          placeholder='Enter prompt'
+          disabled={loading}
+          value={searchText}
+          onChange={handleSearchChange}
+          rightSection={
+            searchText && (
+              <Tooltip withArrow label='Clear'>
+                <CloseButton onClick={() => setSearchText('')} />
+              </Tooltip>
+            )
+          }
+        />
+
+        <div className='mt-3'>
+          {searchText && (
+            <Title className='mb-3 font-medium' order={2} size={'h3'}>
+              <span className='opacity-60'>Showing results for</span> <span className='opacity-100'>{searchText}</span>
+            </Title>
+          )}
+
+          <div className='grid grid-cols-1 gap-3 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'>
+            {searchText ? (
+              <RenderCards posts={searchedPosts} title='No search results found' isLoading={loading} />
+            ) : (
+              <RenderCards posts={posts} title='No posts found' isLoading={loading} />
+            )}
+          </div>
         </div>
       </div>
-
-      <ConfirmModal
-        title='Sign Out'
-        message='Are you sure you want to sign out?'
-        opened={signOutConfirmModalOpened}
-        confirm={signOut}
-        close={closeSignOutConfirmModal}
-      />
     </>
   );
 };

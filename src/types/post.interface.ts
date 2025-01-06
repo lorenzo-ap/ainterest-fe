@@ -4,6 +4,7 @@ export interface Post {
   _id: string;
   prompt: string;
   photo: string;
+  createdAt: string;
   user: User;
 }
 

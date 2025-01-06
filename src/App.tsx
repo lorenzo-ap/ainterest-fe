@@ -7,6 +7,7 @@ import { Header, Page } from './components';
 import ProtectedRoute from './components/ProtectedRoute';
 import useAuth from './hooks/useAuth';
 import { CreatePost, Home } from './pages';
+import ErrorPage from './pages/Error';
 import ProfilePage from './pages/Profile';
 
 const App = () => {
@@ -26,6 +27,15 @@ const App = () => {
               element={
                 <Page title='AInterest'>
                   <Home />
+                </Page>
+              }
+            />
+
+            <Route
+              path='*'
+              element={
+                <Page title='404'>
+                  <ErrorPage />
                 </Page>
               }
             />

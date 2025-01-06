@@ -23,12 +23,12 @@ const GeneratedImage = ({
       className={`mb-5 w-full max-w-xl lg:mb-0 lg:w-1/2 lg:max-w-full ${hiddenOnLargeScreen ? 'block lg:hidden' : 'hidden lg:block'}`}
     >
       <div
-        className={`${styles.backgroundColor} relative rounded-xl border ${isImageMissing ? 'border-[#FA5252]' : styles.border} flex aspect-square items-center justify-center shadow-lg`}
+        className={`${styles.backgroundColor} relative rounded-xl border ${isImageMissing ? 'border-[#E03131]' : styles.border} flex aspect-square items-center justify-center shadow-lg`}
       >
         {imageSource ? (
           <img className='h-full w-full rounded-xl object-cover' src={imageSource} alt={imageAlt} />
         ) : (
-          <IconPhoto className='opacity-50' size='256' color={isImageMissing ? '#FA5252' : '#E5E7EB'} />
+          <IconPhoto className='opacity-50' size='256' color={isImageMissing ? '#E03131' : '#E5E7EB'} />
         )}
 
         {isGenerating && (
@@ -38,9 +38,7 @@ const GeneratedImage = ({
         )}
       </div>
 
-      {isImageMissing && (
-        <Text className='mt-1.5 text-xs text-[#FA5252]'>* an image should be successfully generated</Text>
-      )}
+      {isImageMissing && <Text className='mt-1.5 text-xs text-[#E03131]'>Image should be successfully generated</Text>}
     </div>
   );
 };

@@ -7,7 +7,7 @@ import { RootState } from '../../redux/store';
 import { Post } from '../../types/post.interface';
 import { downloadImage } from '../../utils';
 
-const Card = ({ _id, prompt, photo, user }: Post) => {
+const Card = ({ _id, prompt, photo, createdAt, user }: Post) => {
   const [showInfo, setShowInfo] = useState(false);
 
   const currentUser = useSelector((state: RootState) => state.user);
@@ -37,7 +37,19 @@ const Card = ({ _id, prompt, photo, user }: Post) => {
       <div
         className={`absolute flex max-h-[75%] flex-col md:-bottom-full md:group-hover:bottom-0 ${showInfo ? '-bottom-0' : '-bottom-full'} left-0 right-0 m-2 rounded-md bg-[#10131F] p-4 transition-all duration-500`}
       >
-        <Text className='text-md prompt max-h-[50%] overflow-y-auto text-white'>{prompt}</Text>
+        <div className='flex flex-col items-start justify-between gap-y-1.5'>
+          <Text className='text-xs text-slate-300'>
+            {new Date(createdAt).toLocaleString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: false
+            })}
+          </Text>
+          <Text className='text-md prompt max-h-[100px] overflow-y-auto text-white'>{prompt}</Text>
+        </div>
 
         <div className='mt-3 flex items-center justify-between gap-2'>
           <Link
