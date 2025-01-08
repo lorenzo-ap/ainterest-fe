@@ -1,5 +1,5 @@
 import { Text, Tooltip } from '@mantine/core';
-import { IconDownload, IconInfoSquareRounded, IconSquareRoundedXFilled } from '@tabler/icons-react';
+import { IconCircleXFilled, IconDownload, IconInfoCircle } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -28,9 +28,9 @@ const Card = ({ _id, prompt, photo, createdAt, user }: Post) => {
         }}
       >
         {showInfo ? (
-          <IconSquareRoundedXFilled className='text-slate-300' size={40} />
+          <IconCircleXFilled className='text-slate-300' size={40} />
         ) : (
-          <IconInfoSquareRounded className='text-slate-300' size={40} />
+          <IconInfoCircle className='text-slate-300' size={40} />
         )}
       </button>
 

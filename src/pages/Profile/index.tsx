@@ -93,7 +93,7 @@ const ProfilePage = () => {
   return (
     <>
       <div className='relative mx-auto max-w-7xl'>
-        <div className='mb-5 flex flex-wrap items-center justify-between gap-y-4'>
+        <div className='mb-5 flex flex-wrap items-center justify-between gap-y-5'>
           <div className='flex items-center gap-x-3'>
             <div className='group relative rounded-full'>
               <input id='uploadImage' className='hidden' type='file' onChange={handleFileChange} accept='image/*' />
