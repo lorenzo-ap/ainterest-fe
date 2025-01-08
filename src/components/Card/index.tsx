@@ -59,7 +59,7 @@ const Card = ({ _id, prompt, photo, createdAt, user }: Post) => {
             style={{ pointerEvents: currentUser?._id === user._id ? 'none' : 'auto' }}
           >
             <div className='flex h-7 w-7 items-center justify-center rounded-full bg-green-700 object-cover text-xs font-bold text-white'>
-              {user.username[0].toUpperCase()}
+              {user.photo ? <img className='rounded-full' src={user.photo} /> : user.username[0].toUpperCase()}
             </div>
 
             <Text className='text-sm text-white'>{user.username}</Text>

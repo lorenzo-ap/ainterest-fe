@@ -55,7 +55,7 @@ const Header = () => {
             {user ? (
               <Button component={Link} to='account' state={user} variant='default' px={10} radius='md'>
                 <div className='flex h-6 w-6 items-center justify-center rounded-full bg-green-700 object-cover text-xs font-bold text-white'>
-                  {user.username[0].toUpperCase()}
+                  {user.photo ? <img className='rounded-full' src={user.photo} /> : user.username[0].toUpperCase()}
                 </div>
 
                 <Text className='ms-1.5 text-sm'>{user.username}</Text>

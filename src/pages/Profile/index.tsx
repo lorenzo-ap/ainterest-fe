@@ -1,10 +1,11 @@
-import { Button, CloseButton, Text, TextInput, Title, Tooltip } from '@mantine/core';
-import { IconArrowRight, IconPhotoAi } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { ActionIcon, Button, CheckIcon, CloseButton, Text, TextInput, Title, Tooltip } from '@mantine/core';
+import { IconArrowRight, IconPhotoAi, IconPhotoPlus, IconX } from '@tabler/icons-react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { RootState } from '../../redux/store';
 import { postService } from '../../services/post';
+import { userService } from '../../services/user';
 import { Post } from '../../types/post.interface';
 import RenderCards from '../Home/components/RenderCards';
 
@@ -12,14 +13,16 @@ const ProfilePage = () => {
   const location = useLocation();
   const stateUser = location.state;
 
-  const [searchText, setSearchText] = useState<string>('');
-  const [searchedPosts, setSearchedPosts] = useState<Post[]>([]);
-
   const user = useSelector((state: RootState) => state.user);
 
   const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState<string>('');
+  const [searchedPosts, setSearchedPosts] = useState<Post[]>([]);
+  const [userPhoto, setUserPhoto] = useState<File | null>(null);
+  const [previewUploadedPhoto, SetPreviewUploadedPhoto] = useState<string | undefined>('');
   const [isCurrentUser, setIsCurrentUser] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -45,17 +48,108 @@ const ProfilePage = () => {
     setSearchText(value);
 
     const searchResults = posts.filter((post) => post.prompt.toLowerCase().includes(value.trim().toLowerCase()));
-
     setSearchedPosts(searchResults);
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+
+    if (!selectedFile) return;
+
+    const objectUrl = URL.createObjectURL(selectedFile);
+
+    setUserPhoto(selectedFile);
+    SetPreviewUploadedPhoto(objectUrl);
+  };
+
+  const editUser = () => {
+    if (!userPhoto) return;
+
+    setImageLoading(true);
+
+    const reader = new FileReader();
+    reader.readAsDataURL(userPhoto);
+
+    reader.onload = () => {
+      const base64String = reader.result?.toString().replace('data:', '').replace(/^.+,/, '');
+
+      userService
+        .editUser({
+          ...stateUser,
+          photo: base64String
+        })
+        .then(() => {
+          setUserPhoto(null);
+          SetPreviewUploadedPhoto('');
+
+          postService.getPosts();
+        })
+        .finally(() => {
+          setImageLoading(false);
+        });
+    };
   };
 
   return (
     <>
       <div className='relative mx-auto max-w-7xl'>
-        <div className='mb-5 flex flex-wrap items-start justify-between gap-y-4'>
+        <div className='mb-5 flex flex-wrap items-center justify-between gap-y-4'>
           <div className='flex items-center gap-x-3'>
-            <div className='flex h-16 w-16 items-center justify-center rounded-full bg-green-700 object-cover text-3xl font-bold text-white'>
-              {stateUser?.username[0].toUpperCase()}
+            <div className='group relative rounded-full'>
+              <input id='uploadImage' className='hidden' type='file' onChange={handleFileChange} accept='image/*' />
+
+              <label
+                className='relative flex h-20 w-20 cursor-pointer appearance-none items-center justify-center overflow-hidden rounded-full bg-green-700 object-cover text-4xl font-bold text-white'
+                htmlFor='uploadImage'
+                style={{ pointerEvents: isCurrentUser ? 'auto' : 'none' }}
+              >
+                {stateUser?.photo || userPhoto ? (
+                  <img
+                    className='rounded-full'
+                    src={previewUploadedPhoto || (isCurrentUser ? user?.photo : stateUser?.photo)}
+                  />
+                ) : (
+                  stateUser?.username[0].toUpperCase()
+                )}
+
+                {!userPhoto && isCurrentUser && (
+                  <div className='pointer-events-none absolute -bottom-20 left-1/2 flex h-full w-full -translate-x-1/2 items-start justify-center rounded-full bg-black bg-opacity-50 pt-1.5 transition-all group-hover:-bottom-12'>
+                    <IconPhotoPlus size={16} />
+                  </div>
+                )}
+              </label>
+
+              {userPhoto && (
+                <div>
+                  <Tooltip withArrow label='Remove image'>
+                    <ActionIcon
+                      className='absolute bottom-0 left-0 rounded-full'
+                      variant='default'
+                      size={20}
+                      type='button'
+                      onClick={() => {
+                        setUserPhoto(null);
+                        SetPreviewUploadedPhoto('');
+                      }}
+                    >
+                      <IconX size={14} />
+                    </ActionIcon>
+                  </Tooltip>
+
+                  <Tooltip withArrow label='Save image'>
+                    <ActionIcon
+                      className='absolute bottom-0 right-0 rounded-full'
+                      variant='default'
+                      size={20}
+                      type='button'
+                      loading={imageLoading}
+                      onClick={editUser}
+                    >
+                      <CheckIcon size={10} />
+                    </ActionIcon>
+                  </Tooltip>
+                </div>
+              )}
             </div>
 
             <div>
@@ -67,9 +161,11 @@ const ProfilePage = () => {
           {isCurrentUser && (
             <div className='flex gap-x-3'>
               <Button
+                className='transition-opacity duration-75 hover:opacity-90'
                 component={Link}
                 to='/generate-image'
-                color='violet'
+                variant='gradient'
+                gradient={{ from: 'violet', to: 'blue', deg: 90 }}
                 size='lg'
                 rightSection={<IconArrowRight size={20} />}
                 leftSection={<IconPhotoAi size={20} />}
