@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { RootState } from '../../redux/store';
 import { postService } from '../../services/post';
+import { toastService } from '../../services/toast';
 import { userService } from '../../services/user';
 import { Post } from '../../types/post.interface';
 import RenderCards from '../Home/components/RenderCards';
@@ -81,6 +82,8 @@ const ProfilePage = () => {
         .then(() => {
           setUserPhoto(null);
           SetPreviewUploadedPhoto('');
+
+          toastService.success('Profile image updated successfully');
 
           postService.getPosts();
         })

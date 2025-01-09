@@ -84,7 +84,7 @@ const CreatePost = () => {
       .checkTextForNSFW(prompt)
       .then((res) => {
         if (res.data.sexual) {
-          toastService.error('Prompt contains explicit/adult content, please try a different one.', 5000);
+          toastService.error('Prompt contains explicit/adult content, please try a different one', 5000);
           setIsGenerating(false);
           return;
         }
