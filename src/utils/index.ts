@@ -1,5 +1,4 @@
 import FileSaver from 'file-saver';
-
 import { surpriseMePrompts } from '../constants';
 
 const getRandomPrompt = (prompt: string) => {
@@ -30,4 +29,4 @@ const getColorSchemeFromLocalStorage = () => {
   return scheme === 'dark' || scheme === 'light' ? scheme : 'light';
 };
 
-export { getRandomPrompt, downloadImage, getRapidApiHeaders, getColorSchemeFromLocalStorage };
+export { downloadImage, getColorSchemeFromLocalStorage, getRandomPrompt, getRapidApiHeaders };

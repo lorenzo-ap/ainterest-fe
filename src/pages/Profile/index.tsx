@@ -1,5 +1,5 @@
 import { ActionIcon, Button, CheckIcon, CloseButton, Text, TextInput, Title, Tooltip } from '@mantine/core';
-import { IconArrowRight, IconPhotoAi, IconPhotoPlus, IconX } from '@tabler/icons-react';
+import { IconArrowRight, IconPhotoAi, IconPhotoEdit, IconX } from '@tabler/icons-react';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
@@ -114,7 +114,7 @@ const ProfilePage = () => {
 
                 {!userPhoto && isCurrentUser && (
                   <div className='pointer-events-none absolute -bottom-20 left-1/2 flex h-full w-full -translate-x-1/2 items-start justify-center rounded-full bg-black bg-opacity-50 pt-1.5 transition-all group-hover:-bottom-12'>
-                    <IconPhotoPlus size={16} />
+                    <IconPhotoEdit size={16} />
                   </div>
                 )}
               </label>
@@ -153,7 +153,7 @@ const ProfilePage = () => {
             </div>
 
             <div>
-              <Title className='mb-1'>@{stateUser.username}</Title>
+              <Title className='mb-1'>{stateUser.username}</Title>
               {isCurrentUser && <Text>{user?.email}</Text>}
             </div>
           </div>

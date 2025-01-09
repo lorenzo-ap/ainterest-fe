@@ -1,14 +1,13 @@
 import { Button, Text, Textarea, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconArrowLeft, IconBrandOpenai, IconPhotoUp } from '@tabler/icons-react';
-import axios from 'axios';
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { postService } from '../../services/post';
+import { rapidApiService } from '../../services/rapid-api';
 import { toastService } from '../../services/toast';
-import { TranslateAPIResponse } from '../../types/api-response.interface';
 import { GeneratedImage } from '../../types/post.interface';
-import { getRandomPrompt, getRapidApiHeaders } from '../../utils';
+import { getRandomPrompt } from '../../utils';
 import GeneratedImageComponent from './components/GeneratedImage';
 
 export interface CreatePostForm {
@@ -57,17 +56,8 @@ const CreatePost = () => {
   };
 
   const generateImage = (prompt: string, translatedPrompt: string) => {
-    const headers = getRapidApiHeaders('imageai-generator.p.rapidapi.com');
-    const body = {
-      negative_prompt: null,
-      prompt: translatedPrompt,
-      width: 512,
-      height: 512,
-      hr_scale: 2
-    };
-
-    axios
-      .post<string>('https://imageai-generator.p.rapidapi.com/image', body, { headers })
+    rapidApiService
+      .generateImage(translatedPrompt)
       .then((response) => {
         form.setFieldValue('generatedImage', { prompt, photo: `data:image/png;base64,${response.data}` });
         setIsImageMissing(false);
@@ -89,18 +79,21 @@ const CreatePost = () => {
     setIsGenerating(true);
 
     const { prompt } = form.getValues();
-    const headers = getRapidApiHeaders('ai-translate.p.rapidapi.com');
-    const body = {
-      texts: [prompt],
-      tls: ['en'],
-      sl: 'auto'
-    };
 
-    axios
-      .post<TranslateAPIResponse[]>('https://ai-translate.p.rapidapi.com/translates', body, {
-        headers
+    rapidApiService
+      .checkTextForNSFW(prompt)
+      .then((res) => {
+        if (res.data.sexual) {
+          toastService.error('Prompt contains explicit/adult content, please try a different one.', 5000);
+          setIsGenerating(false);
+          return;
+        }
+
+        rapidApiService
+          .translateText(prompt)
+          .then((response) => generateImage(prompt, response.data[0].texts[0]))
+          .catch((error) => console.error(error));
       })
-      .then((response) => generateImage(prompt, response.data[0].texts[0]))
       .catch((error) => console.error(error));
   };
 
