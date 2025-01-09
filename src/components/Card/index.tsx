@@ -1,16 +1,23 @@
-import { Text, Tooltip } from '@mantine/core';
-import { IconCircleXFilled, IconDownload, IconInfoCircle } from '@tabler/icons-react';
-import { useState } from 'react';
+import { ActionIcon, Text, Tooltip } from '@mantine/core';
+import { IconCircleXFilled, IconHeart, IconHeartFilled, IconInfoCircle, IconPhotoDown } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { RootState } from '../../redux/store';
+import { postService } from '../../services/post';
 import { Post } from '../../types/post.interface';
 import { downloadImage } from '../../utils';
 
-const Card = ({ _id, prompt, photo, createdAt, user }: Post) => {
-  const [showInfo, setShowInfo] = useState(false);
-
+const Card = ({ _id, prompt, photo, createdAt, user, likes }: Post) => {
+  const location = useLocation();
   const currentUser = useSelector((state: RootState) => state.user);
+
+  const [showInfo, setShowInfo] = useState(false);
+  const [username, setUsername] = useState<string>('');
+
+  useEffect(() => {
+    setUsername(location.pathname.split('/').reverse()[0]);
+  }, [location.pathname]);
 
   return (
     <div className='card group relative overflow-y-hidden rounded-xl shadow-card'>
@@ -38,25 +45,40 @@ const Card = ({ _id, prompt, photo, createdAt, user }: Post) => {
         className={`absolute flex max-h-[75%] flex-col md:-bottom-full md:group-hover:bottom-0 ${showInfo ? '-bottom-0' : '-bottom-full'} left-0 right-0 m-2 rounded-md bg-[#10131F] p-4 transition-all duration-500`}
       >
         <div className='flex flex-col items-start justify-between gap-y-1.5'>
-          <Text className='text-xs text-slate-300'>
-            {new Date(createdAt).toLocaleString('en-US', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
-              hour: 'numeric',
-              minute: 'numeric',
-              hour12: false
-            })}
-          </Text>
+          <div className='flex items-center justify-between self-stretch'>
+            <Text className='text-xs text-slate-300'>
+              {new Date(createdAt).toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: false
+              })}
+            </Text>
+
+            <Tooltip label='Download image' withArrow>
+              <ActionIcon
+                variant='transparent'
+                p={0}
+                size={18}
+                onClick={() => {
+                  downloadImage(_id, photo);
+                }}
+              >
+                <IconPhotoDown className='text-slate-400' size={18} />
+              </ActionIcon>
+            </Tooltip>
+          </div>
           <Text className='text-md prompt max-h-[100px] overflow-y-auto text-white'>{prompt}</Text>
         </div>
 
         <div className='mt-3 flex items-center justify-between gap-2'>
           <Link
             className='flex items-center gap-2'
-            to='/account'
+            to={`/account/${user.username}`}
             state={user}
-            style={{ pointerEvents: currentUser?._id === user._id ? 'none' : 'auto' }}
+            style={{ pointerEvents: username === user.username ? 'none' : 'auto' }}
           >
             <div className='flex h-7 w-7 items-center justify-center rounded-full bg-green-700 object-cover text-xs font-bold text-white'>
               {user.photo ? <img className='rounded-full' src={user.photo} /> : user.username[0].toUpperCase()}
@@ -65,16 +87,27 @@ const Card = ({ _id, prompt, photo, createdAt, user }: Post) => {
             <Text className='text-sm text-white'>{user.username}</Text>
           </Link>
 
-          <button
-            type='button'
-            onClick={() => {
-              downloadImage(_id, photo);
-            }}
-          >
-            <Tooltip label='Download image' withArrow>
-              <IconDownload className='text-slate-300' size={24} />
-            </Tooltip>
-          </button>
+          <div className='flex items-center gap-x-2'>
+            <div className='flex items-center gap-x-1'>
+              <button
+                type='button'
+                disabled={!currentUser}
+                onClick={() => {
+                  postService.likePost(_id);
+                }}
+              >
+                <Tooltip label={likes.includes(currentUser?._id) ? 'Remove like' : 'Like'} withArrow>
+                  {likes.includes(currentUser?._id) ? (
+                    <IconHeartFilled className='text-slate-300' size={24} color='firebrick' />
+                  ) : (
+                    <IconHeart className='text-slate-300' size={24} />
+                  )}
+                </Tooltip>
+              </button>
+
+              {likes.length > 0 && <Text className='text-sm text-white'>{likes.length}</Text>}
+            </div>
+          </div>
         </div>
       </div>
     </div>

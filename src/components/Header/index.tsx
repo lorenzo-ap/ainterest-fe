@@ -1,6 +1,7 @@
 import { ActionIcon, Button, Text, Tooltip, useComputedColorScheme, useMantineColorScheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconLogout2, IconMoon, IconSun } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { setUser } from '../../redux/slices/userSlice';
@@ -23,6 +24,12 @@ const Header = () => {
   const [signUpModalOpened, { open: openSignUpModal, close: closeSignUpModal }] = useDisclosure(false);
   const [signOutConfirmModalOpened, { open: openSignOutConfirmModal, close: closeSignOutConfirmModal }] =
     useDisclosure(false);
+  const [jwtToken, setJwtToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwt-token');
+    setJwtToken(token);
+  }, []);
 
   const toggleColorScheme = () => {
     setColorScheme(computedColorScheme === 'dark' ? 'light' : 'dark');
@@ -32,6 +39,7 @@ const Header = () => {
     closeSignOutConfirmModal();
 
     localStorage.removeItem('jwt-token');
+    setJwtToken(null);
     store.dispatch(setUser(null));
 
     navigate('/');
@@ -53,7 +61,14 @@ const Header = () => {
 
           <div className='flex items-center gap-x-2'>
             {user ? (
-              <Button component={Link} to='account' state={user} variant='default' px={10} radius='md'>
+              <Button
+                component={Link}
+                to={`account/${user.username}`}
+                state={user}
+                variant='default'
+                px={10}
+                radius='md'
+              >
                 <div className='flex h-6 w-6 items-center justify-center rounded-full bg-green-700 object-cover text-xs font-bold text-white'>
                   {user.photo ? <img className='rounded-full' src={user.photo} /> : user.username[0].toUpperCase()}
                 </div>
@@ -61,7 +76,7 @@ const Header = () => {
                 <Text className='ms-1.5 text-sm'>{user.username}</Text>
               </Button>
             ) : (
-              <Button onClick={openSignInModal} color='cyan' variant='light'>
+              <Button onClick={openSignInModal} color='cyan' variant='light' loading={!!jwtToken && !user}>
                 Sign In
               </Button>
             )}

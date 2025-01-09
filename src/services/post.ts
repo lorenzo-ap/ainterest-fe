@@ -1,5 +1,5 @@
 import api from '../api/axios';
-import { addPost, setPosts } from '../redux/slices/postsSlice';
+import { addPost, setPosts, setUserPosts, updatePost, updateUserPost } from '../redux/slices/postsSlice';
 import { store } from '../redux/store';
 import { GeneratedImage, Post } from '../types/post.interface';
 
@@ -19,6 +19,15 @@ export const postService = {
   },
 
   getUserPosts: async (userId: string) => {
-    return api.get<Post[]>(`${slug}/${userId}`);
+    return api.get<Post[]>(`${slug}/${userId}`).then((res) => {
+      store.dispatch(setUserPosts(res.data.reverse()));
+    });
+  },
+
+  likePost: async (postId: string) => {
+    return api.put<Post>(`${slug}/${postId}`).then((res) => {
+      store.dispatch(updatePost(res.data));
+      store.dispatch(updateUserPost(res.data));
+    });
   }
 };

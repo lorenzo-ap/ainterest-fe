@@ -6,7 +6,7 @@ import { postService } from '../services/post';
 const useFetchPosts = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const posts = useSelector((state: RootState) => state.posts);
+  const posts = useSelector((state: RootState) => state.posts.allPosts);
 
   const fetchPosts = useCallback(() => {
     setIsLoading(true);

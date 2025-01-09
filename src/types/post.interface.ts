@@ -6,6 +6,7 @@ export interface Post {
   photo: string;
   createdAt: string;
   user: User;
+  likes: (string | undefined)[];
 }
 
 export interface GeneratedImage {

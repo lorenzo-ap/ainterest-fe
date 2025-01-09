@@ -15,8 +15,8 @@ const ProfilePage = () => {
   const stateUser = location.state;
 
   const user = useSelector((state: RootState) => state.user);
+  const posts = useSelector((state: RootState) => state.posts.userPosts);
 
-  const [posts, setPosts] = useState<Post[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [searchedPosts, setSearchedPosts] = useState<Post[]>([]);
   const [userPhoto, setUserPhoto] = useState<File | null>(null);
@@ -26,7 +26,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
+    document.title = stateUser.username;
 
     setIsCurrentUser(user?._id === stateUser._id);
 
@@ -34,9 +34,9 @@ const ProfilePage = () => {
 
     postService
       .getUserPosts(stateUser._id || user?._id)
-      .then((res) => setPosts(res.data.reverse()))
+      .catch((error) => console.error(error))
       .finally(() => setLoading(false));
-  }, [user, stateUser._id]);
+  }, [user, stateUser._id, stateUser.username]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -156,8 +156,8 @@ const ProfilePage = () => {
             </div>
 
             <div>
-              <Title className='mb-1'>{stateUser.username}</Title>
-              {isCurrentUser && <Text>{user?.email}</Text>}
+              <Title>{stateUser.username}</Title>
+              {isCurrentUser && <Text opacity={0.5}>{user?.email}</Text>}
             </div>
           </div>
 

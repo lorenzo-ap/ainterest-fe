@@ -13,7 +13,7 @@ const getRandomPrompt = (prompt: string) => {
 };
 
 const downloadImage = async (_id: string, photo: string) => {
-  FileSaver.saveAs(photo, `download-${_id}.jpg`);
+  FileSaver.saveAs(photo, `AInterest-${_id}.jpg`);
 };
 
 const getRapidApiHeaders = (host: string) => {

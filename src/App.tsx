@@ -31,14 +31,7 @@ const App = () => {
               }
             />
 
-            <Route
-              path='*'
-              element={
-                <Page title='404'>
-                  <ErrorPage />
-                </Page>
-              }
-            />
+            <Route path='/account/:username' element={<ProfilePage />} />
 
             <Route element={<ProtectedRoute />}>
               <Route
@@ -49,16 +42,16 @@ const App = () => {
                   </Page>
                 }
               />
-
-              <Route
-                path='/account'
-                element={
-                  <Page title='Profile'>
-                    <ProfilePage />
-                  </Page>
-                }
-              />
             </Route>
+
+            <Route
+              path='*'
+              element={
+                <Page title='404'>
+                  <ErrorPage />
+                </Page>
+              }
+            />
           </Routes>
         </main>
       </BrowserRouter>

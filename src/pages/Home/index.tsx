@@ -13,7 +13,7 @@ const Home = () => {
 
   const { isLoading, fetchPosts } = useFetchPosts();
 
-  const posts = useSelector((state: RootState) => state.posts);
+  const posts = useSelector((state: RootState) => state.posts.allPosts);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
