@@ -1,4 +1,12 @@
-import { ActionIcon, Button, Text, Tooltip, useComputedColorScheme, useMantineColorScheme } from '@mantine/core';
+import {
+  ActionIcon,
+  Avatar,
+  Button,
+  Text,
+  Tooltip,
+  useComputedColorScheme,
+  useMantineColorScheme
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconLogout2, IconMoon, IconSun } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -69,10 +77,9 @@ const Header = () => {
                 px={10}
                 radius='md'
               >
-                <div className='flex h-6 w-6 items-center justify-center rounded-full bg-green-700 object-cover text-xs font-bold text-white'>
-                  {user.photo ? <img className='rounded-full' src={user.photo} /> : user.username[0].toUpperCase()}
-                </div>
-
+                <Avatar key={user.username} src={user.photo} name={user.username} color='initials' size={24}>
+                  {user.username[0].toUpperCase()}
+                </Avatar>
                 <Text className='ms-1.5 text-sm'>{user.username}</Text>
               </Button>
             ) : (

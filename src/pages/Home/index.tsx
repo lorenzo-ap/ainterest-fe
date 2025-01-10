@@ -1,38 +1,16 @@
 import { ActionIcon, CloseButton, Text, TextInput, Title, Tooltip } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons-react';
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import useFetchPosts from '../../hooks/useFetchPosts';
+import useSearchPosts from '../../hooks/useSearchPosts';
 import { RootState } from '../../redux/store';
-import { Post } from '../../types/post.interface';
 import RenderCards from './components/RenderCards';
 
 const Home = () => {
-  const [searchText, setSearchText] = useState<string>('');
-  const [searchedPosts, setSearchedPosts] = useState<Post[]>([]);
-
-  const { isLoading, fetchPosts } = useFetchPosts();
-
   const posts = useSelector((state: RootState) => state.posts.allPosts);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-
-    if (!value.trim()) {
-      setSearchText('');
-      return;
-    }
-
-    setSearchText(value);
-
-    const searchResults = posts.filter(
-      (post) =>
-        post.user.username.toLowerCase().includes(value.trim().toLowerCase()) ||
-        post.prompt.toLowerCase().includes(value.trim().toLowerCase())
-    );
-
-    setSearchedPosts(searchResults);
-  };
+  const { fetchPosts, loading } = useFetchPosts();
+  const { searchText, searchedPosts, handleSearchChange, resetSearch } = useSearchPosts(posts, true);
 
   return (
     <section className='mx-auto max-w-7xl'>
@@ -52,28 +30,21 @@ const Home = () => {
           size='md'
           radius='md'
           label='Search posts'
-          placeholder='Enter username or prompt'
-          disabled={isLoading}
+          placeholder='Enter prompt or username'
+          disabled={loading}
           value={searchText}
           onChange={handleSearchChange}
           rightSection={
             searchText && (
               <Tooltip withArrow label='Clear'>
-                <CloseButton onClick={() => setSearchText('')} />
+                <CloseButton onClick={resetSearch} />
               </Tooltip>
             )
           }
         />
 
         <Tooltip label='Refresh posts' withArrow>
-          <ActionIcon
-            size={42}
-            color='violet'
-            radius='md'
-            onClick={fetchPosts}
-            loading={isLoading}
-            aria-label='Refresh'
-          >
+          <ActionIcon size={42} color='violet' radius='md' onClick={fetchPosts} loading={loading} aria-label='Refresh'>
             <IconRefresh size={18} />
           </ActionIcon>
         </Tooltip>
@@ -88,9 +59,9 @@ const Home = () => {
 
         <div className='grid grid-cols-1 gap-3 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'>
           {searchText ? (
-            <RenderCards posts={searchedPosts} title='No search results found' isLoading={isLoading} />
+            <RenderCards posts={searchedPosts} title='No search results found' loading={loading} />
           ) : (
-            <RenderCards posts={posts} title='No posts found' isLoading={isLoading} />
+            <RenderCards posts={posts} title='No posts found' loading={loading} />
           )}
         </div>
       </div>

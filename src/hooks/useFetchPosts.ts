@@ -4,18 +4,18 @@ import { RootState } from '../redux/store';
 import { postService } from '../services/post';
 
 const useFetchPosts = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const posts = useSelector((state: RootState) => state.posts.allPosts);
 
   const fetchPosts = useCallback(() => {
-    setIsLoading(true);
+    setLoading(true);
 
     postService
       .getPosts()
       .catch((error) => console.error(error))
       .finally(() => {
-        setIsLoading(false);
+        setLoading(false);
       });
   }, []);
 
@@ -25,7 +25,7 @@ const useFetchPosts = () => {
     fetchPosts();
   }, [posts.length, fetchPosts]);
 
-  return { isLoading, fetchPosts };
+  return { fetchPosts, loading };
 };
 
 export default useFetchPosts;

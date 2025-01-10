@@ -1,4 +1,4 @@
-import { ActionIcon, Text, Tooltip } from '@mantine/core';
+import { ActionIcon, Avatar, Text, Tooltip } from '@mantine/core';
 import { IconCircleXFilled, IconHeart, IconHeartFilled, IconInfoCircle, IconPhotoDown } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -70,20 +70,19 @@ const Card = ({ _id, prompt, photo, createdAt, user, likes }: Post) => {
               </ActionIcon>
             </Tooltip>
           </div>
-          <Text className='text-md prompt max-h-[100px] overflow-y-auto text-white'>{prompt}</Text>
+          <Text className='text-md prompt max-h-[100px] overflow-y-scroll pr-0.5 text-white'>{prompt}</Text>
         </div>
 
         <div className='mt-3 flex items-center justify-between gap-2'>
           <Link
-            className='flex items-center gap-2'
+            className='flex items-center gap-x-1.5 hover:opacity-85'
             to={`/account/${user.username}`}
             state={user}
             style={{ pointerEvents: username === user.username ? 'none' : 'auto' }}
           >
-            <div className='flex h-7 w-7 items-center justify-center rounded-full bg-green-700 object-cover text-xs font-bold text-white'>
-              {user.photo ? <img className='rounded-full' src={user.photo} /> : user.username[0].toUpperCase()}
-            </div>
-
+            <Avatar key={user.username} src={user.photo} name={user.username} color='initials' size={30}>
+              {user.username[0].toUpperCase()}
+            </Avatar>
             <Text className='text-sm text-white'>{user.username}</Text>
           </Link>
 

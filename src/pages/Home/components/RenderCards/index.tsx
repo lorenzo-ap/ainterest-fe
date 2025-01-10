@@ -7,10 +7,10 @@ import { Post } from '../../../../types/post.interface';
 interface RenderCardsProps {
   posts: Post[];
   title: string;
-  isLoading: boolean;
+  loading: boolean;
 }
 
-const RenderCards = ({ posts: data, title, isLoading }: RenderCardsProps) => {
+const RenderCards = ({ posts: data, title, loading }: RenderCardsProps) => {
   const [displayedPosts, setDisplayedPosts] = useState(data.slice(0, 10));
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const RenderCards = ({ posts: data, title, isLoading }: RenderCardsProps) => {
     };
   });
 
-  if (isLoading) {
+  if (loading) {
     return (
       <>
         {Array.from({ length: 10 }).map((_, index) => (
@@ -52,7 +52,7 @@ const RenderCards = ({ posts: data, title, isLoading }: RenderCardsProps) => {
   }
 
   return (
-    <Title className='uppercase text-[#6469FF]' order={2} size={'h3'}>
+    <Title className='col-span-full uppercase text-[#6469FF]' order={2} size={'h3'}>
       {title}
     </Title>
   );
