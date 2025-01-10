@@ -16,11 +16,11 @@ export interface CreatePostForm {
 }
 
 const CreatePost = () => {
+  const navigate = useNavigate();
+
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [isImageMissing, setIsImageMissing] = useState(false);
-
-  const navigate = useNavigate();
 
   const form = useForm<CreatePostForm>({
     mode: 'uncontrolled',
@@ -108,7 +108,7 @@ const CreatePost = () => {
     postService
       .createPost(body)
       .then(() => {
-        navigate(-1);
+        navigate('/');
 
         toastService.success('Post shared successfully');
       })
@@ -162,7 +162,7 @@ const CreatePost = () => {
           />
 
           <div className='flex flex-col justify-between gap-5 md:flex-row'>
-            <div className='flex flex-grow flex-col gap-5 md:min-w-96'>
+            <div className='flex flex-grow flex-col gap-3 md:min-w-96'>
               <Textarea
                 className='relative'
                 rows={8}

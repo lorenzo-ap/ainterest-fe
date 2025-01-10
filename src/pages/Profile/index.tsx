@@ -14,9 +14,9 @@ const ProfilePage = () => {
   const stateUser = useMemo(() => location.state, [location.state]);
 
   const user = useSelector((state: RootState) => state.user);
-  const posts = useSelector((state: RootState) => state.posts.userPosts);
+  const userPosts = useSelector((state: RootState) => state.posts.userPosts);
 
-  const { searchText, searchedPosts, handleSearchChange, resetSearch } = useSearchPosts(posts);
+  const { searchText, searchedPosts, handleSearchChange, resetSearch } = useSearchPosts(userPosts.posts);
 
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -25,13 +25,16 @@ const ProfilePage = () => {
     document.title = stateUser.username;
 
     setIsCurrentUser(user?._id === stateUser._id);
+
+    if (stateUser._id === userPosts.userId) return;
+
     setLoading(true);
 
     postService
       .getUserPosts(stateUser._id)
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
-  }, [user, stateUser._id, stateUser.username]);
+  }, [user, stateUser._id, stateUser.username, userPosts.userId]);
 
   return (
     <>
@@ -71,7 +74,7 @@ const ProfilePage = () => {
           radius='md'
           label='Search posts'
           placeholder='Enter prompt'
-          disabled={loading}
+          disabled={loading || !userPosts.posts.length}
           value={searchText}
           onChange={handleSearchChange}
           rightSection={
@@ -94,7 +97,7 @@ const ProfilePage = () => {
             {searchText ? (
               <RenderCards posts={searchedPosts} title='No search results found' loading={loading} />
             ) : (
-              <RenderCards posts={posts} title='No posts found' loading={loading} />
+              <RenderCards posts={userPosts.posts} title='No posts found' loading={loading} />
             )}
           </div>
         </div>

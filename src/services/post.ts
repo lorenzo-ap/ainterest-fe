@@ -20,7 +20,12 @@ export const postService = {
 
   getUserPosts: async (userId: string) => {
     return api.get<Post[]>(`${slug}/${userId}`).then((res) => {
-      store.dispatch(setUserPosts(res.data.reverse()));
+      const userPosts = {
+        userId,
+        posts: res.data.reverse()
+      };
+
+      store.dispatch(setUserPosts(userPosts));
     });
   },
 

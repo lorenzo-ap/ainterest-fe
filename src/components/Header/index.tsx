@@ -9,9 +9,9 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconLogout2, IconMoon, IconSun } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { setUser } from '../../redux/slices/userSlice';
 import { RootState, store } from '../../redux/store';
 import { toastService } from '../../services/toast';
@@ -23,16 +23,19 @@ import styles from './index.module.scss';
 
 const Header = () => {
   const navigate = useNavigate();
-  const { setColorScheme } = useMantineColorScheme();
+  const location = useLocation();
+  const { pathname } = useMemo(() => location, [location]);
+
   const computedColorScheme = useComputedColorScheme(getColorSchemeFromLocalStorage());
+  const { setColorScheme } = useMantineColorScheme();
 
   const user = useSelector((state: RootState) => state.user);
 
+  const [jwtToken, setJwtToken] = useState<string | null>(null);
   const [signInModalOpened, { open: openSignInModal, close: closeSignInModal }] = useDisclosure(false);
   const [signUpModalOpened, { open: openSignUpModal, close: closeSignUpModal }] = useDisclosure(false);
   const [signOutConfirmModalOpened, { open: openSignOutConfirmModal, close: closeSignOutConfirmModal }] =
     useDisclosure(false);
-  const [jwtToken, setJwtToken] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('jwt-token');
@@ -73,7 +76,8 @@ const Header = () => {
                 component={Link}
                 to={`account/${user.username}`}
                 state={user}
-                variant='default'
+                variant={pathname.includes(user.username) ? 'light' : 'default'}
+                color='indigo'
                 px={10}
                 radius='md'
               >
