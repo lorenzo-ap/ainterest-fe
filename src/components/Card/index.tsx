@@ -70,10 +70,10 @@ const Card = ({ _id, prompt, photo, createdAt, user, likes }: Post) => {
               </ActionIcon>
             </Tooltip>
           </div>
-          <Text className='text-md prompt max-h-[100px] overflow-y-scroll pr-0.5 text-white'>{prompt}</Text>
+          <Text className='prompt max-h-[100px] overflow-y-scroll pr-0.5 text-white max-lg:text-sm'>{prompt}</Text>
         </div>
 
-        <div className='mt-3 flex items-center justify-between gap-2'>
+        <div className='mt-2.5 flex items-center justify-between'>
           <Link
             className='flex items-center gap-x-1.5 hover:opacity-85'
             to={`/account/${user.username}`}
