@@ -1,6 +1,8 @@
 import Card from './Card';
-import Loader from './Loader';
-import Page from './Page';
+import ConfirmModal from './ConfirmModal';
 import Header from './Header';
+import Page from './Page';
+import ProtectedRoute from './ProtectedRoute';
+import RenderCards from './RenderCards';
 
-export { Card, Loader, Page, Header };
+export { Card, ConfirmModal, Header, Page, ProtectedRoute, RenderCards };

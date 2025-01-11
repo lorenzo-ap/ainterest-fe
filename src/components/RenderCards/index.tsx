@@ -1,8 +1,8 @@
 import { Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { Card } from '../../../../components';
-import CardSkeleton from '../../../../components/Card/components/CardSkeleton';
-import { Post } from '../../../../types/post.interface';
+import { Card } from '..';
+import { Post } from '../../types/post.interface';
+import CardSkeleton from '../Card/components/CardSkeleton';
 
 interface RenderCardsProps {
   posts: Post[];
@@ -37,24 +37,18 @@ const RenderCards = ({ posts: data, title, loading }: RenderCardsProps) => {
     };
   });
 
-  if (loading) {
-    return (
-      <>
-        {Array.from({ length: 10 }).map((_, index) => (
-          <CardSkeleton key={index} />
-        ))}
-      </>
-    );
-  }
-
-  if (displayedPosts.length) {
-    return displayedPosts.map((post) => <Card key={post._id} {...post} />);
-  }
-
   return (
-    <Title className='col-span-full uppercase text-[#6469FF]' order={2} size={'h3'}>
-      {title}
-    </Title>
+    <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+      {loading && Array.from({ length: 10 }).map((_, index) => <CardSkeleton key={index} />)}
+
+      {displayedPosts.length ? (
+        displayedPosts.map((post) => <Card key={post._id} {...post} />)
+      ) : (
+        <Title className='col-span-full uppercase' order={2} c='violet'>
+          {title}
+        </Title>
+      )}
+    </div>
   );
 };
 

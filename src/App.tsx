@@ -3,12 +3,9 @@ import '@mantine/core/styles.css';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Header, Page } from './components';
-import ProtectedRoute from './components/ProtectedRoute';
+import { Header, Page, ProtectedRoute } from './components';
 import useAuth from './hooks/useAuth';
-import { CreatePost, Home } from './pages';
-import ErrorPage from './pages/Error';
-import ProfilePage from './pages/Profile';
+import { CreatePost, ErrorPage, Home, ProfilePage } from './pages';
 
 const App = () => {
   useAuth();

@@ -1,10 +1,10 @@
 import { ActionIcon, CloseButton, Text, TextInput, Title, Tooltip } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
+import { RenderCards } from '../../components';
 import useFetchPosts from '../../hooks/useFetchPosts';
 import useSearchPosts from '../../hooks/useSearchPosts';
 import { RootState } from '../../redux/store';
-import RenderCards from './components/RenderCards';
 
 const Home = () => {
   const posts = useSelector((state: RootState) => state.posts.allPosts);
@@ -57,13 +57,7 @@ const Home = () => {
           </Title>
         )}
 
-        <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-          {searchText ? (
-            <RenderCards posts={searchedPosts} title='No search results found' loading={loading} />
-          ) : (
-            <RenderCards posts={posts} title='No posts found' loading={loading} />
-          )}
-        </div>
+        <RenderCards title='No posts found' posts={searchText ? searchedPosts : posts} loading={loading} />
       </div>
     </section>
   );

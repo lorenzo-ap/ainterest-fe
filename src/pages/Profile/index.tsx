@@ -3,10 +3,10 @@ import { IconArrowRight, IconPhotoAi } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
+import { RenderCards } from '../../components';
 import useSearchPosts from '../../hooks/useSearchPosts';
 import { RootState } from '../../redux/store';
 import { postService } from '../../services/post';
-import RenderCards from '../Home/components/RenderCards';
 import ProfileAvatar from './components/ProfileAvatar';
 
 const ProfilePage = () => {
@@ -93,13 +93,7 @@ const ProfilePage = () => {
             </Title>
           )}
 
-          <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-            {searchText ? (
-              <RenderCards posts={searchedPosts} title='No search results found' loading={loading} />
-            ) : (
-              <RenderCards posts={userPosts.posts} title='No posts found' loading={loading} />
-            )}
-          </div>
+          <RenderCards title='No posts found' posts={searchText ? searchedPosts : userPosts.posts} loading={loading} />
         </div>
       </div>
     </>
