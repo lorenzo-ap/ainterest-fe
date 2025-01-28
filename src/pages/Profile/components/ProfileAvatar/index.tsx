@@ -49,8 +49,8 @@ const ProfileAvatar = ({ user, stateUser, isCurrentUser }: ProfileAvatarProps) =
           setUploadedPhotoUrl(null);
 
           toastService.success('Profile image updated successfully');
-
           postService.getPosts();
+          postService.getUserPosts(stateUser._id);
         })
         .finally(() => {
           setImageLoading(false);
