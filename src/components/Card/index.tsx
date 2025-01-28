@@ -7,6 +7,7 @@ import { RootState } from '../../redux/store';
 import { postService } from '../../services/post';
 import { Post } from '../../types/post.interface';
 import { downloadImage } from '../../utils';
+import styles from './components/CardSkeleton/index.module.scss';
 
 const Card = ({ _id, prompt, photo, createdAt, user, likes }: Post) => {
   const location = useLocation();
@@ -18,19 +19,15 @@ const Card = ({ _id, prompt, photo, createdAt, user, likes }: Post) => {
 
   useEffect(() => {
     setUsername(location.pathname.split('/').reverse()[0]);
-  }, [location.pathname, loading]);
+  }, [location.pathname]);
 
   return (
-    <div className='card group relative overflow-y-hidden rounded-xl shadow-card'>
-      {!loading && (
-        <div
-          className={`absolute left-0 top-0 h-full w-full ${showInfo ? 'bg-slate-800/[.5]' : 'bg-transparent'} transition-colors duration-500 md:group-hover:bg-slate-800/[.5]`}
-        />
-      )}
-
-      <div className='relative'>
+    <div
+      className={`${styles.border} card group relative aspect-square overflow-y-hidden rounded-xl border shadow-card`}
+    >
+      <div className='relative h-full w-full'>
         {loading && (
-          <div className='absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-black/50'>
+          <div className='absolute inset-0 z-10 flex h-full w-full items-center justify-center rounded-xl bg-black/50'>
             <Loader color='white' size='lg' />
           </div>
         )}
