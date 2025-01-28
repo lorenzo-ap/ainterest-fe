@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { getUserByUsername } from '../../api';
-import { RenderCards, ScrollToTopButton } from '../../components';
+import { RenderCards, ScrollToTopButton, Sort } from '../../components';
 import { useSearchPosts } from '../../hooks';
+import { setUserPosts } from '../../redux/slices';
 import { RootState } from '../../redux/store';
 import { postService } from '../../services/posts';
 import { User } from '../../types';
@@ -13,10 +14,13 @@ import { UserProfileAvatar } from './components/UserProfileAvatar';
 
 export const UserProfilePage = () => {
   const params = useParams();
-  const [stateUser, setStateUser] = useState<User | null>(null);
+
   const loggedInUser = useSelector((state: RootState) => state.user);
   const userPosts = useSelector((state: RootState) => state.posts.userPosts.posts);
+
   const { searchText, searchedPosts, handleSearchChange, resetSearch } = useSearchPosts(userPosts);
+
+  const [stateUser, setStateUser] = useState<User | null>(null);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [userLoading, setUserLoading] = useState(true);
   const [postsLoading, setPostsLoading] = useState(true);
@@ -88,24 +92,28 @@ export const UserProfilePage = () => {
           <Skeleton radius='md' height={42} className='mt-10 md:mt-16' />
         ) : (
           !!userPosts.length && (
-            <TextInput
-              className='mt-4 md:mt-8'
-              flex={1}
-              size='md'
-              radius='md'
-              label='Search posts'
-              placeholder='Enter prompt'
-              disabled={postsLoading || !userPosts.length}
-              value={searchText}
-              onChange={handleSearchChange}
-              rightSection={
-                searchText && (
-                  <Tooltip withArrow label='Clear'>
-                    <CloseButton onClick={resetSearch} />
-                  </Tooltip>
-                )
-              }
-            />
+            <div className='mt-8 flex items-end gap-x-2'>
+              <TextInput
+                className='mt-4 md:mt-8'
+                flex={1}
+                size='md'
+                radius='md'
+                label='Search posts'
+                placeholder='Enter prompt'
+                disabled={postsLoading || !userPosts.length}
+                value={searchText}
+                onChange={handleSearchChange}
+                rightSection={
+                  searchText && (
+                    <Tooltip withArrow label='Clear'>
+                      <CloseButton onClick={resetSearch} />
+                    </Tooltip>
+                  )
+                }
+              />
+
+              <Sort posts={userPosts} setPosts={setUserPosts} />
+            </div>
           )
         )}
 

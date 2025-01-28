@@ -1,8 +1,9 @@
 import { ActionIcon, CloseButton, Text, TextInput, Title, Tooltip } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
-import { RenderCards, ScrollToTopButton } from '../../components';
+import { RenderCards, ScrollToTopButton, Sort } from '../../components';
 import { useFetchPosts, useSearchPosts } from '../../hooks';
+import { setPosts } from '../../redux/slices';
 import { RootState } from '../../redux/store';
 
 export const HomePage = () => {
@@ -23,31 +24,42 @@ export const HomePage = () => {
         </div>
       </div>
 
-      <div className='mt-8 flex items-end gap-x-2'>
-        <TextInput
-          flex={1}
-          size='md'
-          radius='md'
-          label='Search posts'
-          placeholder='Enter prompt or username'
-          disabled={loading}
-          value={searchText}
-          onChange={handleSearchChange}
-          rightSection={
-            searchText && (
-              <Tooltip withArrow label='Clear'>
-                <CloseButton onClick={resetSearch} />
-              </Tooltip>
-            )
-          }
-        />
+      {!!posts.length && (
+        <div className='mt-8 flex items-end gap-x-2'>
+          <TextInput
+            flex={1}
+            size='md'
+            radius='md'
+            label='Search posts'
+            placeholder='Enter prompt or username'
+            disabled={loading}
+            value={searchText}
+            onChange={handleSearchChange}
+            rightSection={
+              searchText && (
+                <Tooltip withArrow label='Clear'>
+                  <CloseButton onClick={resetSearch} />
+                </Tooltip>
+              )
+            }
+          />
 
-        <Tooltip label='Refresh posts' withArrow>
-          <ActionIcon size={42} color='violet' radius='md' onClick={fetchPosts} loading={loading} aria-label='Refresh'>
-            <IconRefresh size={18} />
-          </ActionIcon>
-        </Tooltip>
-      </div>
+          <Tooltip label='Refresh posts' withArrow>
+            <ActionIcon
+              size={42}
+              color='violet'
+              radius='md'
+              onClick={fetchPosts}
+              loading={loading}
+              aria-label='Refresh'
+            >
+              <IconRefresh size={20} />
+            </ActionIcon>
+          </Tooltip>
+
+          <Sort posts={posts} setPosts={setPosts} />
+        </div>
+      )}
 
       <div className='mt-3'>
         {searchText && (

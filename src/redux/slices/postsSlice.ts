@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Post } from '../../types';
+import { Post, UpdatePost } from '../../types';
 
 interface UserPosts {
   userId: string;
@@ -47,7 +47,7 @@ const postsSlice = createSlice({
       state.userPosts.posts[index] = action.payload;
     },
 
-    updatePostLike: (state, action: PayloadAction<{ postId: string; userId: string }>) => {
+    updatePostLike: (state, action: PayloadAction<UpdatePost>) => {
       const { postId, userId } = action.payload;
 
       const allPostsPostIndex = state.allPosts.findIndex((post) => post._id === postId);

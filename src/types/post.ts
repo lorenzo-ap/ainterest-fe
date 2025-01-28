@@ -13,3 +13,14 @@ export interface GeneratedImage {
   prompt: string;
   photo: string;
 }
+
+export interface UpdatePost {
+  postId: string;
+  userId: string;
+}
+
+export enum SortCriteria {
+  Date = 'Date',
+  Name = 'Name',
+  Likes = 'Likes'
+}
