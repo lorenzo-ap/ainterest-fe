@@ -38,7 +38,7 @@ export const rapidApiService = {
   generateImage: async (text: string) => {
     const headers = getRapidApiHeaders('imageai-generator.p.rapidapi.com');
     const body = {
-      negative_prompt: null,
+      negative_prompt: 'NSFW',
       prompt: text,
       width: 512,
       height: 512,
