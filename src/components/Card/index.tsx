@@ -27,8 +27,8 @@ const Card = ({ _id, prompt, photo, createdAt, user, likes }: Post) => {
     >
       <div className='relative h-full w-full'>
         {loading && (
-          <div className='absolute inset-0 z-10 flex h-full w-full items-center justify-center rounded-xl bg-black/50'>
-            <Loader color='white' size='lg' />
+          <div className='absolute inset-0 z-10 flex h-full w-full items-center justify-center rounded-xl bg-black/15'>
+            <Loader color='white' size='xl' />
           </div>
         )}
 
