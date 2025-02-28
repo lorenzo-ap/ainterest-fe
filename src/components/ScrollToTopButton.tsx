@@ -2,7 +2,7 @@ import { ActionIcon, Tooltip } from '@mantine/core';
 import { IconArrowUp } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
-export const ScrollToTop = () => {
+export const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {

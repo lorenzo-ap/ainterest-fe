@@ -1,7 +1,7 @@
 import { ActionIcon, CloseButton, Text, TextInput, Title, Tooltip } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
-import { RenderCards, ScrollToTop } from '../../components';
+import { RenderCards, ScrollToTopButton } from '../../components';
 import { useFetchPosts, useSearchPosts } from '../../hooks';
 import { RootState } from '../../redux/store';
 
@@ -59,7 +59,7 @@ export const HomePage = () => {
         <RenderCards title='No posts found' posts={searchText ? searchedPosts : posts} loading={loading} />
       </div>
 
-      <ScrollToTop />
+      <ScrollToTopButton />
     </section>
   );
 };

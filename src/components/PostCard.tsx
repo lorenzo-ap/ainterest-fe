@@ -8,7 +8,7 @@ import { postService } from '../services/post';
 import { Post } from '../types';
 import { downloadImage } from '../utils';
 
-export const Card = ({ _id, prompt, photo, createdAt, user, likes }: Post) => {
+export const PostCard = ({ _id, prompt, photo, createdAt, user, likes }: Post) => {
   const location = useLocation();
   const currentUser = useSelector((state: RootState) => state.user);
 
@@ -27,6 +27,12 @@ export const Card = ({ _id, prompt, photo, createdAt, user, likes }: Post) => {
           <div className='absolute inset-0 z-10 flex h-full w-full items-center justify-center rounded-xl bg-black/15'>
             <Loader color='white' size='xl' />
           </div>
+        )}
+
+        {!loading && (
+          <div
+            className={`${showInfo ? 'opacity-100' : 'md:group-hover:opacity-100'} absolute inset-0 z-0 rounded-xl bg-black/50 opacity-0 transition-opacity duration-700`}
+          />
         )}
 
         <img

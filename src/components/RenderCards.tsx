@@ -1,7 +1,16 @@
-import { Title } from '@mantine/core';
+import { Skeleton, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { Card, CardSkeleton } from '.';
+import { PostCard } from '.';
 import { Post } from '../types';
+
+const CardSkeleton = () => {
+  return (
+    <div className='border-color card flex aspect-square flex-col rounded-xl border p-4'>
+      <Skeleton radius='md' className='mb-4 flex-grow' />
+      <Skeleton radius='md' height={24} className='w-3/4' />
+    </div>
+  );
+};
 
 interface RenderCardsProps {
   posts: Post[];
@@ -10,10 +19,10 @@ interface RenderCardsProps {
 }
 
 export const RenderCards = ({ posts: data, title, loading }: RenderCardsProps) => {
-  const [displayedPosts, setDisplayedPosts] = useState(data.slice(0, 10));
+  const [displayedPosts, setDisplayedPosts] = useState(data.slice(0, 100));
 
   useEffect(() => {
-    setDisplayedPosts(data.slice(0, 10));
+    setDisplayedPosts(data.slice(0, 100));
   }, [data]);
 
   const handleScroll = () => {
@@ -41,7 +50,7 @@ export const RenderCards = ({ posts: data, title, loading }: RenderCardsProps) =
       {loading && Array.from({ length: 10 }).map((_, index) => <CardSkeleton key={index} />)}
 
       {displayedPosts.length ? (
-        displayedPosts.map((post) => <Card key={post._id} {...post} />)
+        displayedPosts.map((post) => <PostCard key={post._id} {...post} />)
       ) : (
         <Title className='col-span-full uppercase' order={2} c='violet'>
           {title}

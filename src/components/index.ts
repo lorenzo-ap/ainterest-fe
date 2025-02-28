@@ -1,5 +1,4 @@
-export * from './Card';
-export * from './CardSkeleton';
 export * from './ConfirmModal';
+export * from './PostCard';
 export * from './RenderCards';
-export * from './ScrollToTop';
+export * from './ScrollToTopButton';
