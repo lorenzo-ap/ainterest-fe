@@ -1,6 +1,6 @@
 import { ActionIcon, Avatar, CheckIcon, Tooltip } from '@mantine/core';
 import { IconPhotoEdit, IconX } from '@tabler/icons-react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { postService } from '../../../../services/post';
 import { toastService } from '../../../../services/toast';
 import { userService } from '../../../../services/user';
@@ -16,6 +16,7 @@ const ProfileAvatar = ({ user, stateUser, isCurrentUser }: ProfileAvatarProps) =
   const [uploadedPhoto, setUploadedPhoto] = useState<File | null>(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
@@ -28,6 +29,14 @@ const ProfileAvatar = ({ user, stateUser, isCurrentUser }: ProfileAvatarProps) =
     setUploadedPhotoUrl(objectUrl);
   };
 
+  const resetFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+    setUploadedPhoto(null);
+    setUploadedPhotoUrl(null);
+  };
+
   const editUser = () => {
     if (!uploadedPhoto) return;
 
@@ -37,17 +46,20 @@ const ProfileAvatar = ({ user, stateUser, isCurrentUser }: ProfileAvatarProps) =
     reader.readAsDataURL(uploadedPhoto);
 
     reader.onload = () => {
-      const base64String = reader.result?.toString().replace('data:', '').replace(/^.+,/, '');
+      const photo = reader.result?.toString().replace('data:', '').replace(/^.+,/, '');
+
+      if (!photo) {
+        toastService.error('Failed to upload image');
+        return;
+      }
 
       userService
         .editUser({
           ...stateUser,
-          photo: base64String || stateUser.photo
+          photo
         })
         .then(() => {
-          setUploadedPhoto(null);
-          setUploadedPhotoUrl(null);
-
+          resetFileInput();
           toastService.success('Profile image updated successfully');
           postService.getPosts();
           postService.getUserPosts(stateUser._id);
@@ -60,7 +72,14 @@ const ProfileAvatar = ({ user, stateUser, isCurrentUser }: ProfileAvatarProps) =
 
   return (
     <div className='group relative rounded-full border border-slate-600'>
-      <input id='uploadImage' className='hidden' type='file' onChange={handleFileUpload} accept='image/*' />
+      <input
+        id='uploadImage'
+        className='hidden'
+        type='file'
+        onChange={handleFileUpload}
+        accept='image/*'
+        ref={fileInputRef}
+      />
 
       <label
         className='relative flex cursor-pointer items-center justify-center overflow-hidden rounded-full'
@@ -78,7 +97,7 @@ const ProfileAvatar = ({ user, stateUser, isCurrentUser }: ProfileAvatarProps) =
         </Avatar>
 
         {!uploadedPhoto && isCurrentUser && (
-          <div className='pointer-events-none absolute -bottom-20 left-1/2 flex h-full w-full -translate-x-1/2 items-start justify-center rounded-full bg-black bg-opacity-50 pt-1.5 transition-all group-hover:-bottom-12'>
+          <div className='pointer-events-none absolute -bottom-20 left-1/2 flex h-full w-full -translate-x-1/2 items-start justify-center rounded-full bg-black bg-opacity-50 pt-1.5 text-slate-300 transition-all group-hover:-bottom-12'>
             <IconPhotoEdit size={16} />
           </div>
         )}
@@ -92,10 +111,8 @@ const ProfileAvatar = ({ user, stateUser, isCurrentUser }: ProfileAvatarProps) =
               variant='default'
               size={20}
               type='button'
-              onClick={() => {
-                setUploadedPhoto(null);
-                setUploadedPhotoUrl(null);
-              }}
+              disabled={imageLoading}
+              onClick={resetFileInput}
             >
               <IconX size={14} />
             </ActionIcon>
