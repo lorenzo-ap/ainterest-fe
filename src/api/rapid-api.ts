@@ -34,5 +34,5 @@ export const generateImage = (text: string) => {
     hr_scale: 2
   };
 
-  return req.post<Base64URLString>(`https://${rapidApi.image}/image`, body, { headers });
+  return req.post<string>(`https://${rapidApi.image}/image`, body, { headers });
 };
