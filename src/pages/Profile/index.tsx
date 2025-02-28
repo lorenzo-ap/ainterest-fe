@@ -3,7 +3,7 @@ import { IconArrowRight, IconPhotoAi } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { RenderCards } from '../../components';
+import { RenderCards, ScrollToTop } from '../../components';
 import useSearchPosts from '../../hooks/useSearchPosts';
 import { RootState } from '../../redux/store';
 import { postService } from '../../services/post';
@@ -96,6 +96,8 @@ const ProfilePage = () => {
           <RenderCards title='No posts found' posts={searchText ? searchedPosts : userPosts.posts} loading={loading} />
         </div>
       </div>
+
+      <ScrollToTop />
     </>
   );
 };

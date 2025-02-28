@@ -110,7 +110,7 @@ const Card = ({ _id, prompt, photo, createdAt, user, likes }: Post) => {
                     type='button'
                     disabled={!currentUser}
                     onClick={() => {
-                      postService.likePost(_id);
+                      postService.likePost(_id, currentUser?._id || '');
                     }}
                   >
                     <Tooltip label={likes.includes(currentUser?._id) ? 'Remove like' : 'Like'} withArrow>
