@@ -1,11 +1,13 @@
-import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
-import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
+
+import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Header, Page, ProtectedRoute } from './components';
-import useAuth from './hooks/useAuth';
-import { CreatePost, ErrorPage, Home, ProfilePage } from './pages';
+import { useAuth } from './hooks';
+import { CreatePostPage, ErrorPage, HomePage, UserProfilePage } from './pages';
+import { Page, ProtectedRoute } from './pages/components';
+import { Header } from './pages/components/Header';
 
 const App = () => {
   useAuth();
@@ -23,19 +25,19 @@ const App = () => {
               path='/'
               element={
                 <Page title='AInterest'>
-                  <Home />
+                  <HomePage />
                 </Page>
               }
             />
 
-            <Route path='/account/:username' element={<ProfilePage />} />
+            <Route path='/account/:username' element={<UserProfilePage />} />
 
             <Route element={<ProtectedRoute />}>
               <Route
                 path='/generate-image'
                 element={
                   <Page title='Generate image'>
-                    <CreatePost />
+                    <CreatePostPage />
                   </Page>
                 }
               />

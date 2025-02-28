@@ -10,7 +10,7 @@ export const toastService = {
     });
   },
 
-  error: (message: string, autoClose?: number) => {
+  error: (message = 'An error occurred.', autoClose?: number) => {
     showNotification({
       message: message,
       color: 'red',

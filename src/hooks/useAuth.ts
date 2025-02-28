@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
 import { userService } from '../services/user';
 
-const useAuth = () => {
+export const useAuth = () => {
   useEffect(() => {
     try {
       const token = localStorage.getItem('jwt-token');
@@ -25,5 +25,3 @@ const useAuth = () => {
     }
   }, []);
 };
-
-export default useAuth;

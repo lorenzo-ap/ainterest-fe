@@ -1,12 +1,13 @@
 import axios from 'axios';
+import { apis } from '../assets/apis/apis';
 import { toastService } from '../services/toast';
 
-const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api/v1`
+export const req = axios.create({
+  baseURL: apis.root
 });
 
 // Add bearer token to requests
-api.interceptors.request.use(
+req.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('jwt-token');
 
@@ -20,7 +21,7 @@ api.interceptors.request.use(
 );
 
 // Handle unauthorized responses
-api.interceptors.response.use(
+req.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response.status === 401) {
@@ -35,4 +36,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api;
+export default req;

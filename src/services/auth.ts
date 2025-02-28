@@ -1,11 +1,7 @@
-import api from '../api/axios';
-import { SignInForm } from '../components/Header/components/SignInModal';
-import { SignUpForm } from '../components/Header/components/SignUpModal';
-import { setUser } from '../redux/slices/userSlice';
+import { signIn, signUp } from '../api';
+import { setUser } from '../redux/slices';
 import { store } from '../redux/store';
-import { User } from '../types/user.interface';
-
-const slug = 'users';
+import { SignInForm, SignUpForm, User } from '../types';
 
 const authUser = (user: User) => {
   store.dispatch(setUser(user));
@@ -13,15 +9,13 @@ const authUser = (user: User) => {
 };
 
 export const authService = {
-  signIn: async (values: SignInForm) => {
-    return api.post<User>(`${slug}/login`, values).then((res) => {
+  signIn: (values: SignInForm) =>
+    signIn(values).then((res) => {
       authUser(res.data);
-    });
-  },
+    }),
 
-  signUp: async (values: SignUpForm) => {
-    return api.post<User>(slug, values).then((res) => {
+  signUp: async (values: SignUpForm) =>
+    signUp(values).then((res) => {
       authUser(res.data);
-    });
-  }
+    })
 };

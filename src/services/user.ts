@@ -1,20 +1,17 @@
-import api from '../api/axios';
-import { setUser } from '../redux/slices/userSlice';
+import { getCurrentUser, updateUser } from '../api';
+import { setUser } from '../redux/slices';
 import { store } from '../redux/store';
-import { User } from '../types/user.interface';
-
-const slug = 'users';
+import { User } from '../types';
 
 export const userService = {
   setCurrentUser: async () => {
-    return api.get(`${slug}/current`).then((response) => {
+    getCurrentUser().then((response) => {
       store.dispatch(setUser(response.data));
     });
   },
 
-  editUser: async (data: User) => {
-    return api.put(`${slug}/edit`, data).then((response) => {
+  editUser: async (data: User) =>
+    updateUser(data).then((response) => {
       store.dispatch(setUser(response.data));
-    });
-  }
+    })
 };

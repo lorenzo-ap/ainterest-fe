@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Post } from '../types/post.interface';
+import { Post } from '../types';
 
-const useSearchPosts = (posts: Post[], includeUsername?: boolean) => {
+export const useSearchPosts = (posts: Post[], includeUsername?: boolean) => {
   const [searchText, setSearchText] = useState<string>('');
   const [searchedPosts, setSearchedPosts] = useState<Post[]>([]);
 
@@ -29,5 +29,3 @@ const useSearchPosts = (posts: Post[], includeUsername?: boolean) => {
 
   return { searchText, searchedPosts, handleSearchChange, resetSearch };
 };
-
-export default useSearchPosts;

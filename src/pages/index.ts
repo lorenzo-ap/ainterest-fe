@@ -1,6 +1,4 @@
-import CreatePost from './CreatePost';
-import ErrorPage from './Error';
-import Home from './Home';
-import ProfilePage from './Profile';
-
-export { CreatePost, ErrorPage, Home, ProfilePage };
+export * from './create-post/CreatePost';
+export * from './error/Error';
+export * from './home/Home';
+export * from './user-profile/UserProfile';

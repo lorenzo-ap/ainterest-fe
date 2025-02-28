@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Post } from '../../types/post.interface';
+import { Post } from '../../types';
 
 interface UserPosts {
   userId: string;
@@ -39,7 +39,7 @@ const postsSlice = createSlice({
       state.allPosts[index] = action.payload;
     },
 
-    likePost: (state, action: PayloadAction<{ postId: string; userId: string }>) => {
+    updatePostLike: (state, action: PayloadAction<{ postId: string; userId: string }>) => {
       const { postId, userId } = action.payload;
 
       const index = state.allPosts.findIndex((post) => post._id === postId);
@@ -54,8 +54,8 @@ const postsSlice = createSlice({
       };
     },
 
-    setUserPosts: (state, action: PayloadAction<UserPosts>) => {
-      state.userPosts = action.payload;
+    setUserPosts: (state, action: PayloadAction<Post[]>) => {
+      state.userPosts.posts = action.payload;
     },
 
     updateUserPost: (state, action: PayloadAction<Post>) => {
@@ -65,7 +65,7 @@ const postsSlice = createSlice({
       state.userPosts.posts[index] = action.payload;
     },
 
-    likeUserPost: (state, action: PayloadAction<{ postId: string; userId: string }>) => {
+    updateUserPostLike: (state, action: PayloadAction<{ postId: string; userId: string }>) => {
       const { postId, userId } = action.payload;
 
       const index = state.userPosts.posts.findIndex((post) => post._id === postId);
@@ -82,6 +82,6 @@ const postsSlice = createSlice({
   }
 });
 
-export const { setPosts, addPost, likePost, likeUserPost, updatePost, setUserPosts, updateUserPost } =
+export const { setPosts, addPost, updatePostLike, updateUserPostLike, updatePost, setUserPosts, updateUserPost } =
   postsSlice.actions;
 export default postsSlice.reducer;
