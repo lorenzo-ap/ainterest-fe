@@ -17,5 +17,10 @@ export const authService = {
   signUp: async (values: SignUpForm) =>
     signUp(values).then((res) => {
       authUser(res.data);
-    })
+    }),
+
+  signOut: async () => {
+    localStorage.removeItem('jwt-token');
+    store.dispatch(setUser(null));
+  }
 };

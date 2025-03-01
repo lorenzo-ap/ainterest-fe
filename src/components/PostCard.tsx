@@ -1,10 +1,18 @@
 import { ActionIcon, Avatar, Loader, Text, Tooltip } from '@mantine/core';
-import { IconCircleXFilled, IconHeart, IconHeartFilled, IconInfoCircle, IconPhotoDown } from '@tabler/icons-react';
+import {
+  IconCircleXFilled,
+  IconHeart,
+  IconHeartFilled,
+  IconInfoCircle,
+  IconPhotoDown,
+  IconTrash
+} from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { RootState } from '../redux';
-import { postService } from '../services/post';
+import { postService } from '../services/posts';
+import { toastService } from '../services/toast';
 import { Post } from '../types';
 import { downloadImage } from '../utils';
 
@@ -14,11 +22,21 @@ export const PostCard = ({ _id, prompt, photo, createdAt, user, likes }: Post) =
 
   const [showInfo, setShowInfo] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [deletePostLoading, setDeletePostLoading] = useState(false);
   const [username, setUsername] = useState<string>('');
 
   useEffect(() => {
     setUsername(location.pathname.split('/').reverse()[0]);
   }, [location.pathname]);
+
+  const deletePost = (postId: string) => {
+    setDeletePostLoading(true);
+
+    postService.deleteUserPost(postId).finally(() => {
+      setDeletePostLoading(false);
+      toastService.success('Post deleted successfully!');
+    });
+  };
 
   return (
     <div className='border-color card group relative aspect-square overflow-y-hidden rounded-xl border shadow-card'>
@@ -77,18 +95,37 @@ export const PostCard = ({ _id, prompt, photo, createdAt, user, likes }: Post) =
                   })}
                 </Text>
 
-                <Tooltip label='Download image' withArrow>
-                  <ActionIcon
-                    variant='transparent'
-                    p={0}
-                    size={18}
-                    onClick={() => {
-                      downloadImage(_id, photo);
-                    }}
-                  >
-                    <IconPhotoDown className='text-slate-400' size={18} />
-                  </ActionIcon>
-                </Tooltip>
+                <div className='flex gap-1'>
+                  <Tooltip label='Download image' withArrow>
+                    <ActionIcon
+                      variant='transparent'
+                      p={0}
+                      size={18}
+                      onClick={() => {
+                        downloadImage(_id, photo);
+                      }}
+                    >
+                      <IconPhotoDown className='text-slate-400' size={18} />
+                    </ActionIcon>
+                  </Tooltip>
+
+                  {user._id === currentUser?._id && (
+                    <Tooltip label='Delete image' withArrow>
+                      <ActionIcon
+                        variant='transparent'
+                        p={0}
+                        size={18}
+                        loading={deletePostLoading}
+                        loaderProps={{ color: 'white' }}
+                        onClick={() => {
+                          deletePost(_id);
+                        }}
+                      >
+                        <IconTrash className='text-red-400' size={18} />
+                      </ActionIcon>
+                    </Tooltip>
+                  )}
+                </div>
               </div>
 
               <Text className='prompt max-h-[100px] overflow-y-scroll pr-0.5 text-white max-lg:text-sm'>{prompt}</Text>

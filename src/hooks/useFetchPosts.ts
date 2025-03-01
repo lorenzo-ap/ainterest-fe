@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { postService } from '../services/post';
+import { postService } from '../services/posts';
 
 export const useFetchPosts = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -11,7 +11,7 @@ export const useFetchPosts = () => {
   const fetchPosts = useCallback(() => {
     setLoading(true);
 
-    postService.getPosts().finally(() => {
+    postService.setPosts().finally(() => {
       setLoading(false);
     });
   }, []);

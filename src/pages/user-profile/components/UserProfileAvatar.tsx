@@ -1,7 +1,7 @@
 import { ActionIcon, Avatar, CheckIcon, Tooltip } from '@mantine/core';
 import { IconPhotoEdit, IconX } from '@tabler/icons-react';
 import { ChangeEvent, useRef, useState } from 'react';
-import { postService } from '../../../services/post';
+import { postService } from '../../../services/posts';
 import { toastService } from '../../../services/toast';
 import { userService } from '../../../services/user';
 import { User } from '../../../types';
@@ -63,7 +63,7 @@ export const UserProfileAvatar = ({ user, stateUser, isCurrentUser }: ProfileAva
         .then(() => {
           resetFileInput();
           toastService.success('Profile image updated successfully');
-          postService.getPosts();
+          postService.setPosts();
         })
         .finally(() => {
           setImageLoading(false);

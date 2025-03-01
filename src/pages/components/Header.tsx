@@ -13,8 +13,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ConfirmModal } from '../../components';
-import { setUser } from '../../redux/slices';
-import { RootState, store } from '../../redux/store';
+import { RootState } from '../../redux/store';
+import { authService } from '../../services/auth';
 import { toastService } from '../../services/toast';
 import { getColorSchemeFromLocalStorage } from '../../utils';
 import { SignInModal, SignUpModal } from './modals';
@@ -45,14 +45,12 @@ export const Header = () => {
   };
 
   const signOut = () => {
-    closeSignOutConfirmModal();
-
-    localStorage.removeItem('jwt-token');
-    setJwtToken(null);
-    store.dispatch(setUser(null));
-
-    navigate('/');
-    toastService.success('Signed out successfully');
+    authService.signOut().finally(() => {
+      closeSignOutConfirmModal();
+      setJwtToken(null);
+      navigate('/');
+      toastService.success('Signed out successfully');
+    });
   };
 
   return (

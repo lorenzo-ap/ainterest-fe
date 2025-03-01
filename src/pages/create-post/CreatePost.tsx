@@ -4,7 +4,7 @@ import { IconArrowLeft, IconBrandOpenai, IconPhotoUp } from '@tabler/icons-react
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkTextForNSFW, generateImage, translateText } from '../../api';
-import { postService } from '../../services/post';
+import { postService } from '../../services/posts';
 import { toastService } from '../../services/toast';
 import { GeneratedImage } from '../../types';
 import { getRandomPrompt } from '../../utils';

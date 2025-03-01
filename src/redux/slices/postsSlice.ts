@@ -26,62 +26,48 @@ const postsSlice = createSlice({
     setPosts: (state, action: PayloadAction<Post[]>) => {
       state.allPosts = action.payload;
     },
-
     addPost: (state, action: PayloadAction<Post>) => {
-      if (state.allPosts.length) state.allPosts.unshift(action.payload);
-      if (state.userPosts.posts.length) state.userPosts.posts.unshift(action.payload);
+      state.allPosts.unshift(action.payload);
+      state.userPosts.posts.unshift(action.payload);
     },
-
     updatePost: (state, action: PayloadAction<Post>) => {
       const index = state.allPosts.findIndex((post) => post._id === action.payload._id);
-
-      if (index === -1) return;
       state.allPosts[index] = action.payload;
     },
-
-    updatePostLike: (state, action: PayloadAction<{ postId: string; userId: string }>) => {
-      const { postId, userId } = action.payload;
-
-      const index = state.allPosts.findIndex((post) => post._id === postId);
-      if (index === -1) return;
-
-      const likes = state.allPosts[index].likes;
-      const newLikes = likes.includes(userId) ? likes.filter((like) => like !== userId) : [...likes, userId];
-
-      state.allPosts[index] = {
-        ...state.allPosts[index],
-        likes: newLikes
-      };
+    deletePost: (state, action: PayloadAction<string>) => {
+      state.allPosts = state.allPosts.filter((post) => post._id !== action.payload);
+      state.userPosts.posts = state.userPosts.posts.filter((post) => post._id !== action.payload);
     },
 
     setUserPosts: (state, action: PayloadAction<Post[]>) => {
       state.userPosts.posts = action.payload;
     },
-
     updateUserPost: (state, action: PayloadAction<Post>) => {
       const index = state.userPosts.posts.findIndex((post) => post._id === action.payload._id);
-
-      if (index === -1) return;
       state.userPosts.posts[index] = action.payload;
     },
 
-    updateUserPostLike: (state, action: PayloadAction<{ postId: string; userId: string }>) => {
+    updatePostLike: (state, action: PayloadAction<{ postId: string; userId: string }>) => {
       const { postId, userId } = action.payload;
 
-      const index = state.userPosts.posts.findIndex((post) => post._id === postId);
-      if (index === -1) return;
+      const allPostsPostIndex = state.allPosts.findIndex((post) => post._id === postId);
+      const userPostsPostIndex = state.userPosts.posts.findIndex((post) => post._id === postId);
 
-      const likes = state.userPosts.posts[index].likes;
+      const likes = state.allPosts[allPostsPostIndex].likes;
       const newLikes = likes.includes(userId) ? likes.filter((like) => like !== userId) : [...likes, userId];
 
-      state.userPosts.posts[index] = {
-        ...state.userPosts.posts[index],
+      state.allPosts[allPostsPostIndex] = {
+        ...state.allPosts[allPostsPostIndex],
+        likes: newLikes
+      };
+      state.userPosts.posts[userPostsPostIndex] = {
+        ...state.userPosts.posts[userPostsPostIndex],
         likes: newLikes
       };
     }
   }
 });
 
-export const { setPosts, addPost, updatePostLike, updateUserPostLike, updatePost, setUserPosts, updateUserPost } =
+export const { setPosts, addPost, updatePostLike, deletePost, updatePost, setUserPosts, updateUserPost } =
   postsSlice.actions;
 export default postsSlice.reducer;

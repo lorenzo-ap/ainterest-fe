@@ -3,11 +3,11 @@ import { IconArrowRight, IconPhotoAi } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import { getUserByUsername, getUserPosts } from '../../api';
+import { getUserByUsername } from '../../api';
 import { RenderCards, ScrollToTopButton } from '../../components';
 import { useSearchPosts } from '../../hooks';
-import { setUserPosts } from '../../redux/slices';
-import { RootState, store } from '../../redux/store';
+import { RootState } from '../../redux/store';
+import { postService } from '../../services/posts';
 import { User } from '../../types';
 import { UserProfileAvatar } from './components/UserProfileAvatar';
 
@@ -31,16 +31,13 @@ export const UserProfilePage = () => {
     getUserByUsername(params.username || '')
       .then((res) => {
         const stateUser = res.data;
-        setStateUser(stateUser);
         document.title = stateUser.username;
-        setIsCurrentUser(loggedInUser?._id === stateUser._id);
 
+        setStateUser(stateUser);
+        setIsCurrentUser(loggedInUser?._id === stateUser._id);
         setPostsLoading(true);
-        getUserPosts(stateUser._id)
-          .then((res) => {
-            store.dispatch(setUserPosts(res.data));
-          })
-          .finally(() => setPostsLoading(false));
+
+        postService.setUserPosts(stateUser._id).finally(() => setPostsLoading(false));
       })
       .finally(() => setUserLoading(false));
   }, [loggedInUser, params.username]);
