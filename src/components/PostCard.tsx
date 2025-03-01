@@ -13,20 +13,20 @@ import { Link, useLocation } from 'react-router-dom';
 import { RootState } from '../redux';
 import { postService } from '../services/posts';
 import { toastService } from '../services/toast';
-import { Post } from '../types';
+import { Post, UserRole } from '../types';
 import { downloadImage } from '../utils';
 
-export const PostCard = ({ _id, prompt, photo, createdAt, user, likes }: Post) => {
+export const PostCard = (props: Post) => {
   const location = useLocation();
-  const currentUser = useSelector((state: RootState) => state.user);
+  const loggedUser = useSelector((state: RootState) => state.user);
 
   const [showInfo, setShowInfo] = useState(false);
   const [loading, setLoading] = useState(true);
   const [deletePostLoading, setDeletePostLoading] = useState(false);
-  const [username, setUsername] = useState<string>('');
+  const [profileUsername, setProfileUsername] = useState<string>('');
 
   useEffect(() => {
-    setUsername(location.pathname.split('/').reverse()[0]);
+    setProfileUsername(location.pathname.split('/').reverse()[0]);
   }, [location.pathname]);
 
   const deletePost = (postId: string) => {
@@ -55,8 +55,8 @@ export const PostCard = ({ _id, prompt, photo, createdAt, user, likes }: Post) =
 
         <img
           className={`h-auto w-full rounded-xl object-cover ${loading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
-          src={photo}
-          alt={prompt}
+          src={props.photo}
+          alt={props.prompt}
           onLoad={() => {
             setLoading(false);
           }}
@@ -85,7 +85,7 @@ export const PostCard = ({ _id, prompt, photo, createdAt, user, likes }: Post) =
             <div className='flex flex-col items-start justify-between gap-y-1.5'>
               <div className='flex items-center justify-between self-stretch'>
                 <Text className='text-xs text-slate-300'>
-                  {new Date(createdAt).toLocaleString('en-US', {
+                  {new Date(props.createdAt).toLocaleString('en-US', {
                     month: 'short',
                     day: 'numeric',
                     year: 'numeric',
@@ -102,14 +102,14 @@ export const PostCard = ({ _id, prompt, photo, createdAt, user, likes }: Post) =
                       p={0}
                       size={18}
                       onClick={() => {
-                        downloadImage(_id, photo);
+                        downloadImage(props._id, props.photo);
                       }}
                     >
                       <IconPhotoDown className='text-slate-400' size={18} />
                     </ActionIcon>
                   </Tooltip>
 
-                  {user._id === currentUser?._id && (
+                  {(loggedUser?.role === UserRole.ADMIN ? true : props.user._id === loggedUser?._id) && (
                     <Tooltip label='Delete image' withArrow>
                       <ActionIcon
                         variant='transparent'
@@ -118,7 +118,7 @@ export const PostCard = ({ _id, prompt, photo, createdAt, user, likes }: Post) =
                         loading={deletePostLoading}
                         loaderProps={{ color: 'white' }}
                         onClick={() => {
-                          deletePost(_id);
+                          deletePost(props._id);
                         }}
                       >
                         <IconTrash className='text-red-400' size={18} />
@@ -128,33 +128,41 @@ export const PostCard = ({ _id, prompt, photo, createdAt, user, likes }: Post) =
                 </div>
               </div>
 
-              <Text className='prompt max-h-[100px] overflow-y-scroll pr-0.5 text-white max-lg:text-sm'>{prompt}</Text>
+              <Text className='prompt max-h-[100px] overflow-y-scroll pr-0.5 text-white max-lg:text-sm'>
+                {props.prompt}
+              </Text>
             </div>
 
             <div className='mt-2.5 flex items-center justify-between'>
               <Link
                 className='flex items-center gap-x-1.5 hover:opacity-85'
-                to={`/account/${user.username}`}
-                state={user}
-                style={{ pointerEvents: username === user.username ? 'none' : 'auto' }}
+                to={`/account/${props.user.username}`}
+                state={props.user}
+                style={{ pointerEvents: profileUsername === props.user.username ? 'none' : 'auto' }}
               >
-                <Avatar key={user.username} src={user.photo} name={user.username} color='initials' size={30}>
-                  {user.username[0].toUpperCase()}
+                <Avatar
+                  key={props.user.username}
+                  src={props.user.photo}
+                  name={props.user.username}
+                  color='initials'
+                  size={30}
+                >
+                  {props.user.username[0].toUpperCase()}
                 </Avatar>
-                <Text className='text-sm text-white'>{user.username}</Text>
+                <Text className='text-sm text-white'>{props.user.username}</Text>
               </Link>
 
               <div className='flex items-center gap-x-2'>
                 <div className='flex items-center gap-x-1'>
                   <button
                     type='button'
-                    disabled={!currentUser}
+                    disabled={!loggedUser}
                     onClick={() => {
-                      postService.reactToPost(_id, currentUser?._id || '');
+                      postService.reactToPost(props._id, loggedUser?._id || '');
                     }}
                   >
-                    <Tooltip label={likes.includes(currentUser?._id) ? 'Remove like' : 'Like'} withArrow>
-                      {likes.includes(currentUser?._id) ? (
+                    <Tooltip label={props.likes.includes(loggedUser?._id) ? 'Remove like' : 'Like'} withArrow>
+                      {props.likes.includes(loggedUser?._id) ? (
                         <IconHeartFilled className='text-slate-300' size={24} color='firebrick' />
                       ) : (
                         <IconHeart className='text-slate-300' size={24} />
@@ -162,7 +170,7 @@ export const PostCard = ({ _id, prompt, photo, createdAt, user, likes }: Post) =
                     </Tooltip>
                   </button>
 
-                  {likes.length > 0 && <Text className='text-sm text-white'>{likes.length}</Text>}
+                  {props.likes.length > 0 && <Text className='text-sm text-white'>{props.likes.length}</Text>}
                 </div>
               </div>
             </div>

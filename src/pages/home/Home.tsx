@@ -57,7 +57,7 @@ export const HomePage = () => {
             </ActionIcon>
           </Tooltip>
 
-          <Sort posts={posts} setPosts={setPosts} />
+          <Sort posts={searchText ? searchedPosts : posts} setPosts={setPosts} />
         </div>
       )}
 

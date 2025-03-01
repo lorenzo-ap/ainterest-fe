@@ -1,6 +1,8 @@
 import { ActionIcon, Avatar, CheckIcon, Tooltip } from '@mantine/core';
 import { IconPhotoEdit, IconX } from '@tabler/icons-react';
 import { ChangeEvent, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux';
 import { postService } from '../../../services/posts';
 import { toastService } from '../../../services/toast';
 import { userService } from '../../../services/user';
@@ -8,14 +10,16 @@ import { User } from '../../../types';
 
 interface ProfileAvatarProps {
   user: User | null;
-  stateUser: User | null;
   isCurrentUser: boolean;
 }
 
-export const UserProfileAvatar = ({ user, stateUser, isCurrentUser }: ProfileAvatarProps) => {
+export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) => {
+  const loggedUser = useSelector((state: RootState) => state.user);
+
   const [uploadedPhoto, setUploadedPhoto] = useState<File | null>(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -53,11 +57,11 @@ export const UserProfileAvatar = ({ user, stateUser, isCurrentUser }: ProfileAva
         return;
       }
 
-      if (!stateUser) return;
+      if (!user) return;
 
       userService
         .editUser({
-          ...stateUser,
+          ...user,
           photo
         })
         .then(() => {
@@ -88,13 +92,13 @@ export const UserProfileAvatar = ({ user, stateUser, isCurrentUser }: ProfileAva
         style={{ pointerEvents: isCurrentUser ? 'auto' : 'none' }}
       >
         <Avatar
-          key={stateUser?.username}
-          src={uploadedPhotoUrl || (isCurrentUser ? user?.photo : stateUser?.photo)}
+          key={user?.username}
+          src={uploadedPhotoUrl || (isCurrentUser ? loggedUser?.photo : user?.photo)}
           size={80}
-          name={stateUser?.username}
+          name={user?.username}
           color='initials'
         >
-          {stateUser?.username[0].toUpperCase()}
+          {user?.username[0].toUpperCase()}
         </Avatar>
 
         {!uploadedPhoto && isCurrentUser && (
