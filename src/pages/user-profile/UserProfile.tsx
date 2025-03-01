@@ -1,4 +1,4 @@
-import { Button, CloseButton, Skeleton, Text, TextInput, Title, Tooltip } from '@mantine/core';
+import { Badge, Button, CloseButton, Skeleton, Text, TextInput, Title, Tooltip } from '@mantine/core';
 import { IconArrowRight, IconPhotoAi } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -9,18 +9,18 @@ import { useSearchPosts } from '../../hooks';
 import { setUserPosts } from '../../redux/slices';
 import { RootState } from '../../redux/store';
 import { postService } from '../../services/posts';
-import { User } from '../../types';
+import { User, UserRole } from '../../types';
 import { UserProfileAvatar } from './components/UserProfileAvatar';
 
 export const UserProfilePage = () => {
   const params = useParams();
 
-  const loggedInUser = useSelector((state: RootState) => state.user);
+  const loggedUser = useSelector((state: RootState) => state.user);
   const userPosts = useSelector((state: RootState) => state.posts.userPosts.posts);
 
   const { searchText, searchedPosts, handleSearchChange, resetSearch } = useSearchPosts(userPosts);
 
-  const [stateUser, setStateUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [userLoading, setUserLoading] = useState(true);
   const [postsLoading, setPostsLoading] = useState(true);
@@ -34,17 +34,17 @@ export const UserProfilePage = () => {
 
     getUserByUsername(params.username || '')
       .then((res) => {
-        const stateUser = res.data;
-        document.title = stateUser.username;
+        const user = res.data;
+        document.title = user.username;
 
-        setStateUser(stateUser);
-        setIsCurrentUser(loggedInUser?._id === stateUser._id);
+        setUser(user);
+        setIsCurrentUser(loggedUser?._id === user._id);
         setPostsLoading(true);
 
-        postService.setUserPosts(stateUser._id).finally(() => setPostsLoading(false));
+        postService.setUserPosts(user._id).finally(() => setPostsLoading(false));
       })
       .finally(() => setUserLoading(false));
-  }, [loggedInUser, params.username]);
+  }, [loggedUser, params.username]);
 
   return (
     <>
@@ -54,7 +54,7 @@ export const UserProfilePage = () => {
             {userLoading ? (
               <Skeleton height={80} circle />
             ) : (
-              <UserProfileAvatar user={loggedInUser} stateUser={stateUser} isCurrentUser={isCurrentUser} />
+              <UserProfileAvatar user={user} isCurrentUser={isCurrentUser} />
             )}
 
             {userLoading ? (
@@ -64,8 +64,17 @@ export const UserProfilePage = () => {
               </div>
             ) : (
               <div>
-                <Title>{stateUser?.username}</Title>
-                {isCurrentUser && <Text opacity={0.5}>{loggedInUser?.email}</Text>}
+                <div className='flex items-center gap-2'>
+                  <Title>{user?.username}</Title>
+
+                  {user?.role === UserRole.ADMIN && (
+                    <Badge color='violet' variant='light' size='md' radius='xl' className='font-semibold uppercase'>
+                      Admin
+                    </Badge>
+                  )}
+                </div>
+
+                {isCurrentUser && <Text opacity={0.5}>{loggedUser?.email}</Text>}
               </div>
             )}
           </div>
@@ -89,12 +98,11 @@ export const UserProfilePage = () => {
         </div>
 
         {postsLoading ? (
-          <Skeleton radius='md' height={42} className='mt-10 md:mt-16' />
+          <Skeleton radius='md' height={42} className='mt-8 md:mt-14' />
         ) : (
           !!userPosts.length && (
-            <div className='mt-8 flex items-end gap-x-2'>
+            <div className='mt-4 flex items-end gap-x-2 md:mt-8'>
               <TextInput
-                className='mt-4 md:mt-8'
                 flex={1}
                 size='md'
                 radius='md'
@@ -112,7 +120,7 @@ export const UserProfilePage = () => {
                 }
               />
 
-              <Sort posts={userPosts} setPosts={setUserPosts} />
+              <Sort posts={searchText ? searchedPosts : userPosts} setPosts={setUserPosts} />
             </div>
           )
         )}

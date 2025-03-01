@@ -21,7 +21,7 @@ export const PostGeneratedImage = ({
       className={`mb-5 w-full max-w-xl lg:mb-0 lg:w-1/2 lg:max-w-full ${hiddenOnLargeScreen ? 'block lg:hidden' : 'hidden lg:block'}`}
     >
       <div
-        className={`post-generated-image__bg relative rounded-xl border ${isImageMissing ? 'border-[#E03131]' : 'border-color'} flex aspect-square items-center justify-center shadow-lg`}
+        className={`relative rounded-xl border ${isImageMissing ? 'border-[#E03131]' : 'border-color'} flex aspect-square items-center justify-center shadow-lg`}
       >
         {imageSource ? (
           <img className='h-full w-full rounded-xl object-cover' src={imageSource} alt={imageAlt} />
@@ -30,7 +30,9 @@ export const PostGeneratedImage = ({
         )}
 
         {isGenerating && (
-          <div className='absolute inset-0 z-0 flex items-center justify-center rounded-xl bg-[rgba(0,0,0,0.5)] p-3'>
+          <div
+            className={`absolute inset-0 z-0 flex items-center justify-center rounded-xl p-3 ${imageSource ? 'bg-black/50' : 'bg-black/20'}`}
+          >
             <Loader color='rgba(135, 232, 200, 1)' type='oval' size={64} />
           </div>
         )}
