@@ -1,4 +1,4 @@
-import { ActionIcon, CloseButton, Text, TextInput, Title, Tooltip } from '@mantine/core';
+import { ActionIcon, CloseButton, Skeleton, Text, TextInput, Title, Tooltip } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RenderCards, ScrollToTopButton, Sort } from '../../components';
@@ -24,41 +24,48 @@ export const HomePage = () => {
         </div>
       </div>
 
-      {!!posts.length && (
-        <div className='mt-8 flex items-end gap-x-2'>
-          <TextInput
-            flex={1}
-            size='md'
-            radius='md'
-            label='Search posts'
-            placeholder='Enter prompt or username'
-            disabled={loading}
-            value={searchText}
-            onChange={handleSearchChange}
-            rightSection={
-              searchText && (
-                <Tooltip withArrow label='Clear'>
-                  <CloseButton onClick={resetSearch} />
-                </Tooltip>
-              )
-            }
-          />
-
-          <Tooltip label='Refresh posts' withArrow>
-            <ActionIcon
-              size={42}
-              color='violet'
+      {loading ? (
+        <Skeleton radius='md' height={42} className='mt-8 md:mt-14' />
+      ) : (
+        !!posts.length && (
+          <div className='mt-8 flex items-end gap-x-2'>
+            <TextInput
+              flex={1}
+              size='md'
               radius='md'
-              onClick={fetchPosts}
-              loading={loading}
-              aria-label='Refresh'
-            >
-              <IconRefresh size={20} />
-            </ActionIcon>
-          </Tooltip>
+              type='text'
+              inputMode='text'
+              autoComplete='off'
+              label='Search posts'
+              placeholder='Enter prompt or username'
+              disabled={loading}
+              value={searchText}
+              onChange={handleSearchChange}
+              rightSection={
+                searchText && (
+                  <Tooltip withArrow label='Clear'>
+                    <CloseButton onClick={resetSearch} />
+                  </Tooltip>
+                )
+              }
+            />
 
-          <Sort posts={searchText ? searchedPosts : posts} setPosts={setPosts} />
-        </div>
+            <Tooltip label='Refresh posts' withArrow>
+              <ActionIcon
+                size={42}
+                color='violet'
+                radius='md'
+                onClick={fetchPosts}
+                loading={loading}
+                aria-label='Refresh'
+              >
+                <IconRefresh size={20} />
+              </ActionIcon>
+            </Tooltip>
+
+            <Sort posts={searchText ? searchedPosts : posts} setPosts={setPosts} />
+          </div>
+        )
       )}
 
       <div className='mt-3'>

@@ -106,6 +106,9 @@ export const UserProfilePage = () => {
                 flex={1}
                 size='md'
                 radius='md'
+                type='text'
+                inputMode='text'
+                autoComplete='off'
                 label='Search posts'
                 placeholder='Enter prompt'
                 disabled={postsLoading || !userPosts.length}

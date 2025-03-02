@@ -14,7 +14,7 @@ import { RootState } from '../redux';
 import { postService } from '../services/posts';
 import { toastService } from '../services/toast';
 import { Post, UserRole } from '../types';
-import { downloadImage } from '../utils';
+import { downloadImage, generateIdFromString } from '../utils';
 
 export const PostCard = (props: Post) => {
   const location = useLocation();
@@ -102,7 +102,7 @@ export const PostCard = (props: Post) => {
                       p={0}
                       size={18}
                       onClick={() => {
-                        downloadImage(props._id, props.photo);
+                        downloadImage(generateIdFromString(props.prompt), props.photo);
                       }}
                     >
                       <IconPhotoDown className='text-slate-400' size={18} />

@@ -13,7 +13,7 @@ export const getRandomPrompt = (prompt: string): string => {
 };
 
 export const downloadImage = async (_id: string, photo: string) => {
-  FileSaver.saveAs(photo, `AInterest-${_id}.jpg`);
+  FileSaver.saveAs(photo, `ainterest-${_id}.jpg`);
 };
 
 export const getRapidApiHeaders = (host: string) => {
@@ -27,4 +27,18 @@ export const getRapidApiHeaders = (host: string) => {
 export const getColorSchemeFromLocalStorage = () => {
   const scheme = localStorage.getItem('mantine-color-scheme-value');
   return scheme === 'dark' || scheme === 'light' ? scheme : 'light';
+};
+
+export const generateIdFromString = (text: string) => {
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) {
+    const char = text.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash;
+  }
+
+  const positiveHash = Math.abs(hash);
+  const fiveDigitId = positiveHash % 100000;
+
+  return String(fiveDigitId).padStart(5, '0');
 };
