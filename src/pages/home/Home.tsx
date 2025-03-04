@@ -26,7 +26,7 @@ export const HomePage = () => {
       </div>
 
       {loading ? (
-        <Skeleton radius='md' height={42} className='mt-8 md:mt-14' />
+        <Skeleton radius='md' height={42} className='mt-14' />
       ) : (
         !!posts.length && (
           <div className='mt-8 flex items-end gap-x-2'>

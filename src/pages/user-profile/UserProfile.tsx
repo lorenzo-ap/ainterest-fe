@@ -53,7 +53,7 @@ export const UserProfilePage = () => {
         <div className='mb-5 flex flex-wrap items-center justify-between gap-y-5'>
           <div className='flex items-center gap-x-3'>
             {userLoading ? (
-              <Skeleton height={80} circle />
+              <Skeleton height={82} circle />
             ) : (
               <UserProfileAvatar user={user} isCurrentUser={isCurrentUser} />
             )}
@@ -99,7 +99,7 @@ export const UserProfilePage = () => {
         </div>
 
         {postsLoading ? (
-          <Skeleton radius='md' height={42} className='mt-8 md:mt-14' />
+          <Skeleton radius='md' height={42} className='mt-11 md:mt-14' />
         ) : (
           !!userPosts.length && (
             <div className='mt-4 flex items-end gap-x-2 md:mt-8'>
