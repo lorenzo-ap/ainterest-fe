@@ -1,10 +1,11 @@
-import { ActionIcon, CloseButton, Skeleton, Text, TextInput, Title, Tooltip } from '@mantine/core';
+import { ActionIcon, Skeleton, Text, Title, Tooltip } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RenderCards, ScrollToTopButton, Sort } from '../../components';
 import { useFetchPosts, useSearchPosts } from '../../hooks';
 import { setPosts } from '../../redux/slices';
 import { RootState } from '../../redux/store';
+import { SearchPostsInput } from '../components';
 
 export const HomePage = () => {
   const posts = useSelector((state: RootState) => state.posts.allPosts);
@@ -29,25 +30,12 @@ export const HomePage = () => {
       ) : (
         !!posts.length && (
           <div className='mt-8 flex items-end gap-x-2'>
-            <TextInput
-              flex={1}
-              size='md'
-              radius='md'
-              type='text'
-              inputMode='text'
-              autoComplete='off'
-              label='Search posts'
+            <SearchPostsInput
               placeholder='Enter prompt or username'
-              disabled={loading}
-              value={searchText}
-              onChange={handleSearchChange}
-              rightSection={
-                searchText && (
-                  <Tooltip withArrow label='Clear'>
-                    <CloseButton onClick={resetSearch} />
-                  </Tooltip>
-                )
-              }
+              loading={loading}
+              searchText={searchText}
+              handleSearchChange={handleSearchChange}
+              resetSearch={resetSearch}
             />
 
             <Tooltip label='Refresh posts' withArrow>

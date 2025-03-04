@@ -57,8 +57,8 @@ export const Header = () => {
     <>
       <header className='header flex w-full items-center justify-between border-b px-4 py-5 sm:px-8'>
         <div className='mx-auto flex w-full max-w-7xl items-center justify-between'>
-          <Link to='/'>
-            <Text className='group text-2xl font-semibold transition-opacity duration-150 hover:opacity-75'>
+          <Link className='relative transition-opacity duration-150 hover:opacity-75' to='/'>
+            <Text className='group text-2xl font-semibold'>
               <Text className='text-2xl font-bold' c='violet' span>
                 AI
               </Text>

@@ -64,7 +64,7 @@ export const Sort = (props: SortPopoverProps) => {
     >
       <Popover.Target>
         <Tooltip label='Sort' withArrow>
-          <ActionIcon size={42} color='teal' radius='md' aria-label='Sort' loading={!props.posts.length}>
+          <ActionIcon size={42} color='teal' radius='md' aria-label='Sort'>
             <IconArrowsSort size={20} />
           </ActionIcon>
         </Tooltip>

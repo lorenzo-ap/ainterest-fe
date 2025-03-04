@@ -1,4 +1,4 @@
-import { Badge, Button, CloseButton, Skeleton, Text, TextInput, Title, Tooltip } from '@mantine/core';
+import { Badge, Button, Skeleton, Text, Title } from '@mantine/core';
 import { IconArrowRight, IconPhotoAi } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import { setUserPosts } from '../../redux/slices';
 import { RootState } from '../../redux/store';
 import { postService } from '../../services/posts';
 import { User, UserRole } from '../../types';
+import { SearchPostsInput } from '../components';
 import { UserProfileAvatar } from './components/UserProfileAvatar';
 
 export const UserProfilePage = () => {
@@ -102,25 +103,12 @@ export const UserProfilePage = () => {
         ) : (
           !!userPosts.length && (
             <div className='mt-4 flex items-end gap-x-2 md:mt-8'>
-              <TextInput
-                flex={1}
-                size='md'
-                radius='md'
-                type='text'
-                inputMode='text'
-                autoComplete='off'
-                label='Search posts'
+              <SearchPostsInput
                 placeholder='Enter prompt'
-                disabled={postsLoading || !userPosts.length}
-                value={searchText}
-                onChange={handleSearchChange}
-                rightSection={
-                  searchText && (
-                    <Tooltip withArrow label='Clear'>
-                      <CloseButton onClick={resetSearch} />
-                    </Tooltip>
-                  )
-                }
+                loading={postsLoading}
+                searchText={searchText}
+                handleSearchChange={handleSearchChange}
+                resetSearch={resetSearch}
               />
 
               <Sort posts={searchText ? searchedPosts : userPosts} setPosts={setUserPosts} />
