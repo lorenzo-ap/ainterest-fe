@@ -10,7 +10,7 @@ import { SearchPostsInput } from '../components';
 export const HomePage = () => {
   const posts = useSelector((state: RootState) => state.posts.allPosts);
 
-  const { fetchPosts, loading } = useFetchPosts();
+  const { fetchPosts, loading, firstLoad } = useFetchPosts();
   const { searchText, searchedPosts, handleSearchChange, resetSearch } = useSearchPosts(posts, true);
 
   return (
@@ -25,7 +25,7 @@ export const HomePage = () => {
         </div>
       </div>
 
-      {loading ? (
+      {firstLoad && loading ? (
         <Skeleton radius='md' height={42} className='mt-14' />
       ) : (
         !!posts.length && (
@@ -51,7 +51,7 @@ export const HomePage = () => {
               </ActionIcon>
             </Tooltip>
 
-            <Sort posts={searchText ? searchedPosts : posts} setPosts={setPosts} />
+            <Sort disabled={loading} posts={searchText ? searchedPosts : posts} setPosts={setPosts} />
           </div>
         )
       )}

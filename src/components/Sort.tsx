@@ -6,6 +6,7 @@ import { store } from '../redux';
 import { Post, SortCriteria } from '../types';
 
 interface SortPopoverProps {
+  disabled?: boolean;
   posts: Post[];
   setPosts: ActionCreatorWithPayload<Post[]>;
 }
@@ -64,7 +65,7 @@ export const Sort = (props: SortPopoverProps) => {
     >
       <Popover.Target>
         <Tooltip label='Sort' withArrow>
-          <ActionIcon size={42} color='teal' radius='md' aria-label='Sort'>
+          <ActionIcon disabled={props.disabled} size={42} color='teal' radius='md' aria-label='Sort'>
             <IconArrowsSort size={20} />
           </ActionIcon>
         </Tooltip>
