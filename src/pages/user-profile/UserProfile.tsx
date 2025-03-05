@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getUserByUsername } from '../../api';
 import { Filters, RenderPosts, ScrollToTopButton } from '../../components';
 import { useSearchPosts } from '../../hooks';
+import { store } from '../../redux';
 import {
   selectLoggedUser,
   selectSearchedUserPosts,
@@ -48,7 +49,11 @@ export const UserProfilePage = () => {
   }, []);
 
   useEffect(() => {
+    store.dispatch(setUserPosts([]));
+
+    setIsCurrentUser(false);
     setUserLoading(true);
+    setPostsLoading(true);
 
     getUserByUsername(params.username || '')
       .then((res) => {
@@ -57,12 +62,13 @@ export const UserProfilePage = () => {
 
         setUser(user);
         setIsCurrentUser(loggedUser?._id === user._id);
-        setPostsLoading(true);
 
         postService.setUserPosts(user._id).finally(() => setPostsLoading(false));
       })
       .finally(() => setUserLoading(false));
-  }, [loggedUser, params.username]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.username]);
 
   return (
     <>

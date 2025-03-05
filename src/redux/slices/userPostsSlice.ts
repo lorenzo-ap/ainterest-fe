@@ -27,7 +27,6 @@ const userPostsSlice = createSlice({
     },
     setUserPosts: (state, action: PayloadAction<Post[]>) => {
       state.posts = action.payload;
-      console.log(state.posts);
       if (!state.originalPosts.length) {
         state.originalPosts = [...action.payload];
       }
