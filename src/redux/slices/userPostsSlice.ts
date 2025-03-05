@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FilterCriteria, FiltersState, Post, UpdatePost } from '../../types';
 
-interface UserPostsState {
+export interface UserPostsState {
   posts: Post[];
   originalPosts: Post[];
   searchText: string;

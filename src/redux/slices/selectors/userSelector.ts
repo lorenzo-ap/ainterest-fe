@@ -1,3 +1,3 @@
-import { RootState } from '../store';
+import { RootState } from '../slices';
 
 export const selectLoggedUser = (state: RootState) => state.user;
