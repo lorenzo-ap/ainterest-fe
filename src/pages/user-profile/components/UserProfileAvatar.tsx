@@ -70,6 +70,9 @@ export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) =
           postService.setPosts();
           postService.setUserPosts(user._id);
         })
+        .catch((error) => {
+          toastService.error(error.message);
+        })
         .finally(() => {
           setImageLoading(false);
         });
