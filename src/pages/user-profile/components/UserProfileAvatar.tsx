@@ -22,10 +22,18 @@ export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) =
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
 
     if (!selectedFile) return;
+
+    if (selectedFile.size > MAX_FILE_SIZE) {
+      toastService.error('File size exceeds 5MB limit!');
+      resetFileInput();
+      return;
+    }
 
     const objectUrl = URL.createObjectURL(selectedFile);
 
@@ -70,9 +78,6 @@ export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) =
           postService.setPosts();
           postService.setUserPosts(user._id);
         })
-        .catch((error) => {
-          toastService.error(error.message);
-        })
         .finally(() => {
           setImageLoading(false);
         });
@@ -106,7 +111,7 @@ export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) =
         </Avatar>
 
         {!uploadedPhoto && isCurrentUser && (
-          <div className='pointer-events-none absolute -bottom-20 left-1/2 flex h-full w-full -translate-x-1/2 items-start justify-center rounded-full bg-black bg-opacity-50 pt-1.5 text-slate-300 transition-all group-hover:-bottom-12'>
+          <div className='pointer-events-none absolute -bottom-20 left-1/2 flex h-full w-full -translate-x-1/2 items-start justify-center rounded-full bg-black bg-opacity-50 pt-1.5 text-slate-300 transition-all md:group-hover:-bottom-12'>
             <IconPhotoEdit size={16} />
           </div>
         )}
