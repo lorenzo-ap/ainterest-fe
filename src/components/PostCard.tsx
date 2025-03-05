@@ -57,6 +57,7 @@ export const PostCard = (props: Post) => {
           className={`h-auto w-full rounded-xl object-cover ${loading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
           src={props.photo}
           alt={props.prompt}
+          loading='lazy'
           onLoad={() => {
             setLoading(false);
           }}

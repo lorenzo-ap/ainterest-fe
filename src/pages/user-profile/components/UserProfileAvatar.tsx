@@ -68,6 +68,7 @@ export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) =
           resetFileInput();
           toastService.success('Profile image updated successfully');
           postService.setPosts();
+          postService.setUserPosts(user._id);
         })
         .finally(() => {
           setImageLoading(false);
@@ -110,7 +111,7 @@ export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) =
 
       {uploadedPhoto && (
         <>
-          <Tooltip withArrow label='Remove image'>
+          <Tooltip withArrow label='Undo'>
             <ActionIcon
               className='absolute bottom-0 left-0 rounded-full'
               variant='default'
@@ -123,10 +124,11 @@ export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) =
             </ActionIcon>
           </Tooltip>
 
-          <Tooltip withArrow label='Save image'>
+          <Tooltip withArrow label='Update'>
             <ActionIcon
               className='absolute bottom-0 right-0 rounded-full'
-              variant='default'
+              variant='filled'
+              color='#099268'
               size={20}
               type='button'
               loading={imageLoading}

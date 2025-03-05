@@ -9,15 +9,15 @@ const authUser = (user: User) => {
 };
 
 export const authService = {
-  signIn: (values: SignInForm) =>
-    signIn(values).then((res) => {
-      authUser(res.data);
-    }),
+  signIn: async (values: SignInForm) => {
+    const res = await signIn(values);
+    authUser(res.data);
+  },
 
-  signUp: async (values: SignUpForm) =>
-    signUp(values).then((res) => {
-      authUser(res.data);
-    }),
+  signUp: async (values: SignUpForm) => {
+    const res = await signUp(values);
+    authUser(res.data);
+  },
 
   signOut: async () => {
     localStorage.removeItem('jwt-token');

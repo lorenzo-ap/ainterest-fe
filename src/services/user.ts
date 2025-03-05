@@ -5,13 +5,12 @@ import { User } from '../types';
 
 export const userService = {
   setCurrentUser: async () => {
-    getCurrentUser().then((response) => {
-      store.dispatch(setUser(response.data));
-    });
+    const res = await getCurrentUser();
+    store.dispatch(setUser(res.data));
   },
 
-  editUser: async (data: User) =>
-    updateUser(data).then((response) => {
-      store.dispatch(setUser(response.data));
-    })
+  editUser: async (user: User) => {
+    const res = await updateUser(user);
+    store.dispatch(setUser(res.data));
+  }
 };
