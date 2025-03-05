@@ -161,13 +161,11 @@ export const PostCard = (props: Post) => {
                       postService.reactToPost(props._id, loggedUser?._id || '');
                     }}
                   >
-                    <Tooltip label={props.likes.includes(loggedUser!._id) ? 'Remove like' : 'Like'} withArrow>
-                      {props.likes.includes(loggedUser!._id) ? (
-                        <IconHeartFilled className='text-slate-300' size={24} color='firebrick' />
-                      ) : (
-                        <IconHeart className='text-slate-300' size={24} />
-                      )}
-                    </Tooltip>
+                    {props.likes.includes(loggedUser?._id ?? '') ? (
+                      <IconHeartFilled className='text-slate-300' size={24} color='firebrick' />
+                    ) : (
+                      <IconHeart className='text-slate-300' size={24} />
+                    )}
                   </button>
 
                   {props.likes.length > 0 && <Text className='text-sm text-white'>{props.likes.length}</Text>}
