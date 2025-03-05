@@ -44,6 +44,7 @@ const userPostsSlice = createSlice({
         ...state.posts[postIndex],
         likes: newLikes
       };
+      state.originalPosts = [...state.posts];
     },
     removeUserPost: (state, action: PayloadAction<string>) => {
       if (!state.posts.length) return;
