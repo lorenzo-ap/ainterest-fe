@@ -61,7 +61,6 @@ export const UserProfilePage = () => {
         document.title = user.username;
 
         setUser(user);
-        setIsCurrentUser(loggedUser?._id === user._id);
 
         postService.setUserPosts(user._id).finally(() => setPostsLoading(false));
       })
@@ -69,6 +68,10 @@ export const UserProfilePage = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.username]);
+
+  useEffect(() => {
+    setIsCurrentUser(loggedUser?._id === user?._id);
+  }, [loggedUser?._id, user?._id]);
 
   return (
     <>
