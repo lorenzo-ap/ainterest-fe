@@ -2,7 +2,7 @@ import { ActionIcon, Avatar, CheckIcon, Tooltip } from '@mantine/core';
 import { IconPhotoEdit, IconX } from '@tabler/icons-react';
 import { ChangeEvent, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux';
+import { selectLoggedUser } from '../../../redux/selectors';
 import { postService } from '../../../services/posts';
 import { toastService } from '../../../services/toast';
 import { userService } from '../../../services/user';
@@ -14,7 +14,7 @@ interface ProfileAvatarProps {
 }
 
 export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) => {
-  const loggedUser = useSelector((state: RootState) => state.user);
+  const loggedUser = useSelector(selectLoggedUser);
 
   const [uploadedPhoto, setUploadedPhoto] = useState<File | null>(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);

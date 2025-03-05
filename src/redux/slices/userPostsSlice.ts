@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FilterCriteria, FiltersState, Post, UpdatePost } from '../../types';
 
-interface PostsState {
+interface UserPostsState {
   posts: Post[];
   originalPosts: Post[];
   searchText: string;
   filters: FiltersState;
 }
 
-const initialState: PostsState = {
+const initialState: UserPostsState = {
   posts: [],
   originalPosts: [],
   searchText: '',
@@ -18,20 +18,21 @@ const initialState: PostsState = {
   }
 };
 
-const postsSlice = createSlice({
+const userPostsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    addPost: (state, action: PayloadAction<Post>) => {
+    addUserPost: (state, action: PayloadAction<Post>) => {
       state.posts.unshift(action.payload);
     },
-    setPosts: (state, action: PayloadAction<Post[]>) => {
+    setUserPosts: (state, action: PayloadAction<Post[]>) => {
       state.posts = action.payload;
+      console.log(state.posts);
       if (!state.originalPosts.length) {
         state.originalPosts = [...action.payload];
       }
     },
-    updatePostLike: (state, action: PayloadAction<UpdatePost>) => {
+    updateUserPostLike: (state, action: PayloadAction<UpdatePost>) => {
       if (!state.posts.length) return;
 
       const { postId, userId } = action.payload;
@@ -45,24 +46,24 @@ const postsSlice = createSlice({
         likes: newLikes
       };
     },
-    removePost: (state, action: PayloadAction<string>) => {
+    removeUserPost: (state, action: PayloadAction<string>) => {
       if (!state.posts.length) return;
 
       state.posts = state.posts.filter((post) => post._id !== action.payload);
     },
 
-    setPostsSearchText(state, action: PayloadAction<string>) {
+    setUserPostsSearchText(state, action: PayloadAction<string>) {
       state.searchText = action.payload;
     },
-    resetPostsSearch(state) {
+    resetUserPostsSearch(state) {
       state.searchText = '';
-      state.posts = [...state.posts];
+      state.posts = [...state.originalPosts];
     },
 
-    setPostsFilters: (state, action: PayloadAction<FiltersState>) => {
+    setUserPostsFilters: (state, action: PayloadAction<FiltersState>) => {
       state.filters = action.payload;
     },
-    resetPostsFilters: (state) => {
+    resetUserPostsFilters: (state) => {
       state.filters = initialState.filters;
       state.posts = [...state.originalPosts];
     }
@@ -70,15 +71,15 @@ const postsSlice = createSlice({
 });
 
 export const {
-  addPost,
-  setPosts,
-  updatePostLike,
-  removePost,
+  addUserPost,
+  setUserPosts,
+  updateUserPostLike,
+  removeUserPost,
 
-  setPostsSearchText,
-  resetPostsSearch,
+  setUserPostsSearchText,
+  resetUserPostsSearch,
 
-  setPostsFilters,
-  resetPostsFilters
-} = postsSlice.actions;
-export const postsReducer = postsSlice.reducer;
+  setUserPostsFilters,
+  resetUserPostsFilters
+} = userPostsSlice.actions;
+export const userPostsReducer = userPostsSlice.reducer;

@@ -13,7 +13,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ConfirmModal } from '../../components';
-import { RootState } from '../../redux/store';
+import { selectLoggedUser } from '../../redux/selectors';
 import { authService } from '../../services/auth';
 import { toastService } from '../../services/toast';
 import { getColorSchemeFromLocalStorage } from '../../utils';
@@ -27,7 +27,7 @@ export const Header = () => {
   const computedColorScheme = useComputedColorScheme(getColorSchemeFromLocalStorage());
   const { setColorScheme } = useMantineColorScheme();
 
-  const user = useSelector((state: RootState) => state.user);
+  const loggedUser = useSelector(selectLoggedUser);
 
   const [jwtToken, setJwtToken] = useState<string | null>(null);
   const [signInModalOpened, { open: openSignInModal, close: closeSignInModal }] = useDisclosure(false);
@@ -67,20 +67,26 @@ export const Header = () => {
           </Link>
 
           <div className='flex items-center gap-x-2'>
-            {user ? (
+            {loggedUser ? (
               <Button
-                component={Link}
-                to={`account/${user.username}`}
-                state={user}
-                variant={pathname.includes(user.username) ? 'light' : 'default'}
+                variant={pathname.includes(loggedUser.username) ? 'light' : 'default'}
                 color='indigo'
                 px={10}
                 radius='md'
+                onClick={() => {
+                  navigate(`account/${loggedUser.username}`);
+                }}
               >
-                <Avatar key={user.username} src={user.photo} name={user.username} color='initials' size={24}>
-                  {user.username[0].toUpperCase()}
+                <Avatar
+                  key={loggedUser.username}
+                  src={loggedUser.photo}
+                  name={loggedUser.username}
+                  color='initials'
+                  size={24}
+                >
+                  {loggedUser.username[0].toUpperCase()}
                 </Avatar>
-                <Text className='ms-1.5 text-sm'>{user.username}</Text>
+                <Text className='ms-1.5 text-sm'>{loggedUser.username}</Text>
               </Button>
             ) : (
               <Button onClick={openSignInModal} color='cyan' variant='light' loading={!!jwtToken}>
@@ -94,7 +100,7 @@ export const Header = () => {
               </ActionIcon>
             </Tooltip>
 
-            {user && (
+            {loggedUser && (
               <Tooltip withArrow label='Sign Out'>
                 <ActionIcon
                   variant='light'

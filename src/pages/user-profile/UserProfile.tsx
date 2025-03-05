@@ -4,10 +4,22 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { getUserByUsername } from '../../api';
-import { RenderCards, ScrollToTopButton, Sort } from '../../components';
+import { Filters, RenderPosts, ScrollToTopButton } from '../../components';
 import { useSearchPosts } from '../../hooks';
-import { setUserPosts } from '../../redux/slices';
-import { RootState } from '../../redux/store';
+import {
+  selectLoggedUser,
+  selectSearchedUserPosts,
+  selectUserPosts,
+  selectUserPostsFilters,
+  selectUserPostsSearchText
+} from '../../redux/selectors';
+import {
+  resetUserPostsFilters,
+  resetUserPostsSearch,
+  setUserPosts,
+  setUserPostsFilters,
+  setUserPostsSearchText
+} from '../../redux/slices';
 import { postService } from '../../services/posts';
 import { User, UserRole } from '../../types';
 import { SearchPostsInput } from '../components';
@@ -16,10 +28,15 @@ import { UserProfileAvatar } from './components/UserProfileAvatar';
 export const UserProfilePage = () => {
   const params = useParams();
 
-  const loggedUser = useSelector((state: RootState) => state.user);
-  const userPosts = useSelector((state: RootState) => state.posts.userPosts.posts);
+  const loggedUser = useSelector(selectLoggedUser);
+  const userPosts = useSelector(selectUserPosts);
 
-  const { searchText, searchedPosts, handleSearchChange, resetSearch } = useSearchPosts(userPosts);
+  const { searchText, searchedPosts, handleSearchChange, resetSearchedPosts } = useSearchPosts(
+    selectUserPostsSearchText,
+    selectSearchedUserPosts,
+    setUserPostsSearchText,
+    resetUserPostsSearch
+  );
 
   const [user, setUser] = useState<User | null>(null);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
@@ -108,10 +125,16 @@ export const UserProfilePage = () => {
                 loading={postsLoading}
                 searchText={searchText}
                 handleSearchChange={handleSearchChange}
-                resetSearch={resetSearch}
+                resetSearch={resetSearchedPosts}
               />
 
-              <Sort posts={searchText ? searchedPosts : userPosts} setPosts={setUserPosts} />
+              <Filters
+                postsSelector={selectUserPosts}
+                setPosts={setUserPosts}
+                filtersStateSelector={selectUserPostsFilters}
+                setFiltersState={setUserPostsFilters}
+                resetFilters={resetUserPostsFilters}
+              />
             </div>
           )
         )}
@@ -123,7 +146,7 @@ export const UserProfilePage = () => {
             </Title>
           )}
 
-          <RenderCards title='No posts found' posts={searchText ? searchedPosts : userPosts} loading={postsLoading} />
+          <RenderPosts title='No posts found' posts={searchText ? searchedPosts : userPosts} loading={postsLoading} />
         </div>
       </div>
 

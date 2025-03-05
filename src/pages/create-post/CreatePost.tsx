@@ -157,7 +157,7 @@ export const CreatePostPage = () => {
               <Textarea
                 className='relative'
                 rows={8}
-                label='Prompt'
+                label='Prompt (accepts any language)'
                 placeholder='The long-lost Star Wars 1990 Japanese Anime'
                 key={form.key('prompt')}
                 {...form.getInputProps('prompt')}

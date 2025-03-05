@@ -7,11 +7,11 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser(_, action: PayloadAction<User | null>) {
+    setUser: (_, action: PayloadAction<User | null>) => {
       return action.payload;
     }
   }
 });
 
 export const { setUser } = userSlice.actions;
-export default userSlice.reducer;
+export const userReducer = userSlice.reducer;

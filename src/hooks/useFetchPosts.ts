@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { selectPosts } from '../redux/selectors';
 import { postService } from '../services/posts';
 
 export const useFetchPosts = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [firstLoad, setFirstLoad] = useState<boolean>(true);
 
-  const posts = useSelector((state: RootState) => state.posts.allPosts);
+  const posts = useSelector(selectPosts);
 
   const fetchPosts = useCallback(() => {
     if (posts.length) {
@@ -21,7 +21,7 @@ export const useFetchPosts = () => {
       setFirstLoad(false);
     });
 
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

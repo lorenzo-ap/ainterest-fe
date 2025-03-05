@@ -1,5 +1,5 @@
 export * from './ConfirmModal';
+export * from './Filters';
 export * from './PostCard';
-export * from './RenderCards';
+export * from './RenderPosts';
 export * from './ScrollToTopButton';
-export * from './Sort';

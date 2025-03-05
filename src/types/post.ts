@@ -6,12 +6,7 @@ export interface Post {
   photo: string;
   createdAt: string;
   user: User;
-  likes: (string | undefined)[];
-}
-
-export interface GeneratedImage {
-  prompt: string;
-  photo: string;
+  likes: string[];
 }
 
 export interface UpdatePost {
@@ -19,8 +14,7 @@ export interface UpdatePost {
   userId: string;
 }
 
-export enum SortCriteria {
-  Date = 'Date',
-  Name = 'Name',
-  Likes = 'Likes'
+export interface GeneratedImage {
+  prompt: string;
+  photo: string;
 }

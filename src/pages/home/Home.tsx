@@ -1,17 +1,22 @@
 import { ActionIcon, Skeleton, Text, Title, Tooltip } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
-import { RenderCards, ScrollToTopButton, Sort } from '../../components';
+import { Filters, RenderPosts, ScrollToTopButton } from '../../components';
 import { useFetchPosts, useSearchPosts } from '../../hooks';
-import { setPosts } from '../../redux/slices';
-import { RootState } from '../../redux/store';
+import { selectPosts, selectPostsFilters, selectSearchedPosts, selectSearchText } from '../../redux/selectors';
+import { resetPostsFilters, resetPostsSearch, setPosts, setPostsFilters, setPostsSearchText } from '../../redux/slices';
 import { SearchPostsInput } from '../components';
 
 export const HomePage = () => {
-  const posts = useSelector((state: RootState) => state.posts.allPosts);
+  const posts = useSelector(selectPosts);
 
   const { fetchPosts, loading, firstLoad } = useFetchPosts();
-  const { searchText, searchedPosts, handleSearchChange, resetSearch } = useSearchPosts(posts, true);
+  const { searchText, searchedPosts, handleSearchChange, resetSearchedPosts } = useSearchPosts(
+    selectSearchText,
+    selectSearchedPosts,
+    setPostsSearchText,
+    resetPostsSearch
+  );
 
   return (
     <section className='mx-auto max-w-7xl'>
@@ -35,7 +40,7 @@ export const HomePage = () => {
               loading={loading}
               searchText={searchText}
               handleSearchChange={handleSearchChange}
-              resetSearch={resetSearch}
+              resetSearch={resetSearchedPosts}
             />
 
             <Tooltip label='Refresh posts' withArrow>
@@ -43,7 +48,10 @@ export const HomePage = () => {
                 size={42}
                 color='violet'
                 radius='md'
-                onClick={fetchPosts}
+                onClick={() => {
+                  resetSearchedPosts();
+                  fetchPosts();
+                }}
                 loading={loading}
                 aria-label='Refresh'
               >
@@ -51,7 +59,13 @@ export const HomePage = () => {
               </ActionIcon>
             </Tooltip>
 
-            <Sort disabled={loading} posts={searchText ? searchedPosts : posts} setPosts={setPosts} />
+            <Filters
+              postsSelector={selectPosts}
+              setPosts={setPosts}
+              filtersStateSelector={selectPostsFilters}
+              setFiltersState={setPostsFilters}
+              resetFilters={resetPostsFilters}
+            />
           </div>
         )
       )}
@@ -63,7 +77,7 @@ export const HomePage = () => {
           </Title>
         )}
 
-        <RenderCards title='No posts found' posts={searchText ? searchedPosts : posts} loading={loading} />
+        <RenderPosts title='No posts found' posts={searchText ? searchedPosts : posts} loading={loading} />
       </div>
 
       <ScrollToTopButton />

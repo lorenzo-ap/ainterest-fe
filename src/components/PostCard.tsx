@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { RootState } from '../redux';
+import { selectLoggedUser } from '../redux/selectors';
 import { postService } from '../services/posts';
 import { toastService } from '../services/toast';
 import { Post, UserRole } from '../types';
@@ -18,7 +18,7 @@ import { downloadImage, generateIdFromString } from '../utils';
 
 export const PostCard = (props: Post) => {
   const location = useLocation();
-  const loggedUser = useSelector((state: RootState) => state.user);
+  const loggedUser = useSelector(selectLoggedUser);
 
   const [showInfo, setShowInfo] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,7 @@ export const PostCard = (props: Post) => {
   const deletePost = (postId: string) => {
     setDeletePostLoading(true);
 
-    postService.deleteUserPost(postId).finally(() => {
+    postService.deletePost(postId).finally(() => {
       setDeletePostLoading(false);
       toastService.success('Post deleted successfully!');
     });
@@ -161,8 +161,8 @@ export const PostCard = (props: Post) => {
                       postService.reactToPost(props._id, loggedUser?._id || '');
                     }}
                   >
-                    <Tooltip label={props.likes.includes(loggedUser?._id) ? 'Remove like' : 'Like'} withArrow>
-                      {props.likes.includes(loggedUser?._id) ? (
+                    <Tooltip label={props.likes.includes(loggedUser!._id) ? 'Remove like' : 'Like'} withArrow>
+                      {props.likes.includes(loggedUser!._id) ? (
                         <IconHeartFilled className='text-slate-300' size={24} color='firebrick' />
                       ) : (
                         <IconHeart className='text-slate-300' size={24} />
