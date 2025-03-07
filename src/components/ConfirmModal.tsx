@@ -7,8 +7,8 @@ interface ConfirmModalProps {
   message: string;
   confirm: () => void;
   close: () => void;
-  confirmLabel: string;
-  cancelLabel: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
 }
 
 export const ConfirmModal = (props: ConfirmModalProps) => {
