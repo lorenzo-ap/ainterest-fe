@@ -5,6 +5,7 @@ import { FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { checkTextForNSFW, generateImage, translateText } from '../../api';
+import { useFormValidation } from '../../hooks';
 import { postService } from '../../services/posts';
 import { toastService } from '../../services/toast';
 import { GeneratedImage } from '../../types';
@@ -17,7 +18,7 @@ interface CreatePostForm {
 }
 
 export const CreatePostPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -50,6 +51,8 @@ export const CreatePostPage = () => {
       }
     }
   });
+
+  useFormValidation(form, i18n);
 
   const handleSurpriseMe = () => {
     const randomPrompt = getRandomPrompt(form.getValues().prompt);

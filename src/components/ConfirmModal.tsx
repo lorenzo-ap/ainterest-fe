@@ -17,7 +17,7 @@ export const ConfirmModal = (props: ConfirmModalProps) => {
   return (
     <Modal
       opened={props.opened}
-      onClose={close}
+      onClose={props.close}
       title={<Text className='text-center text-2xl font-bold'>{props.title}</Text>}
       radius='md'
       padding='lg'
@@ -27,12 +27,12 @@ export const ConfirmModal = (props: ConfirmModalProps) => {
       </Text>
 
       <div className='flex items-center justify-end gap-x-3'>
-        <Button variant='subtle' color='red' onClick={close}>
-          {t(props.cancelLabel)}
+        <Button variant='subtle' color='red' onClick={props.close}>
+          {t(props.cancelLabel || 'common.cancel')}
         </Button>
 
         <Button color='teal' onClick={props.confirm}>
-          {t(props.confirmLabel)}
+          {t(props.confirmLabel || 'common.continue')}
         </Button>
       </div>
     </Modal>

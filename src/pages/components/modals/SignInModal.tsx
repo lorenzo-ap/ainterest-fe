@@ -2,6 +2,7 @@ import { Button, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFormValidation } from '../../../hooks';
 import { authService } from '../../../services/auth';
 import { toastService } from '../../../services/toast';
 import { SignInForm } from '../../../types';
@@ -13,7 +14,7 @@ interface SignInModalProps {
 }
 
 export const SignInModal = (props: SignInModalProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const form = useForm<SignInForm>({
     mode: 'uncontrolled',
@@ -40,6 +41,8 @@ export const SignInModal = (props: SignInModalProps) => {
   });
 
   const [loading, setLoading] = useState(false);
+
+  useFormValidation(form, i18n);
 
   const closeModal = () => {
     props.close();
