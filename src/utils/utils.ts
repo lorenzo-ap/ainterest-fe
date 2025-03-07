@@ -24,11 +24,6 @@ export const getRapidApiHeaders = (host: string) => {
   };
 };
 
-export const getColorSchemeFromLocalStorage = () => {
-  const scheme = localStorage.getItem('mantine-color-scheme-value');
-  return scheme === 'dark' || scheme === 'light' ? scheme : 'light';
-};
-
 export const generateIdFromString = (text: string) => {
   let hash = 0;
   for (let i = 0; i < text.length; i++) {

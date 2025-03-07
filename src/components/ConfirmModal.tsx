@@ -7,40 +7,32 @@ interface ConfirmModalProps {
   message: string;
   confirm: () => void;
   close: () => void;
-  confirmLabel?: string;
-  cancelLabel?: string;
+  confirmLabel: string;
+  cancelLabel: string;
 }
 
-export const ConfirmModal = ({
-  opened,
-  title,
-  message,
-  confirm,
-  close,
-  confirmLabel = 'common.continue',
-  cancelLabel = 'common.cancel'
-}: ConfirmModalProps) => {
+export const ConfirmModal = (props: ConfirmModalProps) => {
   const { t } = useTranslation();
 
   return (
     <Modal
-      opened={opened}
+      opened={props.opened}
       onClose={close}
-      title={<Text className='text-center text-2xl font-bold'>{title}</Text>}
+      title={<Text className='text-center text-2xl font-bold'>{props.title}</Text>}
       radius='md'
       padding='lg'
     >
       <Text className='mb-5' c='dimmed'>
-        {t(message)}
+        {t(props.message)}
       </Text>
 
       <div className='flex items-center justify-end gap-x-3'>
         <Button variant='subtle' color='red' onClick={close}>
-          {t(cancelLabel)}
+          {t(props.cancelLabel)}
         </Button>
 
-        <Button color='teal' onClick={confirm}>
-          {t(confirmLabel)}
+        <Button color='teal' onClick={props.confirm}>
+          {t(props.confirmLabel)}
         </Button>
       </div>
     </Modal>

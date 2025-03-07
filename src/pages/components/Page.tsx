@@ -4,10 +4,10 @@ interface PageProps extends PropsWithChildren {
   title: string;
 }
 
-export const Page = ({ title, children }: PageProps) => {
+export const Page = (props: PageProps) => {
   useEffect(() => {
-    document.title = title;
-  }, [title]);
+    document.title = props.title;
+  }, [props.title]);
 
-  return children;
+  return props.children;
 };

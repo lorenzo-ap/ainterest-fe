@@ -12,7 +12,7 @@ interface SignUpModalProps {
   openSignInModal: () => void;
 }
 
-export const SignUpModal = ({ opened, close, openSignInModal }: SignUpModalProps) => {
+export const SignUpModal = (props: SignUpModalProps) => {
   const { t } = useTranslation();
 
   const form = useForm<SignUpForm>({
@@ -77,7 +77,7 @@ export const SignUpModal = ({ opened, close, openSignInModal }: SignUpModalProps
   const [loading, setLoading] = useState(false);
 
   const closeModal = () => {
-    close();
+    props.close();
     form.reset();
   };
 
@@ -98,7 +98,7 @@ export const SignUpModal = ({ opened, close, openSignInModal }: SignUpModalProps
 
   return (
     <Modal
-      opened={opened}
+      opened={props.opened}
       onClose={closeModal}
       title={<Text className='text-center text-2xl font-bold'>{t('common.sign_up')}</Text>}
       radius='md'
@@ -133,7 +133,7 @@ export const SignUpModal = ({ opened, close, openSignInModal }: SignUpModalProps
           variant='transparent'
           onClick={() => {
             closeModal();
-            openSignInModal();
+            props.openSignInModal();
           }}
         >
           {t('common.sign_in')}

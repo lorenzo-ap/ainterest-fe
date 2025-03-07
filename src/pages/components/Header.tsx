@@ -1,13 +1,4 @@
-import {
-  ActionIcon,
-  Avatar,
-  Button,
-  Popover,
-  Text,
-  Tooltip,
-  useComputedColorScheme,
-  useMantineColorScheme
-} from '@mantine/core';
+import { ActionIcon, Avatar, Button, Popover, Text, Tooltip, useMantineColorScheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCheck, IconLogout2, IconMoon, IconSun, IconWorld } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -19,7 +10,6 @@ import { selectLoggedUser } from '../../redux/selectors';
 import { authService } from '../../services/auth';
 import { toastService } from '../../services/toast';
 import { Language } from '../../types';
-import { getColorSchemeFromLocalStorage } from '../../utils';
 import { SignInModal, SignUpModal } from './modals';
 
 interface LanguageButtonProps {
@@ -30,10 +20,11 @@ interface LanguageButtonProps {
 
 const LanguageButton = (props: LanguageButtonProps) => {
   const { i18n } = useTranslation();
+  const { colorScheme } = useMantineColorScheme();
 
   return (
     <Button
-      className={`flex w-full items-center border-none ${props.language === Language.EN ? 'rounded-b-none' : 'rounded-t-none'}`}
+      className={`flex w-full items-center border-none ${props.language === Language.EN ? 'rounded-b-none' : 'rounded-t-none'} ${i18n.language === props.language && colorScheme === 'dark' ? 'bg-[#383838]' : ''}`}
       variant='default'
       disabled={i18n.language === props.language}
       onClick={props.action}
@@ -46,14 +37,12 @@ const LanguageButton = (props: LanguageButtonProps) => {
 
 export const Header = () => {
   const { t, i18n } = useTranslation();
+  const { setColorScheme, colorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
   const location = useLocation();
-  const { pathname } = useMemo(() => location, [location]);
-
-  const computedColorScheme = useComputedColorScheme(getColorSchemeFromLocalStorage() || 'dark');
-  const { setColorScheme } = useMantineColorScheme();
 
   const loggedUser = useSelector(selectLoggedUser);
+  const { pathname } = useMemo(() => location, [location]);
 
   const [jwtToken, setJwtToken] = useState<string | null>(null);
   const [signInModalOpened, { open: openSignInModal, close: closeSignInModal }] = useDisclosure(false);
@@ -77,7 +66,7 @@ export const Header = () => {
   };
 
   const toggleColorScheme = () => {
-    setColorScheme(computedColorScheme === 'dark' ? 'light' : 'dark');
+    setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
   };
 
   const signOut = () => {
@@ -91,7 +80,7 @@ export const Header = () => {
 
   return (
     <>
-      <meta content={computedColorScheme === 'dark' ? '#2e2e2e' : '#fff'} name='theme-color' />
+      <meta content={colorScheme === 'dark' ? '#2e2e2e' : '#fff'} name='theme-color' />
 
       <header className='header flex w-full items-center justify-between border-b px-4 py-5 sm:px-8'>
         <div className='mx-auto flex w-full max-w-7xl items-center justify-between'>
@@ -157,13 +146,13 @@ export const Header = () => {
             <Tooltip
               withArrow
               label={t(
-                computedColorScheme === 'dark'
+                colorScheme === 'dark'
                   ? 'pages.components.header.switch_to_light_mode'
                   : 'pages.components.header.switch_to_dark_mode'
               )}
             >
               <ActionIcon variant='default' radius='md' size={36} onClick={toggleColorScheme} aria-label='Toggle theme'>
-                {computedColorScheme === 'dark' ? <IconSun size={18} /> : <IconMoon size={18} />}
+                {colorScheme === 'dark' ? <IconSun size={18} /> : <IconMoon size={18} />}
               </ActionIcon>
             </Tooltip>
 

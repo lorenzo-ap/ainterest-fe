@@ -14,7 +14,7 @@ interface ProfileAvatarProps {
   isCurrentUser: boolean;
 }
 
-export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) => {
+export const UserProfileAvatar = (props: ProfileAvatarProps) => {
   const { t } = useTranslation();
 
   const loggedUser = useSelector(selectLoggedUser);
@@ -62,13 +62,13 @@ export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) =
 
     reader.onload = () => {
       const photo = reader.result?.toString().replace('data:', '').replace(/^.+,/, '');
-
       if (!photo) {
         toastService.error(t('apis.user.error_upload'));
         return;
       }
 
-      if (!user) return;
+      if (!props.user) return;
+      const user = props.user;
 
       userService
         .editUser({
@@ -101,19 +101,19 @@ export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) =
       <label
         className='relative flex cursor-pointer items-center justify-center overflow-hidden rounded-full'
         htmlFor='uploadImage'
-        style={{ pointerEvents: isCurrentUser ? 'auto' : 'none' }}
+        style={{ pointerEvents: props.isCurrentUser ? 'auto' : 'none' }}
       >
         <Avatar
-          key={user?.username}
-          src={uploadedPhotoUrl || (isCurrentUser ? loggedUser?.photo : user?.photo)}
+          key={props.user?.username}
+          src={uploadedPhotoUrl || (props.isCurrentUser ? loggedUser?.photo : props.user?.photo)}
           size={80}
-          name={user?.username}
+          name={props.user?.username}
           color='initials'
         >
-          {user?.username[0].toUpperCase()}
+          {props.user?.username[0].toUpperCase()}
         </Avatar>
 
-        {!uploadedPhoto && isCurrentUser && (
+        {!uploadedPhoto && props.isCurrentUser && (
           <div className='pointer-events-none absolute -bottom-20 left-1/2 flex h-full w-full -translate-x-1/2 items-start justify-center rounded-full bg-black bg-opacity-50 pt-1.5 text-slate-300 transition-all md:group-hover:-bottom-12'>
             <IconPhotoEdit size={16} />
           </div>
