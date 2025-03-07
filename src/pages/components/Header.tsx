@@ -105,9 +105,9 @@ export const Header = () => {
           <div className='flex items-center gap-x-2'>
             {loggedUser ? (
               <Button
+                className='px-[5px] xs:px-2.5'
                 variant={pathname.includes(loggedUser.username) ? 'light' : 'default'}
                 color='indigo'
-                px={10}
                 radius='md'
                 onClick={() => {
                   navigate(`account/${loggedUser.username}`);
@@ -122,7 +122,8 @@ export const Header = () => {
                 >
                   {loggedUser.username[0].toUpperCase()}
                 </Avatar>
-                <Text className='ms-1.5 text-sm'>{loggedUser.username}</Text>
+
+                <Text className='ms-1.5 text-sm max-xs:hidden'>{loggedUser.username}</Text>
               </Button>
             ) : (
               <Button onClick={openSignInModal} color='cyan' variant='light' loading={!!jwtToken}>
