@@ -50,7 +50,7 @@ export const Header = () => {
   const location = useLocation();
   const { pathname } = useMemo(() => location, [location]);
 
-  const computedColorScheme = useComputedColorScheme(getColorSchemeFromLocalStorage());
+  const computedColorScheme = useComputedColorScheme(getColorSchemeFromLocalStorage() || 'dark');
   const { setColorScheme } = useMantineColorScheme();
 
   const loggedUser = useSelector(selectLoggedUser);
@@ -91,6 +91,8 @@ export const Header = () => {
 
   return (
     <>
+      <meta content={computedColorScheme === 'dark' ? '#2e2e2e' : '#fff'} name='theme-color' />
+
       <header className='header flex w-full items-center justify-between border-b px-4 py-5 sm:px-8'>
         <div className='mx-auto flex w-full max-w-7xl items-center justify-between'>
           <Link className='relative transition-opacity duration-150 hover:opacity-75' to='/'>
