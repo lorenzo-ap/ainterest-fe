@@ -1,0 +1,149 @@
+{
+  "common": {
+    "username": "Nume de utilizator",
+    "email": "Email",
+    "password": "Parolă",
+    "confirm_password": "Confirmă parola",
+    "sign_in": "Autentificare",
+    "sign_up": "Înregistrare",
+    "continue": "Continuă",
+    "cancel": "Anulează",
+    "back": "Înapoi",
+    "languages": {
+      "en": "English",
+      "ro": "Română"
+    }
+  },
+
+  "components": {
+    "filters": {
+      "title": "Filtre",
+      "Date": "Dată",
+      "Name": "Nume",
+      "Likes": "Aprecieri"
+    },
+
+    "post_card": {
+      "download_image": "Descarcă imaginea",
+      "delete_post": "Șterge postarea"
+    },
+
+    "render_posts": {
+      "showing_results_for": "Se afișează rezultatele pentru",
+      "no_posts_found": "Nicio postare găsită"
+    },
+
+    "scroll_to_top_button": {
+      "title": "Derulează în sus"
+    }
+  },
+
+  "pages": {
+    "components": {
+      "modals": {
+        "sign_in": {
+          "dont_have_an_account": "Nu ai un cont?",
+          "errors": {
+            "email": {
+              "required": "E-mailul este obligatoriu",
+              "invalid": "Adresa de e-mail invalidă"
+            },
+            "password": {
+              "required": "Parola este obligatorie"
+            }
+          }
+        },
+        "sign_up": {
+          "already_have_an_account": "Ai deja un cont?",
+          "errors": {
+            "username": {
+              "required": "Numele de utilizator este obligatoriu",
+              "minLength": "Numele de utilizator trebuie să aibă cel puțin 3 caractere",
+              "maxLength": "Numele de utilizator trebuie să aibă cel mult 20 de caractere"
+            },
+            "email": {
+              "required": "E-mailul este obligatoriu",
+              "invalid": "Adresa de e-mail invalidă"
+            },
+            "password": {
+              "required": "Parola este obligatorie",
+              "requirements": {
+                "minLength": "Parola trebuie să aibă cel puțin 8 caractere",
+                "uppercase": "Trebuie să conțină o literă mare",
+                "lowercase": "Trebuie să conțină o literă mică",
+                "number": "Trebuie să conțină un număr",
+                "special": "Trebuie să conțină un caracter special (!@#$%^&*)"
+              }
+            },
+            "confirmPassword": {
+              "required": "Vă rugăm să confirmați parola",
+              "mismatch": "Parolele nu se potrivesc"
+            }
+          }
+        }
+      },
+
+      "header": {
+        "sign_in": "Autentificare",
+        "switch_to_light_mode": "Schimbă la modul luminos",
+        "switch_to_dark_mode": "Schimbă la modul întunecat",
+        "change_language": "Schimbă limba",
+        "sign_out": "Deconectare",
+        "are_you_sure": "Ești sigur că vrei să te deconectezi?"
+      },
+
+      "search_posts_input": {
+        "search_posts": "Caută postări",
+        "enter_prompt": "Introdu cererea",
+        "enter_prompt_or_username": "Introdu cererea sau numele de utilizator"
+      }
+    },
+
+    "home": {
+      "heading": "Vitrina Comunității",
+      "subheading": "Răsfoiește o colecție de imagini imaginative și uimitoare vizual generate de AI",
+      "refresh_posts": "Actualizează postările"
+    },
+
+    "user_profile": {
+      "generate_image": "Generează imagine"
+    },
+
+    "generate_image": {
+      "heading": "Generează imagine",
+      "subheading": "Creează imagini imaginative și uimitoare vizual prin AI și împărtășește-le cu comunitatea",
+      "surprise_me": "Surprinde-mă",
+      "prompt": "Cerere (acceptă orice limbă)",
+      "prompt_example": "O pisică cu aripi",
+      "generate": "Generează",
+      "share": "Împărtășește cu comunitatea",
+      "info": "După ce ai creat imaginea dorită, o poți împărtăși cu ceilalți din comunitate",
+      "errors": {
+        "required": "Promptul este obligatoriu",
+        "min_length": "Promptul trebuie să aibă cel puțin 5 caractere",
+        "max_length": "Promptul trebuie să aibă cel mult 200 de caractere",
+        "image_should_be_generated": "Imaginea ar trebui generată cu succes"
+      }
+    }
+  },
+
+  "apis": {
+    "auth": {
+      "success_sign_in": "Conectare realizată cu succes!",
+      "success_sign_up": "Înregistrare realizată cu succes!",
+      "success_sign_out": "Deconectare realizată cu succes!"
+    },
+    "user": {
+      "update": "Imaginea de profil a fost actualizată cu succes!",
+      "error": "Încărcarea imaginii a eșuat",
+      "error_size": "Dimensiunea fișierului depășește limita de 5MB"
+    },
+    "post": {
+      "success": "Postare distribuită cu succes!",
+      "delete": "Postare ștearsă cu succes!"
+    },
+    "rapid_api": {
+      "error": "Promptul conține conținut explicit/adult, vă rugăm să încercați altul"
+    }
+  }
+}

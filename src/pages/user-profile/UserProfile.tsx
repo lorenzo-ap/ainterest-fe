@@ -1,6 +1,7 @@
 import { Badge, Button, Skeleton, Text, Title } from '@mantine/core';
 import { IconArrowRight, IconPhotoAi } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { getUserByUsername } from '../../api';
@@ -27,6 +28,7 @@ import { SearchPostsInput } from '../components';
 import { UserProfileAvatar } from './components/UserProfileAvatar';
 
 export const UserProfilePage = () => {
+  const { t } = useTranslation();
   const params = useParams();
 
   const loggedUser = useSelector(selectLoggedUser);
@@ -118,7 +120,7 @@ export const UserProfilePage = () => {
                 rightSection={<IconArrowRight size={20} />}
                 leftSection={<IconPhotoAi size={20} />}
               >
-                Generate image
+                {t('pages.user_profile.generate_image')}
               </Button>
             </div>
           )}
@@ -130,7 +132,7 @@ export const UserProfilePage = () => {
           !!userPosts.length && (
             <div className='mt-4 flex items-end gap-x-2 md:mt-8'>
               <SearchPostsInput
-                placeholder='Enter prompt'
+                placeholder={t('pages.components.search_posts_input.enter_prompt')}
                 loading={postsLoading}
                 searchText={searchText}
                 handleSearchChange={handleSearchChange}
@@ -148,15 +150,7 @@ export const UserProfilePage = () => {
           )
         )}
 
-        <div className='mt-3'>
-          {searchText && (
-            <Title className='mb-3 font-medium' order={2} size={'h3'}>
-              <span className='opacity-60'>Showing results for</span> <span className='opacity-100'>{searchText}</span>
-            </Title>
-          )}
-
-          <RenderPosts title='No posts found' posts={searchText ? searchedPosts : userPosts} loading={postsLoading} />
-        </div>
+        <RenderPosts posts={searchText ? searchedPosts : userPosts} searchText={searchText} loading={postsLoading} />
       </div>
 
       <ScrollToTopButton />

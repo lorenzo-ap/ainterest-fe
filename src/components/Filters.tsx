@@ -1,6 +1,7 @@
 import { ActionIcon, Button, Popover, Tooltip } from '@mantine/core';
 import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { IconArrowsSort, IconChevronDown, IconChevronUp, IconX } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
 import { useFilterPosts } from '../hooks';
 import { FilterCriteria, FiltersState, Post } from '../types';
 
@@ -17,6 +18,7 @@ interface FiltersProps {
 }
 
 export const Filters = (props: FiltersProps) => {
+  const { t } = useTranslation();
   const { activeFiltersCriteria, isAscending, handleFiltersChange, resetFilteredPosts } = useFilterPosts(
     props.postsSelector,
     props.setPosts,
@@ -31,13 +33,13 @@ export const Filters = (props: FiltersProps) => {
       withArrow
       arrowSize={10}
       arrowOffset={16}
-      width={100}
+      width={110}
       arrowPosition='side'
       shadow='md'
     >
       <div className='relative'>
         <Popover.Target>
-          <Tooltip label='Filters' withArrow>
+          <Tooltip label={t('components.filters.title')} withArrow>
             <ActionIcon disabled={props.disabled} size={42} color='teal' radius='md' aria-label='Filters'>
               <IconArrowsSort size={20} />
             </ActionIcon>
@@ -62,7 +64,7 @@ export const Filters = (props: FiltersProps) => {
         {Object.values(FilterCriteria).map((label) => (
           <Button
             key={label}
-            className={`flex w-full items-center px-4 py-3 ${
+            className={`flex w-full items-center px-4 ${
               label === FilterCriteria.Date
                 ? 'rounded-b-none border-none'
                 : label === FilterCriteria.Likes
@@ -72,7 +74,8 @@ export const Filters = (props: FiltersProps) => {
             variant='default'
             onClick={() => handleFiltersChange(label)}
           >
-            <span className='me-0.5'>{label}</span>
+            <span className='me-0.5'>{t(`components.filters.${label}`)}</span>
+
             {activeFiltersCriteria === label &&
               (isAscending ? <IconChevronDown size={18} color='violet' /> : <IconChevronUp size={18} color='violet' />)}
           </Button>

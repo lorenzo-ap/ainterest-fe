@@ -1,4 +1,5 @@
 import { CloseButton, TextInput, Tooltip } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
 interface SearchPostsInputProps {
   placeholder: string;
@@ -9,6 +10,8 @@ interface SearchPostsInputProps {
 }
 
 export const SearchPostsInput = (props: SearchPostsInputProps) => {
+  const { t } = useTranslation();
+
   return (
     <TextInput
       flex={1}
@@ -19,7 +22,7 @@ export const SearchPostsInput = (props: SearchPostsInputProps) => {
       name='post-search'
       role='search'
       autoComplete='off'
-      label='Search posts'
+      label={t('pages.components.search_posts_input.search_posts')}
       placeholder={props.placeholder}
       disabled={props.loading}
       value={props.searchText}

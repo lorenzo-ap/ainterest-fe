@@ -2,24 +2,50 @@ import {
   ActionIcon,
   Avatar,
   Button,
+  Popover,
   Text,
   Tooltip,
   useComputedColorScheme,
   useMantineColorScheme
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconLogout2, IconMoon, IconSun } from '@tabler/icons-react';
+import { IconCheck, IconLogout2, IconMoon, IconSun, IconWorld } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ConfirmModal } from '../../components';
 import { selectLoggedUser } from '../../redux/selectors';
 import { authService } from '../../services/auth';
 import { toastService } from '../../services/toast';
+import { Language } from '../../types';
 import { getColorSchemeFromLocalStorage } from '../../utils';
 import { SignInModal, SignUpModal } from './modals';
 
+interface LanguageButtonProps {
+  language: Language;
+  label: string;
+  action: () => void;
+}
+
+const LanguageButton = (props: LanguageButtonProps) => {
+  const { i18n } = useTranslation();
+
+  return (
+    <Button
+      className={`flex w-full items-center border-none ${props.language === Language.EN ? 'rounded-b-none' : 'rounded-t-none'}`}
+      variant='default'
+      disabled={i18n.language === props.language}
+      onClick={props.action}
+    >
+      <span className='me-0.5'>{props.label}</span>
+      {i18n.language === props.language && <IconCheck size={14} />}
+    </Button>
+  );
+};
+
 export const Header = () => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = useMemo(() => location, [location]);
@@ -40,6 +66,16 @@ export const Header = () => {
     setJwtToken(token);
   }, []);
 
+  useEffect(() => {
+    const lang = localStorage.getItem('lang');
+    localStorage.setItem('lang', lang || 'en');
+  }, []);
+
+  const changeLang = (newLanguage: Language) => {
+    i18n.changeLanguage(newLanguage);
+    localStorage.setItem('lang', newLanguage);
+  };
+
   const toggleColorScheme = () => {
     setColorScheme(computedColorScheme === 'dark' ? 'light' : 'dark');
   };
@@ -49,7 +85,7 @@ export const Header = () => {
       closeSignOutConfirmModal();
       setJwtToken(null);
       navigate('/');
-      toastService.success('Signed out successfully');
+      toastService.success(t('apis.auth.success_sign_out'));
     });
   };
 
@@ -90,18 +126,46 @@ export const Header = () => {
               </Button>
             ) : (
               <Button onClick={openSignInModal} color='cyan' variant='light' loading={!!jwtToken}>
-                Sign In
+                {t('common.sign_in')}
               </Button>
             )}
 
-            <Tooltip withArrow label={computedColorScheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
+            <Popover position='bottom' withArrow arrowSize={10} arrowOffset={16} width={120} shadow='md'>
+              <Popover.Target>
+                <ActionIcon variant='default' radius='md' size={36} aria-label='Change Language'>
+                  <IconWorld size={18} stroke={1.5} />
+                </ActionIcon>
+              </Popover.Target>
+
+              <Popover.Dropdown className='flex flex-col items-start p-0'>
+                <LanguageButton
+                  language={Language.EN}
+                  label={t('common.languages.en')}
+                  action={() => changeLang(Language.EN)}
+                />
+                <LanguageButton
+                  language={Language.RO}
+                  label={t('common.languages.ro')}
+                  action={() => changeLang(Language.RO)}
+                />
+              </Popover.Dropdown>
+            </Popover>
+
+            <Tooltip
+              withArrow
+              label={t(
+                computedColorScheme === 'dark'
+                  ? 'pages.components.header.switch_to_light_mode'
+                  : 'pages.components.header.switch_to_dark_mode'
+              )}
+            >
               <ActionIcon variant='default' radius='md' size={36} onClick={toggleColorScheme} aria-label='Toggle theme'>
                 {computedColorScheme === 'dark' ? <IconSun size={18} /> : <IconMoon size={18} />}
               </ActionIcon>
             </Tooltip>
 
             {loggedUser && (
-              <Tooltip withArrow label='Sign Out'>
+              <Tooltip withArrow label={t('pages.components.header.sign_out')}>
                 <ActionIcon
                   variant='light'
                   radius={'md'}
@@ -121,8 +185,8 @@ export const Header = () => {
       <SignInModal opened={signInModalOpened} close={closeSignInModal} openSignUpModal={openSignUpModal} />
       <SignUpModal opened={signUpModalOpened} close={closeSignUpModal} openSignInModal={openSignInModal} />
       <ConfirmModal
-        title='Sign Out'
-        message='Are you sure you want to sign out?'
+        title={t('pages.components.header.sign_out')}
+        message={t('pages.components.header.are_you_sure')}
         opened={signOutConfirmModalOpened}
         confirm={signOut}
         close={closeSignOutConfirmModal}

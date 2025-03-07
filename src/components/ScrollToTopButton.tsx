@@ -1,8 +1,11 @@
 import { ActionIcon, Tooltip } from '@mantine/core';
 import { IconArrowUp } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const ScrollToTopButton = () => {
+  const { t } = useTranslation();
+
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -32,7 +35,7 @@ export const ScrollToTopButton = () => {
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'
         }`}
       >
-        <Tooltip label='Scroll to top' withArrow position='left'>
+        <Tooltip label={t('components.scroll_to_top_button.title')} withArrow position='left'>
           <ActionIcon
             size={42}
             color='violet'

@@ -2,6 +2,7 @@ import { Button, Text, Textarea, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconArrowLeft, IconBrandOpenai, IconPhotoUp } from '@tabler/icons-react';
 import { FormEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { checkTextForNSFW, generateImage, translateText } from '../../api';
 import { postService } from '../../services/posts';
@@ -16,6 +17,7 @@ interface CreatePostForm {
 }
 
 export const CreatePostPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -35,15 +37,15 @@ export const CreatePostPage = () => {
     validate: {
       prompt: (value) => {
         if (!value.trim()) {
-          return 'Prompt is required';
+          return t('pages.generate_image.errors.required');
         }
 
         if (value.length < 5) {
-          return 'Prompt should be at least 5 characters long';
+          return t('pages.generate_image.errors.min_length');
         }
 
         if (value.length > 200) {
-          return 'Prompt should be at most 200 characters long';
+          return t('pages.generate_image.errors.max_length');
         }
       }
     }
@@ -79,8 +81,8 @@ export const CreatePostPage = () => {
     const { prompt } = form.getValues();
 
     checkTextForNSFW(prompt).then((res) => {
-      if (res.data.sexual) {
-        toastService.error('Prompt contains explicit/adult content, please try a different one', 5000);
+      if (res.data.sexual_score > 0.4) {
+        toastService.error(t('apis.rapid_api.error'));
         setIsGenerating(false);
         return;
       }
@@ -102,7 +104,7 @@ export const CreatePostPage = () => {
       .then(() => {
         navigate('/');
 
-        toastService.success('Post shared successfully');
+        toastService.success(t('apis.post.success'));
       })
       .finally(() => setIsSharing(false));
   };
@@ -131,15 +133,13 @@ export const CreatePostPage = () => {
             }}
             leftSection={<IconArrowLeft size={18} />}
           >
-            Back
+            {t('common.back')}
           </Button>
 
           <div className='mt-4 md:mt-8'>
-            <Title order={1}>Create</Title>
+            <Title order={1}>{t('pages.generate_image.heading')}</Title>
 
-            <Text className='mb-5 mt-2 max-w-[500px] opacity-60 lg:mb-8'>
-              Create imaginative and visually stunning images through AI and share them with the community
-            </Text>
+            <Text className='mb-5 mt-2 max-w-[500px] opacity-60 lg:mb-8'>{t('pages.generate_image.subheading')}</Text>
           </div>
 
           <PostGeneratedImage
@@ -157,8 +157,8 @@ export const CreatePostPage = () => {
               <Textarea
                 className='relative'
                 rows={8}
-                label='Prompt (accepts any language)'
-                placeholder='The long-lost Star Wars 1990 Japanese Anime'
+                label={t('pages.generate_image.prompt')}
+                placeholder={t('pages.generate_image.prompt_example')}
                 key={form.key('prompt')}
                 {...form.getInputProps('prompt')}
                 inputContainer={(children) => (
@@ -172,7 +172,7 @@ export const CreatePostPage = () => {
                       color='dark'
                       onClick={handleSurpriseMe}
                     >
-                      Surprise me
+                      {t('pages.generate_image.surprise_me')}
                     </Button>
                   </>
                 )}
@@ -186,7 +186,7 @@ export const CreatePostPage = () => {
                   onClick={onGenerate}
                   disabled={isGenerating || isSharing}
                 >
-                  Generate
+                  {t('pages.generate_image.generate')}
                 </Button>
 
                 <Button
@@ -198,15 +198,13 @@ export const CreatePostPage = () => {
                   loading={isSharing}
                   disabled={isGenerating}
                 >
-                  Share with the community
+                  {t('pages.generate_image.share')}
                 </Button>
               </div>
             </div>
           </div>
 
-          <Text className='mt-3 text-sm opacity-60 md:mt-4'>
-            Once you have created the image you want, you can share it with others in the community.
-          </Text>
+          <Text className='mt-3 text-sm opacity-60 md:mt-4'>{t('pages.generate_image.info')}</Text>
         </form>
 
         <PostGeneratedImage

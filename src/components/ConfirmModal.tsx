@@ -1,4 +1,5 @@
 import { Button, Modal, Text } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
 interface ConfirmModalProps {
   opened: boolean;
@@ -16,9 +17,11 @@ export const ConfirmModal = ({
   message,
   confirm,
   close,
-  confirmLabel = 'Continue',
-  cancelLabel = 'Cancel'
+  confirmLabel = 'common.continue',
+  cancelLabel = 'common.cancel'
 }: ConfirmModalProps) => {
+  const { t } = useTranslation();
+
   return (
     <Modal
       opened={opened}
@@ -28,16 +31,16 @@ export const ConfirmModal = ({
       padding='lg'
     >
       <Text className='mb-5' c='dimmed'>
-        {message}
+        {t(message)}
       </Text>
 
       <div className='flex items-center justify-end gap-x-3'>
         <Button variant='subtle' color='red' onClick={close}>
-          {cancelLabel}
+          {t(cancelLabel)}
         </Button>
 
         <Button color='teal' onClick={confirm}>
-          {confirmLabel}
+          {t(confirmLabel)}
         </Button>
       </div>
     </Modal>

@@ -1,6 +1,7 @@
 import { ActionIcon, Avatar, CheckIcon, Tooltip } from '@mantine/core';
 import { IconPhotoEdit, IconX } from '@tabler/icons-react';
 import { ChangeEvent, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { selectLoggedUser } from '../../../redux/selectors';
 import { postService } from '../../../services/posts';
@@ -14,6 +15,8 @@ interface ProfileAvatarProps {
 }
 
 export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) => {
+  const { t } = useTranslation();
+
   const loggedUser = useSelector(selectLoggedUser);
 
   const [uploadedPhoto, setUploadedPhoto] = useState<File | null>(null);
@@ -30,7 +33,7 @@ export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) =
     if (!selectedFile) return;
 
     if (selectedFile.size > MAX_FILE_SIZE) {
-      toastService.error('File size exceeds 5MB limit!');
+      toastService.error(t('apis.user.error_size'));
       resetFileInput();
       return;
     }
@@ -61,7 +64,7 @@ export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) =
       const photo = reader.result?.toString().replace('data:', '').replace(/^.+,/, '');
 
       if (!photo) {
-        toastService.error('Failed to upload image');
+        toastService.error(t('apis.user.error_upload'));
         return;
       }
 
@@ -74,7 +77,7 @@ export const UserProfileAvatar = ({ user, isCurrentUser }: ProfileAvatarProps) =
         })
         .then(() => {
           resetFileInput();
-          toastService.success('Profile image updated successfully');
+          toastService.success(t('apis.user.update'));
           postService.setPosts();
           postService.setUserPosts(user._id);
         })

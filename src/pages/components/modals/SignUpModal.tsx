@@ -1,6 +1,7 @@
 import { Button, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { authService } from '../../../services/auth';
 import { toastService } from '../../../services/toast';
 import { SignUpForm } from '../../../types';
@@ -12,6 +13,8 @@ interface SignUpModalProps {
 }
 
 export const SignUpModal = ({ opened, close, openSignInModal }: SignUpModalProps) => {
+  const { t } = useTranslation();
+
   const form = useForm<SignUpForm>({
     mode: 'uncontrolled',
     initialValues: {
@@ -24,48 +27,48 @@ export const SignUpModal = ({ opened, close, openSignInModal }: SignUpModalProps
     validate: {
       username: (value) => {
         if (!value.trim()) {
-          return 'Username is required';
+          return t('pages.components.modals.sign_up.errors.username.required');
         }
 
         if (value.length < 3) {
-          return 'Username should be at least 3 characters long';
+          return t('pages.components.modals.sign_up.errors.username.minLength');
         }
 
         if (value.length > 20) {
-          return 'Username should be at most 20 characters long';
+          return t('pages.components.modals.sign_up.errors.username.maxLength');
         }
       },
       email: (value) => {
         if (!value) {
-          return 'Email is required';
+          return t('pages.components.modals.sign_up.errors.email.required');
         }
 
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         if (!emailRegex.test(value)) {
-          return 'Invalid email address';
+          return t('pages.components.modals.sign_up.errors.email.invalid');
         }
       },
       password: (value) => {
-        if (!value) return 'Password is required';
+        if (!value) return t('pages.components.modals.sign_up.errors.password.required');
 
         const requirements = [
-          { re: /.{8}/, label: 'Password must be at least 8 characters long' },
-          { re: /[A-Z]/, label: 'Must contain uppercase letter' },
-          { re: /[a-z]/, label: 'Must contain lowercase letter' },
-          { re: /[0-9]/, label: 'Must contain number' },
-          { re: /[!@#$%^&*]/, label: 'Must contain special character (!@#$%^&*)' }
+          { re: /.{8}/, key: 'minLength' },
+          { re: /[A-Z]/, key: 'uppercase' },
+          { re: /[a-z]/, key: 'lowercase' },
+          { re: /[0-9]/, key: 'number' },
+          { re: /[!@#$%^&*]/, key: 'special' }
         ];
 
         const failed = requirements.find((req) => !req.re.test(value));
-        return failed ? failed.label : null;
+        return failed ? t(`pages.components.modals.sign_up.errors.password.requirements.${failed.key}`) : null;
       },
       confirmPassword: (value, values) => {
         if (!value) {
-          return 'Please confirm your password';
+          return t('pages.components.modals.sign_up.errors.confirmPassword.required');
         }
 
         if (value !== values.password) {
-          return 'Passwords do not match';
+          return t('pages.components.modals.sign_up.errors.confirmPassword.mismatch');
         }
       }
     }
@@ -86,7 +89,7 @@ export const SignUpModal = ({ opened, close, openSignInModal }: SignUpModalProps
       .then(() => {
         closeModal();
 
-        toastService.success('Signed up successfully');
+        toastService.success(t('apis.auth.success_sign_up'));
       })
       .finally(() => {
         setLoading(false);
@@ -97,31 +100,33 @@ export const SignUpModal = ({ opened, close, openSignInModal }: SignUpModalProps
     <Modal
       opened={opened}
       onClose={closeModal}
-      title={<Text className='text-center text-2xl font-bold'>Sign Up</Text>}
+      title={<Text className='text-center text-2xl font-bold'>{t('common.sign_up')}</Text>}
       radius='md'
       padding='lg'
     >
       <form className='flex flex-col gap-y-3' onSubmit={form.onSubmit(submit)}>
-        <TextInput label='Username' key={form.key('username')} {...form.getInputProps('username')} />
-
-        <TextInput label='Email' key={form.key('email')} {...form.getInputProps('email')} />
-
-        <TextInput label='Password' type='password' key={form.key('password')} {...form.getInputProps('password')} />
-
+        <TextInput label={t('common.username')} key={form.key('username')} {...form.getInputProps('username')} />
+        <TextInput label={t('common.email')} key={form.key('email')} {...form.getInputProps('email')} />
         <TextInput
-          label='Confirm password'
+          label={t('common.password')}
+          type='password'
+          key={form.key('password')}
+          {...form.getInputProps('password')}
+        />
+        <TextInput
+          label={t('common.confirm_password')}
           type='password'
           key={form.key('confirmPassword')}
           {...form.getInputProps('confirmPassword')}
         />
 
         <Button className='mt-2' color='teal' size='sm' type='submit' loading={loading}>
-          Sign Up
+          {t('common.sign_up')}
         </Button>
       </form>
 
       <Text className='mt-4 flex items-center justify-center gap-x-1' size='sm'>
-        <span>Already have an account?</span>{' '}
+        <span>{t('pages.components.modals.sign_up.already_have_an_account')}</span>{' '}
         <Button
           className='p-0 underline-offset-2 hover:underline'
           color='teal'
@@ -131,7 +136,7 @@ export const SignUpModal = ({ opened, close, openSignInModal }: SignUpModalProps
             openSignInModal();
           }}
         >
-          Sign In
+          {t('common.sign_in')}
         </Button>
       </Text>
     </Modal>

@@ -1,6 +1,7 @@
 import { Button, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { authService } from '../../../services/auth';
 import { toastService } from '../../../services/toast';
 import { SignInForm } from '../../../types';
@@ -12,6 +13,8 @@ interface SignInModalProps {
 }
 
 export const SignInModal = ({ opened, close, openSignUpModal }: SignInModalProps) => {
+  const { t } = useTranslation();
+
   const form = useForm<SignInForm>({
     mode: 'uncontrolled',
     initialValues: {
@@ -22,27 +25,16 @@ export const SignInModal = ({ opened, close, openSignUpModal }: SignInModalProps
     validate: {
       email: (value) => {
         if (!value) {
-          return 'Email is required';
+          return t('pages.components.modals.sign_in.errors.email.required');
         }
 
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         if (!emailRegex.test(value)) {
-          return 'Invalid email address';
+          return t('pages.components.modals.sign_in.errors.email.invalid');
         }
       },
       password: (value) => {
-        if (!value) return 'Password is required';
-
-        const requirements = [
-          { re: /.{8}/, label: 'Password must be at least 8 characters long' },
-          { re: /[A-Z]/, label: 'Must contain uppercase letter' },
-          { re: /[a-z]/, label: 'Must contain lowercase letter' },
-          { re: /[0-9]/, label: 'Must contain number' },
-          { re: /[!@#$%^&*]/, label: 'Must contain special character (!@#$%^&*)' }
-        ];
-
-        const failed = requirements.find((req) => !req.re.test(value));
-        return failed ? failed.label : null;
+        if (!value) return t('pages.components.modals.sign_in.errors.password.required');
       }
     }
   });
@@ -62,7 +54,7 @@ export const SignInModal = ({ opened, close, openSignUpModal }: SignInModalProps
       .then(() => {
         closeModal();
 
-        toastService.success('Signed in successfully');
+        toastService.success(t('apis.auth.success_sign_in'));
       })
       .finally(() => {
         setLoading(false);
@@ -73,20 +65,25 @@ export const SignInModal = ({ opened, close, openSignUpModal }: SignInModalProps
     <Modal
       opened={opened}
       onClose={closeModal}
-      title={<Text className='text-center text-2xl font-bold'>Sign In</Text>}
+      title={<Text className='text-center text-2xl font-bold'>{t('common.sign_in')}</Text>}
       radius='md'
       padding='lg'
     >
       <form className='flex flex-col gap-y-3' onSubmit={form.onSubmit(submit)}>
-        <TextInput label='Email' key={form.key('email')} {...form.getInputProps('email')} />
-        <TextInput label='Password' type='password' key={form.key('password')} {...form.getInputProps('password')} />
+        <TextInput label={t('common.email')} key={form.key('email')} {...form.getInputProps('email')} />
+        <TextInput
+          label={t('common.password')}
+          type='password'
+          key={form.key('password')}
+          {...form.getInputProps('password')}
+        />
         <Button className='mt-2' color='teal' size='sm' type='submit' loading={loading}>
-          Sign In
+          {t('common.sign_in')}
         </Button>
       </form>
 
       <Text className='mt-4 flex items-center justify-center gap-x-1' size='sm'>
-        <span>Don't have an account?</span>{' '}
+        <span>{t('pages.components.modals.sign_in.dont_have_an_account')}</span>{' '}
         <Button
           className='p-0 underline-offset-2 hover:underline'
           color='teal'
@@ -96,7 +93,7 @@ export const SignInModal = ({ opened, close, openSignUpModal }: SignInModalProps
             openSignUpModal();
           }}
         >
-          Sign up
+          {t('common.sign_up')}
         </Button>
       </Text>
     </Modal>

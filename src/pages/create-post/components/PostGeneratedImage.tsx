@@ -1,5 +1,6 @@
 import { ActionIcon, Loader, Text, Tooltip } from '@mantine/core';
 import { IconPhoto, IconPhotoDown } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
 import { downloadImage, generateIdFromString } from '../../../utils';
 
 interface GeneratedImageProps {
@@ -11,6 +12,8 @@ interface GeneratedImageProps {
 }
 
 export const PostGeneratedImage = (props: GeneratedImageProps) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className={`mb-5 w-full max-w-xl lg:mb-0 lg:w-1/2 lg:max-w-full ${props.hiddenOnLargeScreen ? 'block lg:hidden' : 'hidden lg:block'}`}
@@ -50,7 +53,9 @@ export const PostGeneratedImage = (props: GeneratedImageProps) => {
       </div>
 
       {props.isImageMissing && (
-        <Text className='mt-1.5 text-xs text-[#E03131]'>Image should be successfully generated</Text>
+        <Text className='mt-1.5 text-xs text-[#E03131]'>
+          {t('pages.generate_image.errors.image_should_be_generated')}
+        </Text>
       )}
     </div>
   );

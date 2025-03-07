@@ -8,6 +8,7 @@ import {
   IconTrash
 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { selectLoggedUser } from '../redux/selectors';
@@ -17,6 +18,7 @@ import { Post, UserRole } from '../types';
 import { downloadImage, generateIdFromString } from '../utils';
 
 export const PostCard = (props: Post) => {
+  const { t } = useTranslation();
   const location = useLocation();
   const loggedUser = useSelector(selectLoggedUser);
 
@@ -34,7 +36,7 @@ export const PostCard = (props: Post) => {
 
     postService.deletePost(postId).finally(() => {
       setDeletePostLoading(false);
-      toastService.success('Post deleted successfully!');
+      toastService.success(t('apis.post.delete'));
     });
   };
 
@@ -97,7 +99,7 @@ export const PostCard = (props: Post) => {
                 </Text>
 
                 <div className='flex gap-1'>
-                  <Tooltip label='Download image' withArrow>
+                  <Tooltip label={t('components.post_card.download_image')} withArrow>
                     <ActionIcon
                       variant='transparent'
                       p={0}
@@ -110,8 +112,8 @@ export const PostCard = (props: Post) => {
                     </ActionIcon>
                   </Tooltip>
 
-                  {(loggedUser?.role === UserRole.ADMIN ? true : props.user._id === loggedUser?._id) && (
-                    <Tooltip label='Delete image' withArrow>
+                  {(loggedUser?.role === UserRole.ADMIN || props.user._id === loggedUser?._id) && (
+                    <Tooltip label={t('components.post_card.delete_post')} withArrow>
                       <ActionIcon
                         variant='transparent'
                         p={0}

@@ -1,7 +1,7 @@
 import { showNotification } from '@mantine/notifications';
 
 export const toastService = {
-  success: (message: string, autoClose?: number) => {
+  success: (message: string, autoClose = 5000) => {
     showNotification({
       message: message,
       color: 'green',
@@ -10,7 +10,7 @@ export const toastService = {
     });
   },
 
-  error: (message = 'An error occurred.', autoClose?: number) => {
+  error: (message = 'An error occurred.', autoClose = 5000) => {
     showNotification({
       message: message,
       color: 'red',
