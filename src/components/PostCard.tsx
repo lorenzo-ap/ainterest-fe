@@ -105,7 +105,7 @@ export const PostCard = (props: Post) => {
                       p={0}
                       size={18}
                       onClick={() => {
-                        downloadImage(generateIdFromString(props.prompt), props.photo);
+                        downloadImage(generateIdFromString(props.prompt), props.photo, props.user.username);
                       }}
                     >
                       <IconPhotoDown className='text-slate-400' size={18} />

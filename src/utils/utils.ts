@@ -12,8 +12,8 @@ export const getRandomPrompt = (prompt: string): string => {
   return randomPrompt;
 };
 
-export const downloadImage = async (_id: string, photo: string) => {
-  FileSaver.saveAs(photo, `ainterest-${_id}.jpg`);
+export const downloadImage = async (_id: string, photo: string, username: string) => {
+  FileSaver.saveAs(photo, `${username}-${_id}.jpg`);
 };
 
 export const getRapidApiHeaders = (host: string) => {

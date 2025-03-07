@@ -1,6 +1,8 @@
 import { ActionIcon, Loader, Text, Tooltip } from '@mantine/core';
 import { IconPhoto, IconPhotoDown } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { selectLoggedUser } from '../../../redux/selectors';
 import { downloadImage, generateIdFromString } from '../../../utils';
 
 interface GeneratedImageProps {
@@ -13,6 +15,8 @@ interface GeneratedImageProps {
 
 export const PostGeneratedImage = (props: GeneratedImageProps) => {
   const { t } = useTranslation();
+
+  const loggedUser = useSelector(selectLoggedUser);
 
   return (
     <div
@@ -28,7 +32,7 @@ export const PostGeneratedImage = (props: GeneratedImageProps) => {
               p={0}
               size={28}
               onClick={() => {
-                downloadImage(generateIdFromString(props.imageAlt), props.imageSource);
+                downloadImage(generateIdFromString(props.imageAlt), props.imageSource, loggedUser?.username || '');
               }}
               className='absolute right-4 top-4 z-10'
             >
