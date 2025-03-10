@@ -13,7 +13,7 @@ export const getRandomPrompt = (prompt: string): string => {
 };
 
 export const downloadImage = async (_id: string, photo: string, username: string) => {
-  FileSaver.saveAs(photo, `${username}-${_id}.jpg`);
+  FileSaver.saveAs(photo, `${username}-${_id}.png`);
 };
 
 export const getRapidApiHeaders = (host: string) => {

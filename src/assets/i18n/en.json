@@ -115,13 +115,20 @@
       "surprise_me": "Surprise me",
       "prompt": "Prompt (accepts any language)",
       "prompt_example": "An oil painting by Matisse of a humanoid robot playing chess",
+      "size": "Size (px)",
+      "size_example": "Pick a value",
       "generate": "Generate",
       "share": "Share with the community",
       "info": "Once you have created the image you want, you can share it with others in the community",
       "errors": {
-        "required": "Prompt is required",
-        "min_length": "Prompt must be at least 5 characters long",
-        "max_length": "Prompt must be at most 200 characters long",
+        "prompt": {
+          "required": "Prompt is required",
+          "min_length": "Prompt must be at least 5 characters long",
+          "max_length": "Prompt must be at most 200 characters long"
+        },
+        "size": {
+          "required": "Size is required"
+        },
         "image_should_be_generated": "Image should be successfully generated"
       }
     }

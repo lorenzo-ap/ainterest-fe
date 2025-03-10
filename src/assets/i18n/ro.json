@@ -115,13 +115,21 @@
       "surprise_me": "Surprinde-mă",
       "prompt": "Cerere (acceptă orice limbă)",
       "prompt_example": "O pictură în ulei de Matisse cu un robot umanoid care joacă șah",
+      "size": "Dimensiune (px)",
+      "size_example": "Alege o valoare",
       "generate": "Generează",
       "share": "Împărtășește cu comunitatea",
       "info": "După ce ai creat imaginea dorită, o poți împărtăși cu ceilalți din comunitate",
+
       "errors": {
-        "required": "Promptul este obligatoriu",
-        "min_length": "Promptul trebuie să aibă cel puțin 5 caractere",
-        "max_length": "Promptul trebuie să aibă cel mult 200 de caractere",
+        "prompt": {
+          "required": "Promptul este obligatoriu",
+          "min_length": "Promptul trebuie să aibă cel puțin 5 caractere",
+          "max_length": "Promptul trebuie să aibă cel mult 200 de caractere"
+        },
+        "size": {
+          "required": "Dimensiunea este obligatorie"
+        },
         "image_should_be_generated": "Imaginea ar trebui generată cu succes"
       }
     }

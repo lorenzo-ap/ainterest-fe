@@ -24,13 +24,11 @@ const postsSlice = createSlice({
   reducers: {
     addPost: (state, action: PayloadAction<Post>) => {
       state.posts = [action.payload, ...state.posts];
-      state.originalPosts = [action.payload, ...state.originalPosts];
+      state.originalPosts = [...state.posts];
     },
     setPosts: (state, action: PayloadAction<Post[]>) => {
       state.posts = action.payload;
-      if (!state.originalPosts.length) {
-        state.originalPosts = [...action.payload];
-      }
+      state.originalPosts = [...action.payload];
     },
     updatePostLike: (state, action: PayloadAction<UpdatePost>) => {
       if (!state.posts.length) return;
@@ -51,6 +49,7 @@ const postsSlice = createSlice({
       if (!state.posts.length) return;
 
       state.posts = state.posts.filter((post) => post._id !== action.payload);
+      state.originalPosts = [...state.posts];
     },
 
     setPostsSearchText(state, action: PayloadAction<string>) {

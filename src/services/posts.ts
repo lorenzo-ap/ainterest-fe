@@ -14,6 +14,12 @@ import { GeneratedImage } from '../types';
 export const postService = {
   createPost: async (image: GeneratedImage) => {
     const res = await createPost(image);
+    const posts = store.getState().posts.posts;
+
+    if (!posts.length) {
+      postService.setPosts();
+    }
+
     store.dispatch(addPost(res.data));
   },
   setPosts: async () => {

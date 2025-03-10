@@ -14,6 +14,12 @@ export interface UpdatePost {
   userId: string;
 }
 
+export interface CreatePostForm {
+  prompt: string;
+  size: string;
+  generatedImage: GeneratedImage;
+}
+
 export interface GeneratedImage {
   prompt: string;
   photo: string;

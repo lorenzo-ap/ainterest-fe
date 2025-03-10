@@ -37,6 +37,8 @@ const userPostsSlice = createSlice({
       const { postId, userId } = action.payload;
 
       const postIndex = state.posts.findIndex((post) => post._id === postId);
+      if (!state.posts[postIndex]) return;
+
       const likes = state.posts[postIndex].likes;
       const newLikes = likes.includes(userId) ? likes.filter((like) => like !== userId) : [...likes, userId];
 

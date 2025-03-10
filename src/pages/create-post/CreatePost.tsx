@@ -1,4 +1,4 @@
-import { Button, Text, Textarea, Title } from '@mantine/core';
+import { Button, Select, Text, Textarea, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconArrowLeft, IconBrandOpenai, IconPhotoUp } from '@tabler/icons-react';
 import { FormEvent, useState } from 'react';
@@ -8,14 +8,11 @@ import { checkTextForNSFW, generateImage, translateText } from '../../api';
 import { useFormValidation } from '../../hooks';
 import { postService } from '../../services/posts';
 import { toastService } from '../../services/toast';
-import { GeneratedImage } from '../../types';
+import { CreatePostForm } from '../../types';
 import { getRandomPrompt } from '../../utils';
 import { PostGeneratedImage } from './components';
 
-interface CreatePostForm {
-  prompt: string;
-  generatedImage: GeneratedImage;
-}
+const SIZE_OPTIONS = ['64x64', '128x128', '256x256', '512x512'];
 
 export const CreatePostPage = () => {
   const { t, i18n } = useTranslation();
@@ -29,6 +26,7 @@ export const CreatePostPage = () => {
     mode: 'uncontrolled',
     initialValues: {
       prompt: '',
+      size: '',
       generatedImage: {
         prompt: '',
         photo: ''
@@ -38,15 +36,20 @@ export const CreatePostPage = () => {
     validate: {
       prompt: (value) => {
         if (!value.trim()) {
-          return t('pages.generate_image.errors.required');
+          return t('pages.generate_image.errors.prompt.required');
         }
 
         if (value.length < 5) {
-          return t('pages.generate_image.errors.min_length');
+          return t('pages.generate_image.errors.prompt.min_length');
         }
 
         if (value.length > 200) {
-          return t('pages.generate_image.errors.max_length');
+          return t('pages.generate_image.errors.prompt.max_length');
+        }
+      },
+      size: (value) => {
+        if (!value) {
+          return t('pages.generate_image.errors.size.required');
         }
       }
     }
@@ -60,8 +63,8 @@ export const CreatePostPage = () => {
     form.setFieldValue('prompt', randomPrompt);
   };
 
-  const generatePostImage = (prompt: string, translatedPrompt: string) => {
-    generateImage(translatedPrompt)
+  const generatePostImage = (prompt: string, size: string, translatedPrompt: string) => {
+    generateImage(translatedPrompt, size)
       .then((response) => {
         form.setFieldValue('generatedImage', { prompt, photo: `data:image/png;base64,${response.data}` });
         setIsImageMissing(false);
@@ -71,11 +74,13 @@ export const CreatePostPage = () => {
 
   const onGenerate = () => {
     const promptValidation = form.validateField('prompt');
+    const sizeValidation = form.validateField('size');
 
     setIsImageMissing(false);
 
-    if (promptValidation.hasError) {
+    if (promptValidation.hasError || sizeValidation.hasError) {
       form.validateField('prompt');
+      form.validateField('size');
       return;
     }
 
@@ -90,13 +95,13 @@ export const CreatePostPage = () => {
         return;
       }
 
-      translateText(prompt).then((response) => generatePostImage(prompt, response.data[0].texts[0]));
+      const size = form.getValues().size.split('x')[0];
+
+      translateText(prompt).then((response) => generatePostImage(prompt, size, response.data[0].texts[0]));
     });
   };
 
   const sharePost = (formData: CreatePostForm) => {
-    form.clearFieldError('prompt');
-
     setIsSharing(true);
     setIsImageMissing(false);
 
@@ -117,6 +122,7 @@ export const CreatePostPage = () => {
 
     if (!form.getValues().generatedImage.photo) {
       form.clearFieldError('prompt');
+      form.clearFieldError('size');
       setIsImageMissing(true);
       return;
     }
@@ -179,6 +185,14 @@ export const CreatePostPage = () => {
                     </Button>
                   </>
                 )}
+              />
+
+              <Select
+                label={t('pages.generate_image.size')}
+                placeholder={t('pages.generate_image.size_example')}
+                data={SIZE_OPTIONS}
+                defaultValue={SIZE_OPTIONS[0]}
+                {...form.getInputProps('size')}
               />
 
               <div className='flex flex-col items-stretch gap-3 sm:flex-row sm:items-center'>

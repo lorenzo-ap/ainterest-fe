@@ -24,13 +24,13 @@ export const translateText = (text: string) => {
   });
 };
 
-export const generateImage = (text: string) => {
+export const generateImage = (text: string, size: string) => {
   const headers = getRapidApiHeaders(rapidApi.image);
   const body = {
     negative_prompt: 'NSFW',
     prompt: text,
-    width: 512,
-    height: 512,
+    width: size,
+    height: size,
     hr_scale: 2
   };
 
