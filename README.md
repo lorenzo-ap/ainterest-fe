@@ -1,30 +1,39 @@
-# React + TypeScript + Vite
+# Image Generator FE Documentation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+`image-generator-fe` is a front-end application designed to generate images, likely leveraging an AI-based API. This project, created by [**lorenzo-ap**](https://github.com/lorenzo-ap), provides a user interface to input prompts and display generated images.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Prompt Input**: Users can enter text prompts to generate custom images.
+- **Image Display**: Renders generated images in the UI.
+- **API Integration**: Connects to a backend or third-party API for image generation.
+- **Responsive Design**: Built with modern front-end technologies for cross-device compatibility.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Prerequisites
 
-- Configure the top-level `parserOptions` property like this:
+- **Node.js**: Version 14.x or higher (recommended).
+- **npm**: Comes bundled with Node.js for package management.
+- **.env setup**: See `.env.example` as an example.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname
-  }
-};
+## Configuration with `.env`
+
+The `.env` file is used to store environment-specific variables, such as API keys or endpoints, securely. It is not committed to the repository for security reasons.
+
+### Creating the `.env` File
+
+Create a `.env` file in the root directory with required variables, e.g.:
+
+```env
+VITE_API_URL=http://localhost:9999/api
+VITE_X_RAPIDAPI_KEY=your-api-key
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Author
+
+Created by `lorenzo-ap`.
+
+## Last Updated
+
+March 10, 2025
