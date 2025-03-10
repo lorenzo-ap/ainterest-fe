@@ -11,7 +11,7 @@
     "back": "Back",
     "languages": {
       "en": "English",
-      "ro": "Română"
+      "ro": "Romanian"
     }
   },
 
@@ -120,6 +120,7 @@
       "generate": "Generate",
       "share": "Share with the community",
       "info": "Once you have created the image you want, you can share it with others in the community",
+
       "errors": {
         "prompt": {
           "required": "Prompt is required",
@@ -142,15 +143,15 @@
     },
     "user": {
       "update": "Profile image updated successfully!",
-      "error": "Failed to upload image",
-      "error_size": "File size exceeds 5MB limit"
+      "error": "Failed to upload image.",
+      "error_size": "File size exceeds 5MB limit."
     },
     "post": {
       "success": "Post shared successfully!",
       "delete": "Post deleted successfully!"
     },
     "rapid_api": {
-      "error": "Prompt contains explicit/adult content, please try a different one"
+      "error": "Prompt contains explicit/adult content, please try a different one."
     }
   }
 }

@@ -1,16 +1,16 @@
 {
   "common": {
     "username": "Nume de utilizator",
-    "email": "Email",
+    "email": "E-mail",
     "password": "Parolă",
     "confirm_password": "Confirmă parola",
-    "sign_in": "Autentificare",
+    "sign_in": "Conectare",
     "sign_up": "Înregistrare",
     "continue": "Continuă",
     "cancel": "Anulează",
     "back": "Înapoi",
     "languages": {
-      "en": "English",
+      "en": "Engleză",
       "ro": "Română"
     }
   },
@@ -46,7 +46,7 @@
           "errors": {
             "email": {
               "required": "E-mailul este obligatoriu",
-              "invalid": "Adresa de e-mail invalidă"
+              "invalid": "Adresa de e-mail este invalidă"
             },
             "password": {
               "required": "Parola este obligatorie"
@@ -58,25 +58,25 @@
           "errors": {
             "username": {
               "required": "Numele de utilizator este obligatoriu",
-              "minLength": "Numele de utilizator trebuie să aibă cel puțin 3 caractere",
-              "maxLength": "Numele de utilizator trebuie să aibă cel mult 20 de caractere"
+              "minLength": "Numele de utilizator trebuie să aibă minimum 3 caractere",
+              "maxLength": "Numele de utilizator nu poate depăși 20 de caractere"
             },
             "email": {
               "required": "E-mailul este obligatoriu",
-              "invalid": "Adresa de e-mail invalidă"
+              "invalid": "Adresa de e-mail este invalidă"
             },
             "password": {
               "required": "Parola este obligatorie",
               "requirements": {
-                "minLength": "Parola trebuie să aibă cel puțin 8 caractere",
-                "uppercase": "Trebuie să conțină o literă mare",
-                "lowercase": "Trebuie să conțină o literă mică",
-                "number": "Trebuie să conțină un număr",
-                "special": "Trebuie să conțină un caracter special (!@#$%^&*)"
+                "minLength": "Parola trebuie să aibă minimum 8 caractere",
+                "uppercase": "Parola trebuie să includă o literă mare",
+                "lowercase": "Parola trebuie să includă o literă mică",
+                "number": "Parola trebuie să includă un număr",
+                "special": "Parola trebuie să includă un caracter special (!@#$%^&*)"
               }
             },
             "confirmPassword": {
-              "required": "Vă rugăm să confirmați parola",
+              "required": "Confirmarea parolei este obligatorie",
               "mismatch": "Parolele nu se potrivesc"
             }
           }
@@ -84,9 +84,9 @@
       },
 
       "header": {
-        "sign_in": "Autentificare",
-        "switch_to_light_mode": "Schimbă la modul luminos",
-        "switch_to_dark_mode": "Schimbă la modul întunecat",
+        "sign_in": "Conectare",
+        "switch_to_light_mode": "Treci la modul luminos",
+        "switch_to_dark_mode": "Treci la modul întunecat",
         "change_language": "Schimbă limba",
         "sign_out": "Deconectare",
         "are_you_sure": "Ești sigur că vrei să te deconectezi?"
@@ -94,26 +94,26 @@
 
       "search_posts_input": {
         "search_posts": "Caută postări",
-        "enter_prompt": "Introdu cererea",
-        "enter_prompt_or_username": "Introdu cererea sau numele de utilizator"
+        "enter_prompt": "Introdu descrierea",
+        "enter_prompt_or_username": "Introdu descrierea sau numele de utilizator"
       }
     },
 
     "home": {
       "heading": "Vitrina Comunității",
-      "subheading": "Răsfoiește o colecție de imagini imaginative și uimitoare vizual generate de AI",
-      "refresh_posts": "Actualizează postările"
+      "subheading": "Explorează o colecție de imagini imaginative și impresionante generate de AI",
+      "refresh_posts": "Reîmprospătează postările"
     },
 
     "user_profile": {
-      "generate_image": "Generează imagine"
+      "generate_image": "Generează o imagine"
     },
 
     "generate_image": {
-      "heading": "Generează imagine",
-      "subheading": "Creează imagini imaginative și uimitoare vizual prin AI și împărtășește-le cu comunitatea",
+      "heading": "Generează o imagine",
+      "subheading": "Creează imagini imaginative și impresionante prin AI și împărtășește-le cu comunitatea",
       "surprise_me": "Surprinde-mă",
-      "prompt": "Cerere (acceptă orice limbă)",
+      "prompt": "Descriere (acceptă orice limbă)",
       "prompt_example": "O pictură în ulei de Matisse cu un robot umanoid care joacă șah",
       "size": "Dimensiune (px)",
       "size_example": "Alege o valoare",
@@ -123,14 +123,14 @@
 
       "errors": {
         "prompt": {
-          "required": "Promptul este obligatoriu",
-          "min_length": "Promptul trebuie să aibă cel puțin 5 caractere",
-          "max_length": "Promptul trebuie să aibă cel mult 200 de caractere"
+          "required": "Descrierea este obligatorie",
+          "min_length": "Descrierea trebuie să aibă minimum 5 caractere",
+          "max_length": "Descrierea nu poate depăși 200 de caractere"
         },
         "size": {
           "required": "Dimensiunea este obligatorie"
         },
-        "image_should_be_generated": "Imaginea ar trebui generată cu succes"
+        "image_should_be_generated": "Imaginea trebuie să fie generată cu succes"
       }
     }
   },
@@ -143,15 +143,15 @@
     },
     "user": {
       "update": "Imaginea de profil a fost actualizată cu succes!",
-      "error": "Încărcarea imaginii a eșuat",
-      "error_size": "Dimensiunea fișierului depășește limita de 5MB"
+      "error": "Încărcarea imaginii a eșuat.",
+      "error_size": "Dimensiunea fișierului depășește limita de 5 MB."
     },
     "post": {
-      "success": "Postare distribuită cu succes!",
-      "delete": "Postare ștearsă cu succes!"
+      "success": "Postarea a fost distribuită cu succes!",
+      "delete": "Postarea a fost ștearsă cu succes!"
     },
     "rapid_api": {
-      "error": "Promptul conține conținut explicit/adult, vă rugăm să încercați altul"
+      "error": "Cererea conține conținut explicit/adult, te rugăm să încerci alta."
     }
   }
 }
