@@ -118,7 +118,7 @@ export const Header = () => {
                 <Text className='ms-1.5 text-sm max-xs:hidden'>{loggedUser.username}</Text>
               </Button>
             ) : (
-              <Button onClick={openSignInModal} color='cyan' variant='light' loading={!!jwtToken}>
+              <Button onClick={openSignInModal} color='violet' variant='light' loading={!!jwtToken}>
                 {t('common.sign_in')}
               </Button>
             )}

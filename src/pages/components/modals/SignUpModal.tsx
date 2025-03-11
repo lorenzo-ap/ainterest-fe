@@ -130,7 +130,7 @@ export const SignUpModal = (props: SignUpModalProps) => {
           {...form.getInputProps('confirmPassword')}
         />
 
-        <Button className='mt-2' color='teal' size='md' type='submit' loading={loading}>
+        <Button className='mt-2' color='violet' size='md' type='submit' loading={loading}>
           {t('common.sign_up')}
         </Button>
       </form>
@@ -139,7 +139,7 @@ export const SignUpModal = (props: SignUpModalProps) => {
         <span>{t('pages.components.modals.sign_up.already_have_an_account')}</span>{' '}
         <Button
           className='p-0 underline-offset-2 hover:underline'
-          color='teal'
+          color='violet'
           variant='transparent'
           onClick={() => {
             closeModal();
