@@ -108,22 +108,29 @@ export const SignUpModal = (props: SignUpModalProps) => {
       padding='lg'
     >
       <form className='flex flex-col gap-y-3' onSubmit={form.onSubmit(submit)}>
-        <TextInput label={t('common.username')} key={form.key('username')} {...form.getInputProps('username')} />
-        <TextInput label={t('common.email')} key={form.key('email')} {...form.getInputProps('email')} />
         <TextInput
+          size='md'
+          label={t('common.username')}
+          key={form.key('username')}
+          {...form.getInputProps('username')}
+        />
+        <TextInput size='md' label={t('common.email')} key={form.key('email')} {...form.getInputProps('email')} />
+        <TextInput
+          size='md'
           label={t('common.password')}
           type='password'
           key={form.key('password')}
           {...form.getInputProps('password')}
         />
         <TextInput
+          size='md'
           label={t('common.confirm_password')}
           type='password'
           key={form.key('confirmPassword')}
           {...form.getInputProps('confirmPassword')}
         />
 
-        <Button className='mt-2' color='teal' size='sm' type='submit' loading={loading}>
+        <Button className='mt-2' color='teal' size='md' type='submit' loading={loading}>
           {t('common.sign_up')}
         </Button>
       </form>

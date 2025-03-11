@@ -165,6 +165,7 @@ export const CreatePostPage = () => {
             <div className='flex flex-grow flex-col gap-3 md:min-w-96'>
               <Textarea
                 className='relative'
+                size='md'
                 rows={8}
                 label={t('pages.generate_image.prompt')}
                 placeholder={t('pages.generate_image.prompt_example')}
@@ -188,6 +189,7 @@ export const CreatePostPage = () => {
               />
 
               <Select
+                size='md'
                 label={t('pages.generate_image.size')}
                 placeholder={t('pages.generate_image.size_example')}
                 data={SIZE_OPTIONS}

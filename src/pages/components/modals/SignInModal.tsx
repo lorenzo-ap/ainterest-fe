@@ -73,14 +73,15 @@ export const SignInModal = (props: SignInModalProps) => {
       padding='lg'
     >
       <form className='flex flex-col gap-y-3' onSubmit={form.onSubmit(submit)}>
-        <TextInput label={t('common.email')} key={form.key('email')} {...form.getInputProps('email')} />
+        <TextInput size='md' label={t('common.email')} key={form.key('email')} {...form.getInputProps('email')} />
         <TextInput
+          size='md'
           label={t('common.password')}
           type='password'
           key={form.key('password')}
           {...form.getInputProps('password')}
         />
-        <Button className='mt-2' color='teal' size='sm' type='submit' loading={loading}>
+        <Button className='mt-2' color='teal' size='md' type='submit' loading={loading}>
           {t('common.sign_in')}
         </Button>
       </form>

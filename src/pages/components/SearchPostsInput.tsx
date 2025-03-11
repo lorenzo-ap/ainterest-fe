@@ -20,7 +20,6 @@ export const SearchPostsInput = (props: SearchPostsInputProps) => {
       type='text'
       inputMode='text'
       name='post-search'
-      role='search'
       autoComplete='off'
       label={t('pages.components.search_posts_input.search_posts')}
       aria-label={t('pages.components.search_posts_input.search_posts')}
