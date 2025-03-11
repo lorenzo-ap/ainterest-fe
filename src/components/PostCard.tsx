@@ -56,9 +56,9 @@ export const PostCard = (props: Post) => {
         )}
 
         <img
-          className={`h-auto w-full rounded-xl object-cover ${loading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
-          src={props.photo}
           alt={props.prompt}
+          src={props.photo}
+          className={`h-auto w-full rounded-xl object-cover ${loading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
           loading='lazy'
           onLoad={() => {
             setLoading(false);
@@ -68,19 +68,20 @@ export const PostCard = (props: Post) => {
 
       {!loading && (
         <>
-          <button
+          <ActionIcon
             className='absolute right-3 top-3 z-10 md:hidden'
-            type='button'
+            variant='transparent'
             onClick={() => {
               setShowInfo((prev) => !prev);
             }}
+            aria-label={t('a11y.toggle_info')}
           >
             {showInfo ? (
               <IconCircleXFilled className='text-slate-300' size={40} />
             ) : (
               <IconInfoCircle className='text-slate-300' size={40} />
             )}
-          </button>
+          </ActionIcon>
 
           <div
             className={`absolute flex max-h-[75%] flex-col md:-bottom-full md:group-hover:bottom-0 ${showInfo ? '-bottom-0' : '-bottom-full'} left-0 right-0 m-2 rounded-md bg-[#10131F] p-4 transition-all duration-500`}
@@ -107,6 +108,7 @@ export const PostCard = (props: Post) => {
                       onClick={() => {
                         downloadImage(generateIdFromString(props.prompt), props.photo, props.user.username);
                       }}
+                      aria-label={t('components.post_card.download_image')}
                     >
                       <IconPhotoDown className='text-slate-400' size={18} />
                     </ActionIcon>
@@ -123,6 +125,7 @@ export const PostCard = (props: Post) => {
                         onClick={() => {
                           deletePost(props._id);
                         }}
+                        aria-label={t('components.post_card.delete_post')}
                       >
                         <IconTrash className='text-red-400' size={18} />
                       </ActionIcon>
@@ -157,19 +160,24 @@ export const PostCard = (props: Post) => {
 
               <div className='flex items-center gap-x-2'>
                 <div className='flex items-center gap-x-1'>
-                  <button
-                    type='button'
+                  <ActionIcon
+                    variant='transparent'
                     disabled={!loggedUser}
                     onClick={() => {
                       postService.reactToPost(props._id, loggedUser?._id || '');
                     }}
+                    aria-label={t(
+                      props.likes.includes(loggedUser?._id ?? '')
+                        ? 'components.post_card.unlike_post'
+                        : 'components.post_card.like_post'
+                    )}
                   >
                     {props.likes.includes(loggedUser?._id ?? '') ? (
                       <IconHeartFilled className='text-slate-300' size={24} color='firebrick' />
                     ) : (
                       <IconHeart className='text-slate-300' size={24} />
                     )}
-                  </button>
+                  </ActionIcon>
 
                   {props.likes.length > 0 && <Text className='text-sm text-white'>{props.likes.length}</Text>}
                 </div>

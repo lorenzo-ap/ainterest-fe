@@ -103,6 +103,7 @@ export const Header = () => {
                 onClick={() => {
                   navigate(`account/${loggedUser.username}`);
                 }}
+                aria-label={t('a11y.profile')}
               >
                 <Avatar
                   key={loggedUser.username}
@@ -124,7 +125,7 @@ export const Header = () => {
 
             <Popover position='bottom' withArrow arrowSize={10} arrowOffset={16} width={120} shadow='md'>
               <Popover.Target>
-                <ActionIcon variant='default' radius='md' size={36} aria-label='Change Language'>
+                <ActionIcon variant='default' radius='md' size={36} aria-label={t('a11y.change_language')}>
                   <IconWorld size={18} stroke={1.5} />
                 </ActionIcon>
               </Popover.Target>
@@ -151,7 +152,17 @@ export const Header = () => {
                   : 'pages.components.header.switch_to_dark_mode'
               )}
             >
-              <ActionIcon variant='default' radius='md' size={36} onClick={toggleColorScheme} aria-label='Toggle theme'>
+              <ActionIcon
+                variant='default'
+                radius='md'
+                size={36}
+                onClick={toggleColorScheme}
+                aria-label={t(
+                  colorScheme === 'dark'
+                    ? 'pages.components.header.switch_to_light_mode'
+                    : 'pages.components.header.switch_to_dark_mode'
+                )}
+              >
                 {colorScheme === 'dark' ? <IconSun size={18} /> : <IconMoon size={18} />}
               </ActionIcon>
             </Tooltip>
@@ -164,7 +175,7 @@ export const Header = () => {
                   size={36}
                   color='red'
                   onClick={openSignOutConfirmModal}
-                  aria-label='Sign Out'
+                  aria-label={t('pages.components.header.sign_out')}
                 >
                   <IconLogout2 size={18} />
                 </ActionIcon>

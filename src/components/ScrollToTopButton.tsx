@@ -37,12 +37,12 @@ export const ScrollToTopButton = () => {
       >
         <Tooltip label={t('components.scroll_to_top_button.title')} withArrow position='left'>
           <ActionIcon
+            className='shadow-lg transition-shadow hover:shadow-xl'
             size={42}
             color='violet'
             radius='md'
             onClick={scrollToTop}
-            aria-label='Scroll to top'
-            className='shadow-lg transition-shadow hover:shadow-xl'
+            aria-label={t('components.scroll_to_top_button.title')}
           >
             <IconArrowUp size={18} />
           </ActionIcon>

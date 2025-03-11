@@ -9,10 +9,22 @@
     "continue": "Continuă",
     "cancel": "Anulează",
     "back": "Înapoi",
+    "undo": "Anulează",
+    "update": "Actualizează",
     "languages": {
       "en": "Engleză",
       "ro": "Română"
     }
+  },
+
+  "a11y": {
+    "reset_filters": "Resetează filtrele",
+    "toggle_info": "Comută informațiile",
+    "like_post": "Apreciază postarea",
+    "unlike_post": "Înlătură aprecierea postării",
+    "profile": "Profil",
+    "change_language": "Schimbă limba",
+    "clear": "Șterge"
   },
 
   "components": {

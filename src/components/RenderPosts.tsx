@@ -31,9 +31,9 @@ export const RenderPosts = (props: RenderPostsProps) => {
       )}
 
       <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4'>
-        {props.loading && Array.from({ length: 10 }).map((_, index) => <PostSkeleton key={index} />)}
-
-        {props.posts.length ? (
+        {props.loading ? (
+          Array.from({ length: 10 }).map((_, index) => <PostSkeleton key={index} />)
+        ) : props.posts.length ? (
           props.posts.map((post) => <PostCard key={post._id} {...post} />)
         ) : (
           <Title className='col-span-full uppercase' order={2} c='violet'>

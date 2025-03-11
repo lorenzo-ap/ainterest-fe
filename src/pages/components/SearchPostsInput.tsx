@@ -23,13 +23,14 @@ export const SearchPostsInput = (props: SearchPostsInputProps) => {
       role='search'
       autoComplete='off'
       label={t('pages.components.search_posts_input.search_posts')}
+      aria-label={t('pages.components.search_posts_input.search_posts')}
       placeholder={props.placeholder}
       disabled={props.loading}
       value={props.searchText}
       onChange={props.handleSearchChange}
       rightSection={
         props.searchText && (
-          <Tooltip withArrow label='Clear'>
+          <Tooltip withArrow label={t('a11y.clear')}>
             <CloseButton onClick={props.resetSearch} />
           </Tooltip>
         )

@@ -122,7 +122,7 @@ export const UserProfileAvatar = (props: ProfileAvatarProps) => {
 
       {uploadedPhoto && (
         <>
-          <Tooltip withArrow label='Undo'>
+          <Tooltip withArrow label={t('common.undo')}>
             <ActionIcon
               className='absolute bottom-0 left-0 rounded-full'
               variant='default'
@@ -130,12 +130,13 @@ export const UserProfileAvatar = (props: ProfileAvatarProps) => {
               type='button'
               disabled={imageLoading}
               onClick={resetFileInput}
+              aria-label={t('common.undo')}
             >
               <IconX size={14} />
             </ActionIcon>
           </Tooltip>
 
-          <Tooltip withArrow label='Update'>
+          <Tooltip withArrow label={t('common.update')}>
             <ActionIcon
               className='absolute bottom-0 right-0 rounded-full'
               variant='filled'
@@ -144,6 +145,7 @@ export const UserProfileAvatar = (props: ProfileAvatarProps) => {
               type='button'
               loading={imageLoading}
               onClick={editUser}
+              aria-label={t('common.update')}
             >
               <CheckIcon size={10} />
             </ActionIcon>

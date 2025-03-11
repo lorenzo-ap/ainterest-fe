@@ -26,15 +26,16 @@ export const PostGeneratedImage = (props: GeneratedImageProps) => {
         className={`relative rounded-xl border ${props.isImageMissing ? 'border-[#E03131]' : 'border-color'} flex aspect-square items-center justify-center shadow-lg`}
       >
         {props.imageSource && !props.isGenerating && (
-          <Tooltip label='Download image' withArrow>
+          <Tooltip label={t('components.post_card.download_image')} withArrow>
             <ActionIcon
+              className='absolute right-4 top-4 z-10'
               variant='transparent'
               p={0}
               size={28}
               onClick={() => {
                 downloadImage(generateIdFromString(props.imageAlt), props.imageSource, loggedUser?.username || '');
               }}
-              className='absolute right-4 top-4 z-10'
+              aria-label={t('components.post_card.download_image')}
             >
               <IconPhotoDown className='text-slate-300' size={28} />
             </ActionIcon>

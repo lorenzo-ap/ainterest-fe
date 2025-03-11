@@ -40,7 +40,13 @@ export const Filters = (props: FiltersProps) => {
       <div className='relative'>
         <Popover.Target>
           <Tooltip label={t('components.filters.title')} withArrow>
-            <ActionIcon disabled={props.disabled} size={42} color='teal' radius='md' aria-label='Filters'>
+            <ActionIcon
+              disabled={props.disabled}
+              size={42}
+              color='teal'
+              radius='md'
+              aria-label={t('components.filters.title')}
+            >
               <IconArrowsSort size={20} />
             </ActionIcon>
           </Tooltip>
@@ -52,8 +58,8 @@ export const Filters = (props: FiltersProps) => {
             disabled={props.disabled}
             size={16}
             color='gray'
-            aria-label='Filters'
             onClick={resetFilteredPosts}
+            aria-label={t('a11y.reset_filters')}
           >
             <IconX size={12} />
           </ActionIcon>

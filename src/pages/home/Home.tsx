@@ -55,7 +55,7 @@ export const HomePage = () => {
                     fetchPosts();
                   }}
                   loading={loading}
-                  aria-label='Refresh'
+                  aria-label={t('pages.home.refresh_posts')}
                 >
                   <IconRefresh size={20} />
                 </ActionIcon>

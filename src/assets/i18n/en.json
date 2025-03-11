@@ -9,10 +9,22 @@
     "continue": "Continue",
     "cancel": "Cancel",
     "back": "Back",
+    "undo": "Undo",
+    "update": "Update",
     "languages": {
       "en": "English",
       "ro": "Romanian"
     }
+  },
+
+  "a11y": {
+    "reset_filters": "Reset filters",
+    "toggle_info": "Toggle info",
+    "like_post": "Like post",
+    "unlike_post": "Unlike post",
+    "profile": "Profile",
+    "change_language": "Change language",
+    "clear": "Clear"
   },
 
   "components": {
