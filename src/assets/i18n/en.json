@@ -11,9 +11,10 @@
     "back": "Back",
     "undo": "Undo",
     "update": "Update",
+    "close": "Close",
     "languages": {
       "en": "English",
-      "ro": "Romanian"
+      "ro": "Română"
     }
   },
 
@@ -36,6 +37,7 @@
     },
 
     "post_card": {
+      "maximize_image": "Maximize image",
       "download_image": "Download image",
       "delete_post": "Delete post"
     },

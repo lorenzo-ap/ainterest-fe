@@ -11,8 +11,9 @@
     "back": "Înapoi",
     "undo": "Anulează",
     "update": "Actualizează",
+    "close": "Închide",
     "languages": {
-      "en": "Engleză",
+      "en": "English",
       "ro": "Română"
     }
   },
@@ -36,6 +37,7 @@
     },
 
     "post_card": {
+      "maximize_image": "Mărește imaginea",
       "download_image": "Descarcă imaginea",
       "delete_post": "Șterge postarea"
     },
