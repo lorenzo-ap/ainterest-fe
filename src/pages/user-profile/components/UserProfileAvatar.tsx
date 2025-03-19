@@ -1,7 +1,9 @@
-import { ActionIcon, Avatar, Tooltip } from '@mantine/core';
-import { IconCheck, IconPhotoEdit, IconX } from '@tabler/icons-react';
+import { Avatar, Button, Modal } from '@mantine/core';
+import { IconPhotoEdit } from '@tabler/icons-react';
 import { ChangeEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import ReactCrop, { Crop, centerCrop, makeAspectCrop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 import { useSelector } from 'react-redux';
 import { selectLoggedUser } from '../../../redux/selectors';
 import { postService } from '../../../services/posts';
@@ -9,23 +11,26 @@ import { toastService } from '../../../services/toast';
 import { userService } from '../../../services/user';
 import { User } from '../../../types';
 
-interface ProfileAvatarProps {
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+interface UserProfileAvatarProps {
   user: User | null;
   isCurrentUser: boolean;
 }
 
-export const UserProfileAvatar = (props: ProfileAvatarProps) => {
+export const UserProfileAvatar = (props: UserProfileAvatarProps) => {
   const { t } = useTranslation();
-
   const loggedUser = useSelector(selectLoggedUser);
 
   const [uploadedPhoto, setUploadedPhoto] = useState<File | null>(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [crop, setCrop] = useState<Crop>();
+  const [completedCrop, setCompletedCrop] = useState<Crop | null>(null);
 
+  const imgRef = useRef<HTMLImageElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
@@ -39,37 +44,93 @@ export const UserProfileAvatar = (props: ProfileAvatarProps) => {
     }
 
     const objectUrl = URL.createObjectURL(selectedFile);
-
     setUploadedPhoto(selectedFile);
     setUploadedPhotoUrl(objectUrl);
+    setCropModalOpen(true);
   };
 
   const resetFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-    setUploadedPhoto(null);
-    setUploadedPhotoUrl(null);
+    setCropModalOpen(false);
+    setTimeout(() => {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      setUploadedPhoto(null);
+      setUploadedPhotoUrl(null);
+      setCrop(undefined);
+      setCompletedCrop(null);
+    }, 150);
   };
 
-  const editUser = () => {
-    if (!uploadedPhoto) return;
+  const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const { width, height } = e.currentTarget;
+    const crop = centerCrop(
+      makeAspectCrop(
+        {
+          unit: '%',
+          width: 90
+        },
+        1, // 1:1 aspect ratio for avatar
+        width,
+        height
+      ),
+      width,
+      height
+    );
+    setCrop(crop);
+  };
+
+  const getCroppedImage = async (): Promise<File> => {
+    if (!completedCrop || !imgRef.current) {
+      throw new Error('Crop or image not available');
+    }
+
+    const canvas = document.createElement('canvas');
+    const image = imgRef.current;
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = completedCrop.width;
+    canvas.height = completedCrop.height;
+
+    ctx?.drawImage(
+      image,
+      completedCrop.x * scaleX,
+      completedCrop.y * scaleY,
+      completedCrop.width * scaleX,
+      completedCrop.height * scaleY,
+      0,
+      0,
+      completedCrop.width,
+      completedCrop.height
+    );
+
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        resolve(new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' }));
+      }, 'image/jpeg');
+    });
+  };
+
+  const editUser = async () => {
+    if (!uploadedPhoto || !completedCrop) return;
 
     setImageLoading(true);
 
+    const croppedImage = await getCroppedImage();
     const reader = new FileReader();
-    reader.readAsDataURL(uploadedPhoto);
+    reader.readAsDataURL(croppedImage);
 
     reader.onload = () => {
       const photo = reader.result?.toString().replace('data:', '').replace(/^.+,/, '');
-      if (!photo) {
+      if (!photo || !props.user) {
         toastService.error(t('apis.user.error_upload'));
         return;
       }
 
-      if (!props.user) return;
       const user = props.user;
-
       userService
         .editUser({
           ...user,
@@ -105,7 +166,7 @@ export const UserProfileAvatar = (props: ProfileAvatarProps) => {
       >
         <Avatar
           key={props.user?.username}
-          src={uploadedPhotoUrl || (props.isCurrentUser ? loggedUser?.photo : props.user?.photo)}
+          src={props.isCurrentUser ? loggedUser?.photo : props.user?.photo}
           size={80}
           name={props.user?.username}
           color='initials'
@@ -120,38 +181,40 @@ export const UserProfileAvatar = (props: ProfileAvatarProps) => {
         )}
       </label>
 
-      {uploadedPhoto && (
-        <>
-          <Tooltip withArrow label={t('common.undo')}>
-            <ActionIcon
-              className='absolute bottom-0 left-0 rounded-full'
-              variant='default'
-              size={20}
-              type='button'
-              disabled={imageLoading}
-              onClick={resetFileInput}
-              aria-label={t('common.undo')}
-            >
-              <IconX size={14} />
-            </ActionIcon>
-          </Tooltip>
+      <Modal opened={cropModalOpen} onClose={resetFileInput} withCloseButton={false} size='lg' centered>
+        {uploadedPhotoUrl && (
+          <ReactCrop
+            crop={crop}
+            onChange={(_, percentCrop) => setCrop(percentCrop)}
+            onComplete={(c) => setCompletedCrop(c)}
+            aspect={1}
+            circularCrop
+          >
+            <img
+              ref={imgRef}
+              src={uploadedPhotoUrl}
+              alt={t('common.avatar')}
+              onLoad={onImageLoad}
+              className='max-h-[70vh] w-full object-contain'
+            />
+          </ReactCrop>
+        )}
 
-          <Tooltip withArrow label={t('common.update')}>
-            <ActionIcon
-              className='absolute bottom-0 right-0 rounded-full'
-              variant='filled'
-              color='#099268'
-              size={20}
-              type='button'
-              loading={imageLoading}
-              onClick={editUser}
-              aria-label={t('common.update')}
-            >
-              <IconCheck size={14} />
-            </ActionIcon>
-          </Tooltip>
-        </>
-      )}
+        <div className='mt-3 flex items-center justify-end gap-x-3'>
+          <Button variant='subtle' color='red' onClick={resetFileInput} disabled={imageLoading}>
+            {t('common.cancel')}
+          </Button>
+
+          <Button
+            color='teal'
+            onClick={editUser}
+            loading={imageLoading}
+            disabled={!completedCrop || completedCrop.width <= 1 || completedCrop.height <= 1}
+          >
+            {t('common.save')}
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -28,7 +28,9 @@ const postsSlice = createSlice({
     },
     setPosts: (state, action: PayloadAction<Post[]>) => {
       state.posts = action.payload;
-      state.originalPosts = [...action.payload];
+      if (!state.originalPosts.length) {
+        state.originalPosts = [...action.payload];
+      }
     },
     updatePostLike: (state, action: PayloadAction<UpdatePost>) => {
       if (!state.posts.length) return;
@@ -57,7 +59,7 @@ const postsSlice = createSlice({
     },
     resetPostsSearch(state) {
       state.searchText = '';
-      state.posts = [...state.posts];
+      state.posts = [...state.originalPosts];
     },
 
     setPostsFilters: (state, action: PayloadAction<FiltersState>) => {

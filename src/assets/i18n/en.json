@@ -12,6 +12,8 @@
     "undo": "Undo",
     "update": "Update",
     "close": "Close",
+    "save": "Save",
+    "avatar": "Avatar preview",
     "languages": {
       "en": "English",
       "ro": "Română"
