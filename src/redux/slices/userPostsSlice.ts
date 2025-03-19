@@ -52,6 +52,7 @@ const userPostsSlice = createSlice({
       if (!state.posts.length) return;
 
       state.posts = state.posts.filter((post) => post._id !== action.payload);
+      state.originalPosts = [...state.posts];
     },
 
     setUserPostsSearchText(state, action: PayloadAction<string>) {

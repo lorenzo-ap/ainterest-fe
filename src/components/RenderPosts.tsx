@@ -36,7 +36,7 @@ export const RenderPosts = (props: RenderPostsProps) => {
         ) : props.posts.length ? (
           props.posts.map((post) => <PostCard key={post._id} {...post} />)
         ) : (
-          <Title className='col-span-full uppercase' order={2} c='violet'>
+          <Title className='col-span-full mt-4 uppercase' order={2} c='violet'>
             {t('components.render_posts.no_posts_found')}
           </Title>
         )}

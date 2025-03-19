@@ -52,7 +52,7 @@ export const PostGeneratedImage = (props: GeneratedImageProps) => {
           <div
             className={`absolute inset-0 z-0 flex items-center justify-center rounded-xl p-3 ${props.imageSource ? 'bg-black/50' : 'bg-black/20'}`}
           >
-            <Loader color='rgba(135, 232, 200, 1)' type='oval' size={64} />
+            <Loader color='rgba(135, 232, 200, 1)' size={64} />
           </div>
         )}
       </div>

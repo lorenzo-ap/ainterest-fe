@@ -1,5 +1,5 @@
-import { ActionIcon, Avatar, CheckIcon, Tooltip } from '@mantine/core';
-import { IconPhotoEdit, IconX } from '@tabler/icons-react';
+import { ActionIcon, Avatar, Tooltip } from '@mantine/core';
+import { IconCheck, IconPhotoEdit, IconX } from '@tabler/icons-react';
 import { ChangeEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -147,7 +147,7 @@ export const UserProfileAvatar = (props: ProfileAvatarProps) => {
               onClick={editUser}
               aria-label={t('common.update')}
             >
-              <CheckIcon size={10} />
+              <IconCheck size={14} />
             </ActionIcon>
           </Tooltip>
         </>
