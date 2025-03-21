@@ -89,7 +89,7 @@ export const CreatePostPage = () => {
     const { prompt } = form.getValues();
 
     checkTextForNSFW(prompt).then((res) => {
-      if (res.data.sexual_score > 0.4) {
+      if (res.data.sexual_score > 0.3) {
         toastService.error(t('apis.rapid_api.error'));
         setIsGenerating(false);
         return;
