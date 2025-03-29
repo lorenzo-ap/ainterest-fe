@@ -180,7 +180,6 @@ export const PostCard = (props: Post) => {
                   <div className='flex items-center gap-x-1'>
                     <ActionIcon
                       variant='transparent'
-                      disabled={!loggedUser}
                       onClick={() => {
                         postService.reactToPost(props._id, loggedUser?._id || '');
                       }}
@@ -189,6 +188,7 @@ export const PostCard = (props: Post) => {
                           ? 'components.post_card.unlike_post'
                           : 'components.post_card.like_post'
                       )}
+                      className={!loggedUser ? 'pointer-events-none' : ''}
                     >
                       {props.likes.includes(loggedUser?._id ?? '') ? (
                         <IconHeartFilled className='text-slate-300' size={24} color='firebrick' />
