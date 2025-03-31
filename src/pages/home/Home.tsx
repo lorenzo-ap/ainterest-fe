@@ -28,7 +28,7 @@ export const HomePage = () => {
           <div>
             <Title order={1}>{t('pages.home.heading')}</Title>
 
-            <Text className='mt-2 max-w-[500px] opacity-60'>{t('pages.home.subheading')}</Text>
+            <Text className='mt-2 opacity-60'>{t('pages.home.subheading')}</Text>
           </div>
         </div>
 

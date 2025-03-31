@@ -88,16 +88,19 @@ export const CreatePostPage = () => {
 
     const { prompt } = form.getValues();
 
-    checkTextForNSFW(prompt).then((res) => {
-      if (res.data.sexual_score > 0.3) {
-        toastService.error(t('apis.rapid_api.error'));
-        setIsGenerating(false);
-        return;
-      }
+    translateText(prompt).then((res) => {
+      const translatedPrompt = res.data[0].texts[0];
 
-      const size = form.getValues().size.split('x')[0];
+      checkTextForNSFW(translatedPrompt).then((res) => {
+        if (res.data.sexual_score > 0.3) {
+          toastService.error(t('apis.rapid_api.error'));
+          setIsGenerating(false);
+          return;
+        }
 
-      translateText(prompt).then((response) => generatePostImage(prompt, size, response.data[0].texts[0]));
+        const size = form.getValues().size.split('x')[0];
+        generatePostImage(prompt, size, translatedPrompt);
+      });
     });
   };
 
