@@ -23,16 +23,3 @@ export const translateText = (text: string) => {
     headers
   });
 };
-
-export const generateImage = (text: string, size: string) => {
-  const headers = getRapidApiHeaders(rapidApi.image);
-  const body = {
-    negative_prompt: 'NSFW',
-    prompt: text,
-    width: size,
-    height: size,
-    hr_scale: 2
-  };
-
-  return req.post<string>(`https://${rapidApi.image}/image`, body, { headers });
-};

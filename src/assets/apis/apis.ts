@@ -7,6 +7,5 @@ export const apis = {
 
 export const rapidApi = {
   nsfw: 'nsfw-text-detection.p.rapidapi.com',
-  translate: 'ai-translate.p.rapidapi.com',
-  image: 'imageai-generator.p.rapidapi.com'
+  translate: 'ai-translate.p.rapidapi.com'
 };

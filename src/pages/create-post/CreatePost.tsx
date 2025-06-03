@@ -12,7 +12,7 @@ import { CreatePostForm } from '../../types';
 import { getRandomPrompt } from '../../utils';
 import { PostGeneratedImage } from './components';
 
-const SIZE_OPTIONS = ['64x64', '128x128', '256x256', '512x512'];
+const SIZE_OPTIONS = ['256x256', '512x512', '1024x1024'];
 
 export const CreatePostPage = () => {
   const { t, i18n } = useTranslation();
@@ -63,10 +63,10 @@ export const CreatePostPage = () => {
     form.setFieldValue('prompt', randomPrompt);
   };
 
-  const generatePostImage = (prompt: string, size: string, translatedPrompt: string) => {
+  const generatePostImage = (prompt: string, size: number, translatedPrompt: string) => {
     generateImage(translatedPrompt, size)
       .then((response) => {
-        form.setFieldValue('generatedImage', { prompt, photo: `data:image/png;base64,${response.data}` });
+        form.setFieldValue('generatedImage', { prompt, photo: response.data.image });
         setIsImageMissing(false);
       })
       .finally(() => setIsGenerating(false));
@@ -98,7 +98,7 @@ export const CreatePostPage = () => {
           return;
         }
 
-        const size = form.getValues().size.split('x')[0];
+        const size = +form.getValues().size.split('x')[0];
         generatePostImage(prompt, size, translatedPrompt);
       });
     });
@@ -196,7 +196,6 @@ export const CreatePostPage = () => {
                 label={t('pages.generate_image.size')}
                 placeholder={t('pages.generate_image.size_example')}
                 data={SIZE_OPTIONS}
-                defaultValue={SIZE_OPTIONS[0]}
                 {...form.getInputProps('size')}
               />
 
