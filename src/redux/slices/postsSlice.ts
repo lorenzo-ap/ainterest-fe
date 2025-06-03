@@ -54,12 +54,11 @@ const postsSlice = createSlice({
       state.originalPosts = [...state.posts];
     },
 
-    setPostsSearchText(state, action: PayloadAction<string>) {
+    setPostsSearchText: (state, action: PayloadAction<string>) => {
       state.searchText = action.payload;
     },
-    resetPostsSearch(state) {
+    resetPostsSearch: (state) => {
       state.searchText = '';
-      state.posts = [...state.originalPosts];
     },
 
     setPostsFilters: (state, action: PayloadAction<FiltersState>) => {
