@@ -70,7 +70,7 @@ export const Filters = (props: FiltersProps) => {
         {Object.values(FilterCriteria).map((label) => (
           <Button
             key={label}
-            className={`flex w-full items-center px-4 ${
+            className={`flex w-full items-center border-x-0 px-4 ${
               label === FilterCriteria.Date
                 ? 'rounded-b-none border-none'
                 : label === FilterCriteria.Likes

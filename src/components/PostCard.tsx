@@ -28,6 +28,7 @@ export const PostCard = (props: Post) => {
   const [showInfo, setShowInfo] = useState(false);
   const [loading, setLoading] = useState(true);
   const [deletePostLoading, setDeletePostLoading] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [profileUsername, setProfileUsername] = useState<string>('');
   const [postImageModalOpened, { open: openPostImageModal, close: closePostImageModal }] = useDisclosure(false);
 
@@ -46,7 +47,11 @@ export const PostCard = (props: Post) => {
 
   return (
     <>
-      <div className='border-color card group relative aspect-square overflow-y-hidden rounded-xl border shadow-card'>
+      <div
+        className='border-color card group relative aspect-square overflow-y-hidden rounded-xl border shadow-card'
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <div className='relative h-full w-full'>
           {loading && (
             <div className='absolute inset-0 z-10 flex h-full w-full items-center justify-center rounded-xl bg-black/15'>
@@ -81,6 +86,7 @@ export const PostCard = (props: Post) => {
                 setShowInfo((prev) => !prev);
               }}
               aria-label={t('a11y.toggle_info')}
+              tabIndex={showInfo ? 0 : -1}
             >
               {showInfo ? (
                 <IconCircleXFilled className='text-slate-300' size={40} />
@@ -113,6 +119,7 @@ export const PostCard = (props: Post) => {
                         size={18}
                         onClick={openPostImageModal}
                         aria-label={t('components.post_card.maximize_image')}
+                        tabIndex={isHovered || showInfo ? 0 : -1}
                       >
                         <IconArrowsMaximize className='text-slate-400' size={18} />
                       </ActionIcon>
@@ -127,6 +134,7 @@ export const PostCard = (props: Post) => {
                           downloadImage(generateIdFromString(props.prompt), props.photo, props.user.username);
                         }}
                         aria-label={t('components.post_card.download_image')}
+                        tabIndex={isHovered || showInfo ? 0 : -1}
                       >
                         <IconPhotoDown className='text-slate-400' size={18} />
                       </ActionIcon>
@@ -144,6 +152,7 @@ export const PostCard = (props: Post) => {
                             deletePost(props._id);
                           }}
                           aria-label={t('components.post_card.delete_post')}
+                          tabIndex={isHovered || showInfo ? 0 : -1}
                         >
                           <IconTrash className='text-red-400' size={18} />
                         </ActionIcon>
@@ -152,7 +161,10 @@ export const PostCard = (props: Post) => {
                   </div>
                 </div>
 
-                <Text className='prompt max-h-[100px] overflow-y-scroll pr-0.5 text-white max-lg:text-sm'>
+                <Text
+                  className='prompt max-h-[100px] overflow-y-scroll pr-0.5 text-white max-lg:text-sm'
+                  tabIndex={isHovered || showInfo ? 0 : -1}
+                >
                   {props.prompt}
                 </Text>
               </div>
@@ -163,6 +175,7 @@ export const PostCard = (props: Post) => {
                   to={`/account/${props.user.username}`}
                   state={props.user}
                   style={{ pointerEvents: profileUsername === props.user.username ? 'none' : 'auto' }}
+                  tabIndex={isHovered || showInfo ? 0 : -1}
                 >
                   <Avatar
                     key={props.user.username}
@@ -189,6 +202,7 @@ export const PostCard = (props: Post) => {
                           : 'components.post_card.like_post'
                       )}
                       className={!loggedUser ? 'pointer-events-none' : ''}
+                      tabIndex={isHovered || showInfo ? 0 : -1}
                     >
                       {props.likes.includes(loggedUser?._id ?? '') ? (
                         <IconHeartFilled className='text-slate-300' size={24} color='firebrick' />
