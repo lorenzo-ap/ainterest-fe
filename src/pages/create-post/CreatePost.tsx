@@ -26,7 +26,7 @@ export const CreatePostPage = () => {
     mode: 'uncontrolled',
     initialValues: {
       prompt: '',
-      size: '1024x1024',
+      size: '',
       generatedImage: {
         prompt: '',
         photo: ''
