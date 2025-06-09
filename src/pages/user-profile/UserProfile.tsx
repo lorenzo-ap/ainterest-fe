@@ -130,7 +130,7 @@ export const UserProfilePage = () => {
           <Skeleton radius='md' height={42} className='mt-11 md:mt-14' />
         ) : (
           !!userPosts.length && (
-            <div className='mt-4 flex items-end gap-x-2 md:mt-8'>
+            <div className='mt-4 flex items-end gap-x-2 md:mt-7'>
               <SearchPostsInput
                 placeholder={t('pages.components.search_posts_input.enter_prompt')}
                 loading={postsLoading}
