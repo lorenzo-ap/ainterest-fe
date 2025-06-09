@@ -103,7 +103,7 @@ export const UserProfilePage = () => {
                   )}
                 </div>
 
-                {isCurrentUser && <Text opacity={0.5}>{loggedUser?.email}</Text>}
+                <Text opacity={0.5}>{user?.email}</Text>
               </div>
             )}
           </div>
