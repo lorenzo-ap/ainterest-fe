@@ -109,9 +109,9 @@ export const UserProfilePage = () => {
           </div>
 
           {isCurrentUser && (
-            <div className='flex gap-x-3'>
+            <div className='flex gap-x-3 max-md:w-full'>
               <Button
-                className='transition-opacity duration-75 hover:opacity-90'
+                className='transition-opacity duration-75 hover:opacity-90 max-md:w-full'
                 component={Link}
                 to='/generate-image'
                 variant='gradient'
