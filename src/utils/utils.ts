@@ -1,5 +1,6 @@
 import FileSaver from 'file-saver';
 import { surpriseMePrompts } from '../constants';
+import { toastService } from '../services/toast';
 
 export const getRandomPrompt = (prompt: string): string => {
   const randomIndex = Math.floor(Math.random() * surpriseMePrompts.length);
@@ -12,8 +13,10 @@ export const getRandomPrompt = (prompt: string): string => {
   return randomPrompt;
 };
 
-export const downloadImage = async (_id: string, photo: string, username: string) => {
-  FileSaver.saveAs(photo, `${username}-${_id}.png`);
+export const downloadImage = async (desc: string, photo: string, username: string) => {
+  const id = generateIdFromString(desc);
+  FileSaver.saveAs(photo, `${username}-${id}.png`);
+  toastService.success('Image downloaded successfully!', 2500);
 };
 
 export const getRapidApiHeaders = (host: string) => {

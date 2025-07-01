@@ -3,7 +3,7 @@ import { IconPhoto, IconPhotoDown } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { selectLoggedUser } from '../../../redux/selectors';
-import { downloadImage, generateIdFromString } from '../../../utils';
+import { downloadImage } from '../../../utils';
 
 interface GeneratedImageProps {
   imageSource: string;
@@ -33,7 +33,7 @@ export const PostGeneratedImage = (props: GeneratedImageProps) => {
               p={0}
               size={28}
               onClick={() => {
-                downloadImage(generateIdFromString(props.imageAlt), props.imageSource, loggedUser?.username || '');
+                downloadImage(props.imageAlt, props.imageSource, loggedUser?.username ?? ' ');
               }}
               aria-label={t('components.post_card.download_image')}
             >

@@ -17,7 +17,7 @@ import { selectLoggedUser } from '../redux/selectors';
 import { postService } from '../services/posts';
 import { toastService } from '../services/toast';
 import { Post, UserRole } from '../types';
-import { downloadImage, generateIdFromString } from '../utils';
+import { downloadImage } from '../utils';
 import { PostImageModal } from './PostImageModal';
 
 export const PostCard = (props: Post) => {
@@ -131,7 +131,7 @@ export const PostCard = (props: Post) => {
                         p={0}
                         size={18}
                         onClick={() => {
-                          downloadImage(generateIdFromString(props.prompt), props.photo, props.user.username);
+                          downloadImage(props.prompt, props.photo, props.user.username);
                         }}
                         aria-label={t('components.post_card.download_image')}
                         tabIndex={isHovered || showInfo ? 0 : -1}
