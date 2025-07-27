@@ -29,7 +29,7 @@ export const ScrollToTopButton = () => {
   }, []);
 
   return (
-    <div className='fixed bottom-4 right-4 z-50'>
+    <div className='fixed bottom-4 left-4 z-50'>
       <div
         className={`transition-all duration-300 ease-in-out ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'
