@@ -67,8 +67,6 @@ export const UserProfilePage = () => {
         postService.setUserPosts(user._id).finally(() => setPostsLoading(false));
       })
       .finally(() => setUserLoading(false));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.username]);
 
   useEffect(() => {
