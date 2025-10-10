@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import App from './App.tsx';
 import en from './assets/i18n/en.json';
 import ro from './assets/i18n/ro.json';
-import './index.scss';
+import './index.css';
 import { store } from './redux';
 import { Language } from './types';
 
