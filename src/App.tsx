@@ -16,7 +16,12 @@ const App = () => {
     <MantineProvider defaultColorScheme='light' withCssVariables>
       <Notifications position='bottom-right' zIndex={1000} autoClose={3000} />
 
-      <BrowserRouter>
+      <BrowserRouter
+        future={{
+          v7_relativeSplatPath: true,
+          v7_startTransition: true
+        }}
+      >
         <Header />
 
         <main className='min-h-[calc(100vh-77px)] w-full px-4 py-8 sm:px-8'>

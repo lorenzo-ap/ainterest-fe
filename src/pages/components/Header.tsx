@@ -1,12 +1,12 @@
 import { ActionIcon, Avatar, Button, Popover, Text, Tooltip, useMantineColorScheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCheck, IconLogout2, IconMoon, IconSun, IconWorld } from '@tabler/icons-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ConfirmModal } from '../../components';
-import { selectLoggedUser } from '../../redux/selectors';
+import { selectAuthLoading, selectLoggedUser } from '../../redux/selectors';
 import { authService } from '../../services/auth';
 import { toastService } from '../../services/toast';
 import { Language } from '../../types';
@@ -42,18 +42,13 @@ export const Header = () => {
   const location = useLocation();
 
   const loggedUser = useSelector(selectLoggedUser);
+  const isAuthLoading = useSelector(selectAuthLoading);
   const { pathname } = useMemo(() => location, [location]);
 
-  const [jwtToken, setJwtToken] = useState<string | null>(null);
   const [signInModalOpened, { open: openSignInModal, close: closeSignInModal }] = useDisclosure(false);
   const [signUpModalOpened, { open: openSignUpModal, close: closeSignUpModal }] = useDisclosure(false);
   const [signOutConfirmModalOpened, { open: openSignOutConfirmModal, close: closeSignOutConfirmModal }] =
     useDisclosure(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem('jwt-token');
-    setJwtToken(token);
-  }, []);
 
   useEffect(() => {
     const lang = localStorage.getItem('lang');
@@ -72,7 +67,6 @@ export const Header = () => {
   const signOut = () => {
     authService.signOut().finally(() => {
       closeSignOutConfirmModal();
-      setJwtToken(null);
       navigate('/');
       toastService.success(t('apis.auth.success_sign_out'));
     });
@@ -118,7 +112,7 @@ export const Header = () => {
                 <Text className='ms-1.5 text-sm max-xs:hidden'>{loggedUser.username}</Text>
               </Button>
             ) : (
-              <Button onClick={openSignInModal} color='violet' variant='light' loading={!!jwtToken}>
+              <Button disabled={isAuthLoading} onClick={openSignInModal} color='violet' variant='light'>
                 {t('common.sign_in')}
               </Button>
             )}

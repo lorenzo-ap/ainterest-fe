@@ -1,11 +1,12 @@
-import { signIn, signUp } from '../api';
+import { refreshToken, signIn, signOut, signUp } from '../api';
 import { setUser } from '../redux/slices';
 import { store } from '../redux/store';
 import { SignInForm, SignUpForm, User } from '../types';
+import { removeAccessToken, setAccessToken } from '../utils';
 
 const authUser = (user: User) => {
   store.dispatch(setUser(user));
-  localStorage.setItem('jwt-token', user.token);
+  setAccessToken(user.accessToken);
 };
 
 export const authService = {
@@ -20,7 +21,13 @@ export const authService = {
   },
 
   signOut: async () => {
-    localStorage.removeItem('jwt-token');
+    await signOut();
+    removeAccessToken();
     store.dispatch(setUser(null));
+  },
+
+  refreshToken: async () => {
+    const res = await refreshToken();
+    setAccessToken(res.data.accessToken);
   }
 };

@@ -112,6 +112,12 @@
         "search_posts": "Caută postări",
         "enter_prompt": "Introdu descrierea",
         "enter_prompt_or_username": "Introdu descrierea sau numele"
+      },
+
+      "protected_route": {
+        "title": "Autentificare necesară",
+        "description": "Trebuie să fii conectat pentru a accesa această pagină. Te rugăm să te conectezi pentru a continua.",
+        "go_to_home": "Du-te Acasă"
       }
     },
 

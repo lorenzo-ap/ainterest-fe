@@ -1,27 +1,30 @@
-import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
+import { refreshToken } from '../api/auth';
+import { setAuthLoading } from '../redux/slices';
+import { store } from '../redux/store';
 import { userService } from '../services/user';
+import { getAccessToken, removeAccessToken, setAccessToken } from '../utils';
 
 export const useAuth = () => {
   useEffect(() => {
-    try {
-      const token = localStorage.getItem('jwt-token');
+    const authUser = async () => {
+      const accessToken = getAccessToken();
 
-      if (!token) return;
-
-      const decoded = jwtDecode(token);
-
-      if (decoded && typeof decoded.exp === 'number') {
-        const currentTime = Date.now() / 1000;
-
-        if (decoded.exp > currentTime) {
-          userService.setCurrentUser();
-        } else {
-          localStorage.removeItem('jwt-token');
+      try {
+        if (!accessToken) {
+          const response = await refreshToken();
+          setAccessToken(response.data.accessToken);
         }
+
+        await userService.setCurrentUser();
+      } catch (error) {
+        console.error('Auth failed:', error);
+        removeAccessToken();
+      } finally {
+        store.dispatch(setAuthLoading(false));
       }
-    } catch (error) {
-      localStorage.removeItem('jwt-token');
-    }
+    };
+
+    authUser();
   }, []);
 };

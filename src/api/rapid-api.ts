@@ -1,7 +1,7 @@
 import { rapidApi } from '../assets/apis/apis';
 import { CheckTextResponse, TranslateTextResponse } from '../types';
 import { getRapidApiHeaders } from '../utils';
-import req from './axios';
+import { req } from './axios';
 
 export const checkTextForNSFW = (text: string) => {
   const headers = getRapidApiHeaders(rapidApi.nsfw);

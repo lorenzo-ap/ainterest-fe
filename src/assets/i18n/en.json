@@ -112,6 +112,12 @@
         "search_posts": "Search posts",
         "enter_prompt": "Enter prompt",
         "enter_prompt_or_username": "Enter prompt or username"
+      },
+
+      "protected_route": {
+        "title": "Authentication required",
+        "description": "You need to be logged in to access this page. Please sign in to continue.",
+        "go_to_home": "Go to Home"
       }
     },
 

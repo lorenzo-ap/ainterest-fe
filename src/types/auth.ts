@@ -9,3 +9,7 @@ export interface SignUpForm {
   password: string;
   confirmPassword: string;
 }
+
+export interface AccessToken {
+  accessToken: string;
+}
