@@ -17,10 +17,10 @@ export interface UpdatePost {
 export interface CreatePostForm {
   prompt: string;
   size: string;
-  generatedImage: GeneratedImage;
+  postGeneratedImage: PostGeneratedImage;
 }
 
-export interface GeneratedImage {
+export interface PostGeneratedImage {
   prompt: string;
   photo: string;
 }

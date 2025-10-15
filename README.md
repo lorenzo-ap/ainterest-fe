@@ -27,7 +27,6 @@ Create a `.env` file in the root directory with required variables, e.g.:
 
 ```env
 VITE_API_URL=http://localhost:9999/api
-VITE_X_RAPIDAPI_KEY=your-api-key
 ```
 
 ## Author

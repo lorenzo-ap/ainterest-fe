@@ -1,10 +1,11 @@
 import { Button, Select, Text, Textarea, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconArrowLeft, IconBrandOpenai, IconPhotoUp } from '@tabler/icons-react';
+import { AxiosError } from 'axios';
 import { FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { checkTextForNSFW, generateImage, translateText } from '../../api';
+import { generateImage } from '../../api';
 import { useFormValidation } from '../../hooks';
 import { postService } from '../../services/posts';
 import { toastService } from '../../services/toast';
@@ -27,7 +28,7 @@ export const CreatePostPage = () => {
     initialValues: {
       prompt: '',
       size: '',
-      generatedImage: {
+      postGeneratedImage: {
         prompt: '',
         photo: ''
       }
@@ -63,11 +64,15 @@ export const CreatePostPage = () => {
     form.setFieldValue('prompt', randomPrompt);
   };
 
-  const generatePostImage = (prompt: string, size: number, translatedPrompt: string) => {
-    generateImage(translatedPrompt, size)
+  const generatePostImage = (prompt: string, size: number) => {
+    generateImage(prompt, size)
       .then((response) => {
-        form.setFieldValue('generatedImage', { prompt, photo: response.data.image });
+        form.setFieldValue('postGeneratedImage', { prompt, photo: response.data.image });
         setIsImageMissing(false);
+      })
+      .catch((err: AxiosError<{ message: string; nsfw: boolean }>) => {
+        if (!err.response?.data.nsfw) return;
+        toastService.error(t('apis.generate.error'));
       })
       .finally(() => setIsGenerating(false));
   };
@@ -86,29 +91,17 @@ export const CreatePostPage = () => {
 
     setIsGenerating(true);
 
+    const size = +form.getValues().size.split('x')[0];
     const { prompt } = form.getValues();
 
-    translateText(prompt).then((res) => {
-      const translatedPrompt = res.data[0].texts[0];
-
-      checkTextForNSFW(translatedPrompt).then((res) => {
-        if (res.data.sexual_score > 0.3) {
-          toastService.error(t('apis.rapid_api.error'));
-          setIsGenerating(false);
-          return;
-        }
-
-        const size = +form.getValues().size.split('x')[0];
-        generatePostImage(prompt, size, translatedPrompt);
-      });
-    });
+    generatePostImage(prompt, size);
   };
 
   const sharePost = (formData: CreatePostForm) => {
     setIsSharing(true);
     setIsImageMissing(false);
 
-    const body = { ...formData.generatedImage };
+    const body = { ...formData.postGeneratedImage };
 
     postService
       .createPost(body)
@@ -123,7 +116,7 @@ export const CreatePostPage = () => {
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!form.getValues().generatedImage.photo) {
+    if (!form.getValues().postGeneratedImage.photo) {
       form.clearFieldError('prompt');
       form.clearFieldError('size');
       setIsImageMissing(true);
@@ -156,7 +149,7 @@ export const CreatePostPage = () => {
 
           <PostGeneratedImage
             {...{
-              imageSource: form.getValues().generatedImage.photo,
+              imageSource: form.getValues().postGeneratedImage.photo,
               imageAlt: form.getValues().prompt,
               isGenerating,
               isImageMissing,
@@ -230,7 +223,7 @@ export const CreatePostPage = () => {
 
         <PostGeneratedImage
           {...{
-            imageSource: form.getValues().generatedImage.photo,
+            imageSource: form.getValues().postGeneratedImage.photo,
             imageAlt: form.getValues().prompt,
             isGenerating,
             isImageMissing

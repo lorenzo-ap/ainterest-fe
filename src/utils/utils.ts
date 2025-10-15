@@ -19,14 +19,6 @@ export const downloadImage = async (desc: string, photo: string, username: strin
   toastService.success('Image downloaded successfully!', 2500);
 };
 
-export const getRapidApiHeaders = (host: string) => {
-  return {
-    'x-rapidapi-key': import.meta.env.VITE_X_RAPIDAPI_KEY,
-    'x-rapidapi-host': host,
-    'Content-Type': 'application/json'
-  };
-};
-
 export const generateIdFromString = (text: string) => {
   let hash = 0;
   for (let i = 0; i < text.length; i++) {

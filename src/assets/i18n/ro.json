@@ -172,7 +172,7 @@
       "success": "Postarea a fost distribuită cu succes!",
       "delete": "Postarea a fost ștearsă cu succes!"
     },
-    "rapid_api": {
+    "generate": {
       "error": "Cererea conține conținut explicit/adult, te rugăm să încerci alta."
     }
   }

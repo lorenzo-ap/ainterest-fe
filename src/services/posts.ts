@@ -9,10 +9,10 @@ import {
   updateUserPostLike
 } from '../redux/slices';
 import { store } from '../redux/store';
-import { GeneratedImage } from '../types';
+import { PostGeneratedImage } from '../types';
 
 export const postService = {
-  createPost: async (image: GeneratedImage) => {
+  createPost: async (image: PostGeneratedImage) => {
     const res = await createPost(image);
     const posts = store.getState().posts.posts;
 

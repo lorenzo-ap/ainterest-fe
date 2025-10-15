@@ -172,7 +172,7 @@
       "success": "Post shared successfully!",
       "delete": "Post deleted successfully!"
     },
-    "rapid_api": {
+    "generate": {
       "error": "Prompt contains explicit/adult content, please try a different one."
     }
   }
