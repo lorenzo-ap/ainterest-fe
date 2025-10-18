@@ -1,8 +1,6 @@
-# Image Generator FE Documentation
-
 ## Overview
 
-**`ainterest-fe`** is a front-end application designed to generate images, likely leveraging an AI-based API. This project, created by [**lorenzo-ap**](https://github.com/lorenzo-ap), provides a user interface to input prompts and display generated images.
+This repository is a front-end application designed to generate images, likely leveraging an AI-based API. This project, created by [**lorenzo-ap**](https://github.com/lorenzo-ap), provides a user interface to input prompts and display generated images.
 
 ## Features
 
@@ -35,4 +33,4 @@ Created by `lorenzo-ap`.
 
 ## Last Updated
 
-March 10, 2025
+October 16, 2025

@@ -1,12 +1,10 @@
-import { refreshToken, signIn, signOut, signUp } from '../api';
+import { signIn, signOut, signUp } from '../api';
 import { setUser } from '../redux/slices';
 import { store } from '../redux/store';
 import { SignInForm, SignUpForm, User } from '../types';
-import { removeAccessToken, setAccessToken } from '../utils';
 
 const authUser = (user: User) => {
   store.dispatch(setUser(user));
-  setAccessToken(user.accessToken);
 };
 
 export const authService = {
@@ -22,12 +20,6 @@ export const authService = {
 
   signOut: async () => {
     await signOut();
-    removeAccessToken();
     store.dispatch(setUser(null));
-  },
-
-  refreshToken: async () => {
-    const res = await refreshToken();
-    setAccessToken(res.data.accessToken);
   }
 };

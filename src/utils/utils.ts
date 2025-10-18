@@ -32,15 +32,3 @@ export const generateIdFromString = (text: string) => {
 
   return String(fiveDigitId).padStart(5, '0');
 };
-
-export const setAccessToken = (token: string) => {
-  sessionStorage.setItem('access-token', token);
-};
-
-export const getAccessToken = (): string | null => {
-  return sessionStorage.getItem('access-token');
-};
-
-export const removeAccessToken = () => {
-  sessionStorage.removeItem('access-token');
-};
