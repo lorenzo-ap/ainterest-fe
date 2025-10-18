@@ -15,7 +15,7 @@ req.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
-    if (error.response?.status !== 401) {
+    if (error.response?.status !== 401 && error.response?.status !== 403) {
       if (error.response?.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
         toastService.error(error.response.data.message as string);
       }
