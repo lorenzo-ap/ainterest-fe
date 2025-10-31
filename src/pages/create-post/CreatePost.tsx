@@ -1,6 +1,6 @@
 import { Button, Select, Text, Textarea, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconArrowLeft, IconBrandOpenai, IconPhotoUp } from '@tabler/icons-react';
+import { IconArrowLeft, IconPhotoUp, IconSparkles } from '@tabler/icons-react';
 import { AxiosError } from 'axios';
 import { FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -196,7 +196,7 @@ export const CreatePostPage = () => {
                 <Button
                   color='teal'
                   size='md'
-                  rightSection={<IconBrandOpenai size={20} />}
+                  leftSection={<IconSparkles size={20} />}
                   onClick={onGenerate}
                   disabled={isGenerating || isSharing}
                 >
