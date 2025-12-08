@@ -1,14 +1,13 @@
+import 'react-image-crop/dist/ReactCrop.css';
+
 import { Avatar, Button, Modal } from '@mantine/core';
 import { IconPhotoEdit } from '@tabler/icons-react';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactCrop, { Crop, centerCrop, makeAspectCrop } from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
-import { useSelector } from 'react-redux';
-import { selectLoggedUser } from '../../../redux/selectors';
+import { useCurrentUser, useUpdateUser } from '../../../queries';
 import { postService } from '../../../services/posts';
 import { toastService } from '../../../services/toast';
-import { userService } from '../../../services/user';
 import { User } from '../../../types';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -20,11 +19,19 @@ interface UserProfileAvatarProps {
 
 export const UserProfileAvatar = (props: UserProfileAvatarProps) => {
   const { t } = useTranslation();
-  const loggedUser = useSelector(selectLoggedUser);
+
+  const { data: currentUser } = useCurrentUser();
+  const { mutate: updateUser, isPending } = useUpdateUser({
+    onSuccess: (res) => {
+      resetFileInput();
+      toastService.success(t('apis.user.update'));
+      postService.setPosts();
+      postService.setUserPosts(res.data._id);
+    }
+  });
 
   const [uploadedPhoto, setUploadedPhoto] = useState<File | null>(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
-  const [imageLoading, setImageLoading] = useState(false);
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<Crop | null>(null);
@@ -62,7 +69,7 @@ export const UserProfileAvatar = (props: UserProfileAvatarProps) => {
     }, 150);
   };
 
-  const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+  const onImageLoad = (e: SyntheticEvent<HTMLImageElement>) => {
     const { width, height } = e.currentTarget;
     const crop = centerCrop(
       makeAspectCrop(
@@ -117,8 +124,6 @@ export const UserProfileAvatar = (props: UserProfileAvatarProps) => {
   const editUser = async () => {
     if (!uploadedPhoto || !completedCrop) return;
 
-    setImageLoading(true);
-
     const croppedImage = await getCroppedImage();
     const reader = new FileReader();
     reader.readAsDataURL(croppedImage);
@@ -131,20 +136,10 @@ export const UserProfileAvatar = (props: UserProfileAvatarProps) => {
       }
 
       const user = props.user;
-      userService
-        .editUser({
-          ...user,
-          photo
-        })
-        .then(() => {
-          resetFileInput();
-          toastService.success(t('apis.user.update'));
-          postService.setPosts();
-          postService.setUserPosts(user._id);
-        })
-        .finally(() => {
-          setImageLoading(false);
-        });
+      updateUser({
+        ...user,
+        photo
+      });
     };
   };
 
@@ -166,7 +161,7 @@ export const UserProfileAvatar = (props: UserProfileAvatarProps) => {
       >
         <Avatar
           key={props.user?.username}
-          src={props.isCurrentUser ? loggedUser?.photo : props.user?.photo}
+          src={props.isCurrentUser ? currentUser?.photo : props.user?.photo}
           size={80}
           name={props.user?.username}
           color='initials'
@@ -201,14 +196,14 @@ export const UserProfileAvatar = (props: UserProfileAvatarProps) => {
         )}
 
         <div className='mt-3 flex items-center justify-end gap-x-3'>
-          <Button variant='subtle' color='red' onClick={resetFileInput} disabled={imageLoading}>
+          <Button variant='subtle' color='red' onClick={resetFileInput} disabled={isPending}>
             {t('common.cancel')}
           </Button>
 
           <Button
             color='teal'
             onClick={editUser}
-            loading={imageLoading}
+            loading={isPending}
             disabled={!completedCrop || completedCrop.width <= 1 || completedCrop.height <= 1}
           >
             {t('common.save')}

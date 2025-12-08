@@ -1,9 +1,8 @@
 import { Button, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormValidation } from '../../../hooks';
-import { authService } from '../../../services/auth';
+import { useSignIn } from '../../../queries';
 import { toastService } from '../../../services/toast';
 import { SignInForm } from '../../../types';
 
@@ -40,9 +39,14 @@ export const SignInModal = (props: SignInModalProps) => {
     }
   });
 
-  const [loading, setLoading] = useState(false);
-
   useFormValidation(form, i18n);
+
+  const { mutate: signIn, isPending } = useSignIn({
+    onSuccess: () => {
+      closeModal();
+      toastService.success(t('apis.auth.success_sign_in'));
+    }
+  });
 
   const closeModal = () => {
     props.close();
@@ -50,18 +54,7 @@ export const SignInModal = (props: SignInModalProps) => {
   };
 
   const submit = (values: SignInForm) => {
-    setLoading(true);
-
-    authService
-      .signIn(values)
-      .then(() => {
-        closeModal();
-
-        toastService.success(t('apis.auth.success_sign_in'));
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    signIn(values);
   };
 
   return (
@@ -81,7 +74,7 @@ export const SignInModal = (props: SignInModalProps) => {
           key={form.key('password')}
           {...form.getInputProps('password')}
         />
-        <Button className='mt-2' color='violet' size='md' type='submit' loading={loading}>
+        <Button className='mt-2' color='violet' size='md' type='submit' loading={isPending}>
           {t('common.sign_in')}
         </Button>
       </form>

@@ -3,11 +3,9 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconCheck, IconLogout2, IconMoon, IconSun, IconWorld } from '@tabler/icons-react';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ConfirmModal } from '../../components';
-import { selectAuthLoading, selectLoggedUser } from '../../redux/selectors';
-import { authService } from '../../services/auth';
+import { useCurrentUser, useSignOut } from '../../queries';
 import { toastService } from '../../services/toast';
 import { Language } from '../../types';
 import { SignInModal, SignUpModal } from './modals';
@@ -38,11 +36,16 @@ const LanguageButton = (props: LanguageButtonProps) => {
 export const Header = () => {
   const { t, i18n } = useTranslation();
   const { setColorScheme, colorScheme } = useMantineColorScheme();
-  const navigate = useNavigate();
   const location = useLocation();
 
-  const loggedUser = useSelector(selectLoggedUser);
-  const isAuthLoading = useSelector(selectAuthLoading);
+  const { data: currentUser, isLoading: isCurrentUserLoading } = useCurrentUser();
+  const { mutate: signOut, isPending } = useSignOut({
+    onSuccess: () => {
+      closeSignOutConfirmModal();
+      toastService.success(t('apis.auth.success_sign_out'));
+    }
+  });
+
   const { pathname } = useMemo(() => location, [location]);
 
   const [signInModalOpened, { open: openSignInModal, close: closeSignInModal }] = useDisclosure(false);
@@ -64,14 +67,6 @@ export const Header = () => {
     setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
   };
 
-  const signOut = () => {
-    authService.signOut().finally(() => {
-      closeSignOutConfirmModal();
-      navigate('/');
-      toastService.success(t('apis.auth.success_sign_out'));
-    });
-  };
-
   return (
     <>
       <meta content={colorScheme === 'dark' ? '#2e2e2e' : '#fff'} name='theme-color' />
@@ -88,31 +83,29 @@ export const Header = () => {
           </Link>
 
           <div className='flex items-center gap-x-2'>
-            {loggedUser ? (
+            {currentUser ? (
               <Button
-                className='px-[5px] xs:px-2.5'
-                variant={pathname.includes(loggedUser.username) ? 'light' : 'default'}
+                component={Link}
+                variant={pathname.includes(currentUser.username) ? 'light' : 'default'}
                 color='indigo'
                 radius='md'
-                onClick={() => {
-                  navigate(`account/${loggedUser.username}`);
-                }}
-                aria-label={t('a11y.profile')}
+                to={`account/${currentUser.username}`}
+                className='px-[5px] xs:px-2.5'
               >
                 <Avatar
-                  key={loggedUser.username}
-                  src={loggedUser.photo}
-                  name={loggedUser.username}
+                  key={currentUser.username}
+                  src={currentUser.photo}
+                  name={currentUser.username}
                   color='initials'
                   size={24}
                 >
-                  {loggedUser.username[0].toUpperCase()}
+                  {currentUser.username[0].toUpperCase()}
                 </Avatar>
 
-                <Text className='ms-1.5 text-sm max-xs:hidden'>{loggedUser.username}</Text>
+                <Text className='ms-1.5 text-sm max-xs:hidden'>{currentUser.username}</Text>
               </Button>
             ) : (
-              <Button disabled={isAuthLoading} onClick={openSignInModal} color='violet' variant='light'>
+              <Button disabled={isCurrentUserLoading} onClick={openSignInModal} color='violet' variant='light'>
                 {t('common.sign_in')}
               </Button>
             )}
@@ -161,7 +154,7 @@ export const Header = () => {
               </ActionIcon>
             </Tooltip>
 
-            {loggedUser && (
+            {currentUser && (
               <Tooltip withArrow label={t('pages.components.header.sign_out')}>
                 <ActionIcon
                   variant='light'
@@ -184,6 +177,7 @@ export const Header = () => {
       <ConfirmModal
         title={t('pages.components.header.sign_out')}
         message={t('pages.components.header.are_you_sure')}
+        isLoading={isPending}
         opened={signOutConfirmModalOpened}
         confirm={signOut}
         close={closeSignOutConfirmModal}

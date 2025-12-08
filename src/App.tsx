@@ -4,13 +4,15 @@ import '@mantine/notifications/styles.css';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { useAuth } from './hooks';
 import { CreatePostPage, ErrorPage, HomePage, UserProfilePage } from './pages';
 import { Page, ProtectedRoute } from './pages/components';
 import { Header } from './pages/components/Header';
+import { useCurrentUser } from './queries';
 
 const App = () => {
-  useAuth();
+  useCurrentUser({
+    enabled: true
+  });
 
   return (
     <MantineProvider defaultColorScheme='light' withCssVariables>

@@ -7,9 +7,9 @@ import { Link, useParams } from 'react-router-dom';
 import { getUserByUsername } from '../../api';
 import { Filters, RenderPosts, ScrollToTopButton } from '../../components';
 import { useSearchPosts } from '../../hooks';
+import { useCurrentUser } from '../../queries';
 import { store } from '../../redux';
 import {
-  selectLoggedUser,
   selectSearchedUserPosts,
   selectUserPosts,
   selectUserPostsFilters,
@@ -30,8 +30,7 @@ import { UserProfileAvatar } from './components/UserProfileAvatar';
 export const UserProfilePage = () => {
   const { t } = useTranslation();
   const params = useParams();
-
-  const loggedUser = useSelector(selectLoggedUser);
+  const { data: currentUser } = useCurrentUser();
   const userPosts = useSelector(selectUserPosts);
 
   const { searchText, searchedPosts, handleSearchChange, resetSearchedPosts } = useSearchPosts(
@@ -70,8 +69,8 @@ export const UserProfilePage = () => {
   }, [params.username]);
 
   useEffect(() => {
-    setIsCurrentUser(loggedUser?._id === user?._id);
-  }, [loggedUser?._id, user?._id]);
+    setIsCurrentUser(currentUser?._id === user?._id);
+  }, [currentUser?._id, user?._id]);
 
   return (
     <>

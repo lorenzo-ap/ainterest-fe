@@ -9,6 +9,7 @@ interface ConfirmModalProps {
   close: () => void;
   confirmLabel?: string;
   cancelLabel?: string;
+  isLoading?: boolean;
 }
 
 export const ConfirmModal = (props: ConfirmModalProps) => {
@@ -31,7 +32,7 @@ export const ConfirmModal = (props: ConfirmModalProps) => {
           {t(props.cancelLabel || 'common.cancel')}
         </Button>
 
-        <Button color='teal' onClick={props.confirm}>
+        <Button color='teal' loading={props.isLoading} onClick={props.confirm}>
           {t(props.confirmLabel || 'common.continue')}
         </Button>
       </div>

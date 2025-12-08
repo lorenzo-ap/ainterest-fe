@@ -1,8 +1,7 @@
 import { ActionIcon, Loader, Text, Tooltip } from '@mantine/core';
 import { IconPhoto, IconPhotoDown } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { selectLoggedUser } from '../../../redux/selectors';
+import { useCurrentUser } from '../../../queries';
 import { downloadImage } from '../../../utils';
 
 interface GeneratedImageProps {
@@ -15,8 +14,7 @@ interface GeneratedImageProps {
 
 export const PostGeneratedImage = (props: GeneratedImageProps) => {
   const { t } = useTranslation();
-
-  const loggedUser = useSelector(selectLoggedUser);
+  const { data: currentUser } = useCurrentUser();
 
   return (
     <div
@@ -33,7 +31,7 @@ export const PostGeneratedImage = (props: GeneratedImageProps) => {
               p={0}
               size={28}
               onClick={() => {
-                downloadImage(props.imageAlt, props.imageSource, loggedUser?.username ?? ' ');
+                downloadImage(props.imageAlt, props.imageSource, currentUser.username);
               }}
               aria-label={t('components.post_card.download_image')}
             >

@@ -1,9 +1,8 @@
 import { Button, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormValidation } from '../../../hooks';
-import { authService } from '../../../services/auth';
+import { useSignUp } from '../../../queries';
 import { toastService } from '../../../services/toast';
 import { SignUpForm } from '../../../types';
 
@@ -75,9 +74,14 @@ export const SignUpModal = (props: SignUpModalProps) => {
     }
   });
 
-  const [loading, setLoading] = useState(false);
-
   useFormValidation(form, i18n);
+
+  const { mutate: signUp, isPending } = useSignUp({
+    onSuccess: () => {
+      closeModal();
+      toastService.success(t('apis.auth.success_sign_up'));
+    }
+  });
 
   const closeModal = () => {
     props.close();
@@ -85,18 +89,7 @@ export const SignUpModal = (props: SignUpModalProps) => {
   };
 
   const submit = (values: SignUpForm) => {
-    setLoading(true);
-
-    authService
-      .signUp(values)
-      .then(() => {
-        closeModal();
-
-        toastService.success(t('apis.auth.success_sign_up'));
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    signUp(values);
   };
 
   return (
@@ -130,7 +123,7 @@ export const SignUpModal = (props: SignUpModalProps) => {
           {...form.getInputProps('confirmPassword')}
         />
 
-        <Button className='mt-2' color='violet' size='md' type='submit' loading={loading}>
+        <Button className='mt-2' color='violet' size='md' type='submit' loading={isPending}>
           {t('common.sign_up')}
         </Button>
       </form>

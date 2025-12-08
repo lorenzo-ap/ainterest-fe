@@ -11,9 +11,8 @@ import {
 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { selectLoggedUser } from '../redux/selectors';
+import { useCurrentUser } from '../queries';
 import { postService } from '../services/posts';
 import { toastService } from '../services/toast';
 import { Post, UserRole } from '../types';
@@ -23,7 +22,7 @@ import { PostImageModal } from './PostImageModal';
 export const PostCard = (props: Post) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const loggedUser = useSelector(selectLoggedUser);
+  const { data: currentUser } = useCurrentUser();
 
   const [showInfo, setShowInfo] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -140,7 +139,7 @@ export const PostCard = (props: Post) => {
                       </ActionIcon>
                     </Tooltip>
 
-                    {(loggedUser?.role === UserRole.ADMIN || props.user._id === loggedUser?._id) && (
+                    {(currentUser?.role === UserRole.ADMIN || props.user._id === currentUser?._id) && (
                       <Tooltip label={t('components.post_card.delete_post')} withArrow>
                         <ActionIcon
                           variant='transparent'
@@ -194,17 +193,17 @@ export const PostCard = (props: Post) => {
                     <ActionIcon
                       variant='transparent'
                       onClick={() => {
-                        postService.reactToPost(props._id, loggedUser?._id || '');
+                        postService.reactToPost(props._id, currentUser?._id || '');
                       }}
                       aria-label={t(
-                        props.likes.includes(loggedUser?._id ?? '')
+                        props.likes.includes(currentUser?._id ?? '')
                           ? 'components.post_card.unlike_post'
                           : 'components.post_card.like_post'
                       )}
-                      className={!loggedUser ? 'pointer-events-none' : ''}
+                      className={!currentUser ? 'pointer-events-none' : ''}
                       tabIndex={isHovered || showInfo ? 0 : -1}
                     >
-                      {props.likes.includes(loggedUser?._id ?? '') ? (
+                      {props.likes.includes(currentUser?._id ?? '') ? (
                         <IconHeartFilled className='text-slate-300' size={24} color='firebrick' />
                       ) : (
                         <IconHeart className='text-slate-300' size={24} />
