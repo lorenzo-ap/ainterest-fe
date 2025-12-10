@@ -1,4 +1,2 @@
-export * from './useFetchPosts';
-export * from './useFilterPosts';
 export * from './useFormValidation';
-export * from './useSearchPosts';
+export * from './usePostsFiltering';

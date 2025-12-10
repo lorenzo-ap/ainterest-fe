@@ -10,3 +10,8 @@ export interface NSFWCheck {
   sexual: boolean;
   sexual_score: number;
 }
+
+export interface GenerateImageBody {
+  text: string;
+  size: number;
+}

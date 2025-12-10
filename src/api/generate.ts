@@ -1,6 +1,5 @@
 import { req } from '.';
 import { apis } from '../assets/apis/apis';
-import { GeneratedImage } from '../types';
+import { GeneratedImage, GenerateImageBody } from '../types';
 
-export const generateImage = (text: string, size: number) =>
-  req.post<GeneratedImage>(`v1/${apis.generate}/image`, { text, size });
+export const generateImage = (body: GenerateImageBody) => req.post<GeneratedImage>(`v1/${apis.generate}/image`, body);

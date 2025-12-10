@@ -2,31 +2,33 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 import { Avatar, Button, Modal } from '@mantine/core';
 import { IconPhotoEdit } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ReactCrop, { Crop, centerCrop, makeAspectCrop } from 'react-image-crop';
-import { useCurrentUser, useUpdateUser } from '../../../queries';
-import { postService } from '../../../services/posts';
+import ReactCrop, { centerCrop, Crop, makeAspectCrop } from 'react-image-crop';
+import { postKeys, useCurrentUser, useUpdateCurrentUser } from '../../../queries';
 import { toastService } from '../../../services/toast';
 import { User } from '../../../types';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 interface UserProfileAvatarProps {
-  user: User | null;
+  user: User | undefined;
   isCurrentUser: boolean;
 }
 
 export const UserProfileAvatar = (props: UserProfileAvatarProps) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const { data: currentUser } = useCurrentUser();
-  const { mutate: updateUser, isPending } = useUpdateUser({
-    onSuccess: (res) => {
+  const { mutate: updateUser, isPending } = useUpdateCurrentUser({
+    onSuccess: () => {
       resetFileInput();
       toastService.success(t('apis.user.update'));
-      postService.setPosts();
-      postService.setUserPosts(res.data._id);
+      queryClient.invalidateQueries({
+        queryKey: postKeys.posts
+      });
     }
   });
 

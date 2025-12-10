@@ -9,24 +9,33 @@ import {
   IconPhotoDown,
   IconTrash
 } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
-import { useCurrentUser } from '../queries';
-import { postService } from '../services/posts';
+import { getUserByUsername, getUserPosts } from '../api';
+import { postKeys, useCurrentUser, useDeletePost, useLikePost, userKeys } from '../queries';
 import { toastService } from '../services/toast';
 import { Post, UserRole } from '../types';
-import { downloadImage } from '../utils';
+import { downloadImage, STALE_TIME } from '../utils';
 import { PostImageModal } from './PostImageModal';
 
 export const PostCard = (props: Post) => {
   const { t } = useTranslation();
   const location = useLocation();
+  const queryClient = useQueryClient();
+
   const { data: currentUser } = useCurrentUser();
+
+  const { mutate: likePost } = useLikePost(props._id, currentUser?._id || '');
+  const { mutate: deletePost, isPending: isDeletePostLoading } = useDeletePost(props._id, {
+    onSuccess: () => {
+      toastService.success(t('apis.post.delete'));
+    }
+  });
 
   const [showInfo, setShowInfo] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [deletePostLoading, setDeletePostLoading] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [profileUsername, setProfileUsername] = useState<string>('');
   const [postImageModalOpened, { open: openPostImageModal, close: closePostImageModal }] = useDisclosure(false);
@@ -35,12 +44,19 @@ export const PostCard = (props: Post) => {
     setProfileUsername(location.pathname.split('/').reverse()[0]);
   }, [location.pathname]);
 
-  const deletePost = (postId: string) => {
-    setDeletePostLoading(true);
+  const prefetchUserData = () => {
+    const { _id: id, username } = props.user;
 
-    postService.deletePost(postId).finally(() => {
-      setDeletePostLoading(false);
-      toastService.success(t('apis.post.delete'));
+    queryClient.prefetchQuery({
+      queryKey: userKeys.user(username),
+      queryFn: () => getUserByUsername(username),
+      staleTime: STALE_TIME
+    });
+
+    queryClient.prefetchQuery({
+      queryKey: postKeys.userPosts(id),
+      queryFn: () => getUserPosts(id),
+      staleTime: STALE_TIME
     });
   };
 
@@ -145,10 +161,10 @@ export const PostCard = (props: Post) => {
                           variant='transparent'
                           p={0}
                           size={18}
-                          loading={deletePostLoading}
+                          loading={isDeletePostLoading}
                           loaderProps={{ color: 'white' }}
                           onClick={() => {
-                            deletePost(props._id);
+                            deletePost();
                           }}
                           aria-label={t('components.post_card.delete_post')}
                           tabIndex={isHovered || showInfo ? 0 : -1}
@@ -175,6 +191,7 @@ export const PostCard = (props: Post) => {
                   state={props.user}
                   style={{ pointerEvents: profileUsername === props.user.username ? 'none' : 'auto' }}
                   tabIndex={isHovered || showInfo ? 0 : -1}
+                  onMouseEnter={prefetchUserData}
                 >
                   <Avatar
                     key={props.user.username}
@@ -193,7 +210,7 @@ export const PostCard = (props: Post) => {
                     <ActionIcon
                       variant='transparent'
                       onClick={() => {
-                        postService.reactToPost(props._id, currentUser?._id || '');
+                        likePost();
                       }}
                       aria-label={t(
                         props.likes.includes(currentUser?._id ?? '')

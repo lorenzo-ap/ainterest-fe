@@ -31,7 +31,7 @@ export const PostGeneratedImage = (props: GeneratedImageProps) => {
               p={0}
               size={28}
               onClick={() => {
-                downloadImage(props.imageAlt, props.imageSource, currentUser.username);
+                downloadImage(props.imageAlt, props.imageSource, currentUser?.username || '');
               }}
               aria-label={t('components.post_card.download_image')}
             >

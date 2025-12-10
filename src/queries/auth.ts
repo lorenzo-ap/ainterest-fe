@@ -4,28 +4,33 @@ import { signIn, signOut, signUp } from '../api';
 import { SignInForm, SignUpForm, User } from '../types';
 import { userKeys } from './user';
 
-export const useSignIn = (options?: UseMutationOptions<AxiosResponse<User>, Error, SignInForm>) => {
+type UseSignInOptions = UseMutationOptions<AxiosResponse<User>, Error, SignInForm>;
+type UseSignUpOptions = UseMutationOptions<AxiosResponse<User>, Error, SignUpForm>;
+
+export const useSignIn = (options?: UseSignInOptions) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     ...options,
     mutationFn: (body) => signIn(body),
-    onSuccess: (data, variables, onMutateResult, context) => {
+    onSuccess: (...args) => {
+      const [data] = args;
       queryClient.setQueryData(userKeys.current, data);
-      options?.onSuccess?.(data, variables, onMutateResult, context);
+      options?.onSuccess?.(...args);
     }
   });
 };
 
-export const useSignUp = (options?: UseMutationOptions<AxiosResponse<User>, Error, SignUpForm>) => {
+export const useSignUp = (options?: UseSignUpOptions) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     ...options,
     mutationFn: (body) => signUp(body),
-    onSuccess: (data, variables, onMutateResult, context) => {
+    onSuccess: (...args) => {
+      const [data] = args;
       queryClient.setQueryData(userKeys.current, data);
-      options?.onSuccess?.(data, variables, onMutateResult, context);
+      options?.onSuccess?.(...args);
     }
   });
 };
@@ -36,9 +41,9 @@ export const useSignOut = (options?: UseMutationOptions) => {
   return useMutation({
     ...options,
     mutationFn: () => signOut(),
-    onSuccess: (data, variables, onMutateResult, context) => {
+    onSuccess: (...args) => {
       queryClient.setQueryData(userKeys.current, { data: null });
-      options?.onSuccess?.(data, variables, onMutateResult, context);
+      options?.onSuccess?.(...args);
     }
   });
 };

@@ -1,76 +1,39 @@
 import { Badge, Button, Skeleton, Text, Title } from '@mantine/core';
 import { IconArrowRight, IconPhotoAi } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import { getUserByUsername } from '../../api';
 import { Filters, RenderPosts, ScrollToTopButton } from '../../components';
-import { useSearchPosts } from '../../hooks';
-import { useCurrentUser } from '../../queries';
-import { store } from '../../redux';
-import {
-  selectSearchedUserPosts,
-  selectUserPosts,
-  selectUserPostsFilters,
-  selectUserPostsSearchText
-} from '../../redux/selectors';
-import {
-  resetUserPostsFilters,
-  resetUserPostsSearch,
-  setUserPosts,
-  setUserPostsFilters,
-  setUserPostsSearchText
-} from '../../redux/slices';
-import { postService } from '../../services/posts';
-import { User, UserRole } from '../../types';
+import { usePostsFiltering } from '../../hooks';
+import { useCurrentUser, useUserByUsername, useUserPosts } from '../../queries';
+import { UserRole } from '../../types';
 import { SearchPostsInput } from '../components';
 import { UserProfileAvatar } from './components/UserProfileAvatar';
 
 export const UserProfilePage = () => {
   const { t } = useTranslation();
-  const params = useParams();
+  const params = useParams<{ username: string }>();
+
   const { data: currentUser } = useCurrentUser();
-  const userPosts = useSelector(selectUserPosts);
+  const { data: user, isLoading: userLoading, isSuccess } = useUserByUsername(params.username || '', {});
+  const { data: userPosts, isLoading: postsLoading } = useUserPosts(user?._id || '', {
+    enabled: isSuccess
+  });
 
-  const { searchText, searchedPosts, handleSearchChange, resetSearchedPosts } = useSearchPosts(
-    selectUserPostsSearchText,
-    selectSearchedUserPosts,
-    setUserPostsSearchText,
-    resetUserPostsSearch
-  );
+  const isCurrentUser = currentUser?._id === user?._id;
 
-  const [user, setUser] = useState<User | null>(null);
-  const [isCurrentUser, setIsCurrentUser] = useState(false);
-  const [userLoading, setUserLoading] = useState(true);
-  const [postsLoading, setPostsLoading] = useState(true);
+  const { searchText, handleSearchChange, resetSearch, filters, handleFiltersChange, resetFilters, filteredPosts } =
+    usePostsFiltering(userPosts);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
-    store.dispatch(setUserPosts([]));
-
-    setIsCurrentUser(false);
-    setUserLoading(true);
-    setPostsLoading(true);
-
-    getUserByUsername(params.username || '')
-      .then((res) => {
-        const user = res.data;
-        document.title = user.username;
-
-        setUser(user);
-
-        postService.setUserPosts(user._id).finally(() => setPostsLoading(false));
-      })
-      .finally(() => setUserLoading(false));
-  }, [params.username]);
-
-  useEffect(() => {
-    setIsCurrentUser(currentUser?._id === user?._id);
-  }, [currentUser?._id, user?._id]);
+    if (isSuccess && user) {
+      document.title = user.username;
+    }
+  }, [isSuccess, user]);
 
   return (
     <>
@@ -123,31 +86,25 @@ export const UserProfilePage = () => {
           )}
         </div>
 
-        {postsLoading ? (
+        {!isSuccess || postsLoading ? (
           <Skeleton radius='md' height={42} className='mt-11 md:mt-14' />
         ) : (
-          !!userPosts.length && (
+          !!userPosts?.length && (
             <div className='mt-4 flex items-end gap-x-2 md:mt-7'>
               <SearchPostsInput
                 placeholder={t('pages.components.search_posts_input.enter_prompt')}
                 loading={postsLoading}
                 searchText={searchText}
                 handleSearchChange={handleSearchChange}
-                resetSearch={resetSearchedPosts}
+                resetSearch={resetSearch}
               />
 
-              <Filters
-                postsSelector={selectUserPosts}
-                setPosts={setUserPosts}
-                filtersStateSelector={selectUserPostsFilters}
-                setFiltersState={setUserPostsFilters}
-                resetFilters={resetUserPostsFilters}
-              />
+              <Filters filters={filters} onFiltersChange={handleFiltersChange} onReset={resetFilters} />
             </div>
           )
         )}
 
-        <RenderPosts posts={searchText ? searchedPosts : userPosts} searchText={searchText} loading={postsLoading} />
+        <RenderPosts posts={filteredPosts} searchText={searchText} loading={!isSuccess || postsLoading} />
       </div>
 
       <ScrollToTopButton />

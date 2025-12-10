@@ -1,15 +1,13 @@
 import { Button, Select, Text, Textarea, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconArrowLeft, IconPhotoUp, IconSparkles } from '@tabler/icons-react';
-import { AxiosError } from 'axios';
 import { FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { generateImage } from '../../api';
 import { useFormValidation } from '../../hooks';
-import { postService } from '../../services/posts';
+import { useCreatePost, useGenerateImage } from '../../queries';
 import { toastService } from '../../services/toast';
-import { CreatePostForm } from '../../types';
+import { CreatePostForm, GenerateImageBody } from '../../types';
 import { getRandomPrompt } from '../../utils';
 import { PostGeneratedImage } from './components';
 
@@ -19,8 +17,23 @@ export const CreatePostPage = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [isSharing, setIsSharing] = useState(false);
+  const { mutate: generateImage, isPending: isGenerating } = useGenerateImage({
+    onSuccess: (res, variables) => {
+      form.setFieldValue('postGeneratedImage', { prompt: variables.text, photo: res.data.image });
+      setIsImageMissing(false);
+    },
+    onError: (err) => {
+      if (!err.response?.data.nsfw) return;
+      toastService.error(t('apis.generate.error'));
+    }
+  });
+  const { mutate: createPost, isPending: isSharing } = useCreatePost({
+    onSuccess: () => {
+      navigate('/');
+      toastService.success(t('apis.post.success'));
+    }
+  });
+
   const [isImageMissing, setIsImageMissing] = useState(false);
 
   const form = useForm<CreatePostForm>({
@@ -65,16 +78,12 @@ export const CreatePostPage = () => {
   };
 
   const generatePostImage = (prompt: string, size: number) => {
-    generateImage(prompt, size)
-      .then((response) => {
-        form.setFieldValue('postGeneratedImage', { prompt, photo: response.data.image });
-        setIsImageMissing(false);
-      })
-      .catch((err: AxiosError<{ message: string; nsfw: boolean }>) => {
-        if (!err.response?.data.nsfw) return;
-        toastService.error(t('apis.generate.error'));
-      })
-      .finally(() => setIsGenerating(false));
+    const body: GenerateImageBody = {
+      text: prompt,
+      size
+    };
+
+    generateImage(body);
   };
 
   const onGenerate = () => {
@@ -89,8 +98,6 @@ export const CreatePostPage = () => {
       return;
     }
 
-    setIsGenerating(true);
-
     const size = +form.getValues().size.split('x')[0];
     const { prompt } = form.getValues();
 
@@ -98,19 +105,10 @@ export const CreatePostPage = () => {
   };
 
   const sharePost = (formData: CreatePostForm) => {
-    setIsSharing(true);
     setIsImageMissing(false);
 
     const body = { ...formData.postGeneratedImage };
-
-    postService
-      .createPost(body)
-      .then(() => {
-        navigate('/');
-
-        toastService.success(t('apis.post.success'));
-      })
-      .finally(() => setIsSharing(false));
+    createPost(body);
   };
 
   const submitForm = (e: FormEvent<HTMLFormElement>) => {

@@ -1,25 +1,18 @@
 import { ActionIcon, Skeleton, Text, Title, Tooltip } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { Filters, RenderPosts, ScrollToTopButton } from '../../components';
-import { useFetchPosts, useSearchPosts } from '../../hooks';
-import { selectPosts, selectPostsFilters, selectSearchedPosts, selectSearchText } from '../../redux/selectors';
-import { resetPostsFilters, resetPostsSearch, setPosts, setPostsFilters, setPostsSearchText } from '../../redux/slices';
+import { usePostsFiltering } from '../../hooks';
+import { usePosts } from '../../queries';
 import { SearchPostsInput } from '../components';
 
 export const HomePage = () => {
   const { t } = useTranslation();
 
-  const posts = useSelector(selectPosts);
+  const { data: posts, isLoading, isFetching, refetch } = usePosts();
 
-  const { fetchPosts, loading, firstLoad } = useFetchPosts();
-  const { searchText, searchedPosts, handleSearchChange, resetSearchedPosts } = useSearchPosts(
-    selectSearchText,
-    selectSearchedPosts,
-    setPostsSearchText,
-    resetPostsSearch
-  );
+  const { searchText, handleSearchChange, resetSearch, filters, handleFiltersChange, resetFilters, filteredPosts } =
+    usePostsFiltering(posts, { searchByUsername: true });
 
   return (
     <>
@@ -32,17 +25,17 @@ export const HomePage = () => {
           </div>
         </div>
 
-        {firstLoad && loading ? (
+        {isLoading ? (
           <Skeleton radius='md' height={42} className='mt-14' />
         ) : (
-          !!posts.length && (
+          !!posts?.length && (
             <div className='mt-8 flex items-end gap-x-2'>
               <SearchPostsInput
                 placeholder={t('pages.components.search_posts_input.enter_prompt_or_username')}
-                loading={loading}
+                loading={isFetching}
                 searchText={searchText}
                 handleSearchChange={handleSearchChange}
-                resetSearch={resetSearchedPosts}
+                resetSearch={resetSearch}
               />
 
               <Tooltip label={t('pages.home.refresh_posts')} withArrow>
@@ -51,10 +44,10 @@ export const HomePage = () => {
                   color='violet'
                   radius='md'
                   onClick={() => {
-                    resetSearchedPosts();
-                    fetchPosts();
+                    resetSearch();
+                    refetch();
                   }}
-                  loading={loading}
+                  loading={isFetching}
                   aria-label={t('pages.home.refresh_posts')}
                 >
                   <IconRefresh size={20} />
@@ -62,17 +55,16 @@ export const HomePage = () => {
               </Tooltip>
 
               <Filters
-                postsSelector={selectPosts}
-                setPosts={setPosts}
-                filtersStateSelector={selectPostsFilters}
-                setFiltersState={setPostsFilters}
-                resetFilters={resetPostsFilters}
+                disabled={isFetching}
+                filters={filters}
+                onFiltersChange={handleFiltersChange}
+                onReset={resetFilters}
               />
             </div>
           )
         )}
 
-        <RenderPosts posts={searchText ? searchedPosts : posts} searchText={searchText} loading={loading} />
+        <RenderPosts posts={filteredPosts} searchText={searchText} loading={isFetching} />
       </div>
 
       <ScrollToTopButton />

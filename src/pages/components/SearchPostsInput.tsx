@@ -1,11 +1,12 @@
 import { CloseButton, TextInput, Tooltip } from '@mantine/core';
+import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface SearchPostsInputProps {
   placeholder: string;
   loading: boolean;
   searchText: string;
-  handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSearchChange: (event: ChangeEvent<HTMLInputElement>) => void;
   resetSearch: () => void;
 }
 

@@ -1,31 +1,19 @@
 import { ActionIcon, Button, Popover, Tooltip } from '@mantine/core';
-import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { IconArrowsSort, IconChevronDown, IconChevronUp, IconX } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { useFilterPosts } from '../hooks';
-import { FilterCriteria, FiltersState, Post } from '../types';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SelectorType<T> = (state: any) => T;
+import { FilterCriteria, FiltersState } from '../types';
 
 interface FiltersProps {
   disabled?: boolean;
-  postsSelector: SelectorType<Post[]>;
-  filtersStateSelector: SelectorType<FiltersState>;
-  setFiltersState: ActionCreatorWithPayload<FiltersState>;
-  setPosts: ActionCreatorWithPayload<Post[]>;
-  resetFilters: ActionCreatorWithoutPayload;
+  filters: FiltersState;
+  onFiltersChange: (criteria: FilterCriteria) => void;
+  onReset: () => void;
 }
 
-export const Filters = (props: FiltersProps) => {
+export const Filters = ({ disabled, filters, onFiltersChange, onReset }: FiltersProps) => {
   const { t } = useTranslation();
-  const { activeFiltersCriteria, isAscending, handleFiltersChange, resetFilteredPosts } = useFilterPosts(
-    props.postsSelector,
-    props.setPosts,
-    props.filtersStateSelector,
-    props.setFiltersState,
-    props.resetFilters
-  );
+
+  const isDefaultFilters = filters.criteria === FilterCriteria.Date && filters.isAscending;
 
   return (
     <Popover
@@ -41,7 +29,7 @@ export const Filters = (props: FiltersProps) => {
         <Popover.Target>
           <Tooltip label={t('components.filters.title')} withArrow>
             <ActionIcon
-              disabled={props.disabled}
+              disabled={disabled}
               size={42}
               color='teal'
               radius='md'
@@ -52,13 +40,13 @@ export const Filters = (props: FiltersProps) => {
           </Tooltip>
         </Popover.Target>
 
-        {(!isAscending ? true : activeFiltersCriteria !== FilterCriteria.Date) && (
+        {!isDefaultFilters && (
           <ActionIcon
             className='absolute -right-1 -top-1 rounded-full'
-            disabled={props.disabled}
+            disabled={disabled}
             size={16}
             color='gray'
-            onClick={resetFilteredPosts}
+            onClick={onReset}
             aria-label={t('a11y.reset_filters')}
           >
             <IconX size={12} />
@@ -78,12 +66,16 @@ export const Filters = (props: FiltersProps) => {
                   : 'rounded-none'
             }`}
             variant='default'
-            onClick={() => handleFiltersChange(label)}
+            onClick={() => onFiltersChange(label)}
           >
             <span className='me-0.5'>{t(`components.filters.${label}`)}</span>
 
-            {activeFiltersCriteria === label &&
-              (isAscending ? <IconChevronDown size={18} color='violet' /> : <IconChevronUp size={18} color='violet' />)}
+            {filters.criteria === label &&
+              (filters.isAscending ? (
+                <IconChevronDown size={18} color='violet' />
+              ) : (
+                <IconChevronUp size={18} color='violet' />
+              ))}
           </Button>
         ))}
       </Popover.Dropdown>
