@@ -3,7 +3,7 @@ import { IconArrowRight, IconPhotoAi } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { useUserByUsername } from '../../../queries';
+import { useCurrentUser, useUserByUsername } from '../../../queries';
 import { UserRole } from '../../../types';
 import { UserAvatar } from './UserAvatar';
 
@@ -27,9 +27,10 @@ type UserHeaderProps = {
 export const UserHeader = ({ username }: UserHeaderProps) => {
   const { t } = useTranslation();
 
+  const { data: currentUser } = useCurrentUser();
   const { data: user } = useUserByUsername(username);
 
-  const isCurrentUser = username === user.username;
+  const isCurrentUser = currentUser?.username === username;
 
   useEffect(() => {
     document.title = username;
