@@ -3,14 +3,23 @@ import { useTranslation } from 'react-i18next';
 import { PostCard } from '.';
 import { Post } from '../types';
 
-const PostSkeleton = () => {
-  return (
-    <div className='border-color card flex aspect-square flex-col rounded-xl border p-4'>
-      <Skeleton radius='md' className='mb-4 flex-grow' />
-      <Skeleton radius='md' height={24} className='w-3/4' />
-    </div>
-  );
-};
+const PostCardSkeleton = () => (
+  <>
+    {Array.from({ length: 10 }).map((_, index) => (
+      <div key={index} className='border-color card flex aspect-square flex-col rounded-xl border p-4'>
+        <Skeleton radius='md' className='mb-4 flex-grow' />
+        <Skeleton radius='md' height={24} className='w-3/4' />
+      </div>
+    ))}
+  </>
+);
+
+export const PostsSkeleton = () => (
+  <>
+    <Skeleton radius='md' height={42} className='mb-3 mt-11 md:mt-14' />
+    <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4'>{<PostCardSkeleton />}</div>
+  </>
+);
 
 interface RenderPostsProps {
   posts: Post[];
@@ -18,23 +27,23 @@ interface RenderPostsProps {
   loading: boolean;
 }
 
-export const RenderPosts = (props: RenderPostsProps) => {
+export const RenderPosts = ({ posts, searchText, loading }: RenderPostsProps) => {
   const { t } = useTranslation();
 
   return (
     <div className='mt-3'>
-      {props.searchText && (
+      {searchText && (
         <Title className='mb-3 font-medium' order={2} size={'h3'}>
           <span className='opacity-60'>{t('components.render_posts.showing_results_for')}</span>{' '}
-          <span className='opacity-100'>{props.searchText}</span>
+          <span className='opacity-100'>{searchText}</span>
         </Title>
       )}
 
       <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4'>
-        {props.loading ? (
-          Array.from({ length: 10 }).map((_, index) => <PostSkeleton key={index} />)
-        ) : props.posts.length ? (
-          props.posts.map((post) => <PostCard key={post._id} {...post} />)
+        {loading ? (
+          <PostCardSkeleton />
+        ) : posts.length ? (
+          posts.map((post) => <PostCard key={post._id} {...post} />)
         ) : (
           <Title className='col-span-full mt-4 uppercase' order={2} c='violet'>
             {t('components.render_posts.no_posts_found')}

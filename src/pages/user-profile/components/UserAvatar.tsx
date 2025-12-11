@@ -12,12 +12,12 @@ import { User } from '../../../types';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
-interface UserProfileAvatarProps {
-  user: User | undefined;
+interface UserAvatarProps {
+  user: User;
   isCurrentUser: boolean;
 }
 
-export const UserProfileAvatar = (props: UserProfileAvatarProps) => {
+export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
@@ -132,12 +132,11 @@ export const UserProfileAvatar = (props: UserProfileAvatarProps) => {
 
     reader.onload = () => {
       const photo = reader.result?.toString().replace('data:', '').replace(/^.+,/, '');
-      if (!photo || !props.user) {
+      if (!photo || !user) {
         toastService.error(t('apis.user.error_upload'));
         return;
       }
 
-      const user = props.user;
       updateUser({
         ...user,
         photo
@@ -159,19 +158,19 @@ export const UserProfileAvatar = (props: UserProfileAvatarProps) => {
       <label
         className='relative flex cursor-pointer items-center justify-center overflow-hidden rounded-full'
         htmlFor='uploadImage'
-        style={{ pointerEvents: props.isCurrentUser ? 'auto' : 'none' }}
+        style={{ pointerEvents: isCurrentUser ? 'auto' : 'none' }}
       >
         <Avatar
-          key={props.user?.username}
-          src={props.isCurrentUser ? currentUser?.photo : props.user?.photo}
+          key={user.username}
+          src={isCurrentUser ? currentUser?.photo : user.photo}
           size={80}
-          name={props.user?.username}
+          name={user.username}
           color='initials'
         >
-          {props.user?.username[0].toUpperCase()}
+          {user.username[0].toUpperCase()}
         </Avatar>
 
-        {!uploadedPhoto && props.isCurrentUser && (
+        {!uploadedPhoto && isCurrentUser && (
           <div className='pointer-events-none absolute -bottom-20 left-1/2 flex h-full w-full -translate-x-1/2 items-start justify-center rounded-full bg-black bg-opacity-50 pt-1.5 text-slate-300 transition-all md:group-hover:-bottom-12'>
             <IconPhotoEdit size={16} />
           </div>

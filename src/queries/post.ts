@@ -1,4 +1,10 @@
-import { useMutation, UseMutationOptions, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+  useSuspenseQuery,
+  UseSuspenseQueryOptions
+} from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { createPost, deletePost, getPosts, getUserPosts, likePost } from '../api';
 import { Post, PostGeneratedImage } from '../types';
@@ -6,10 +12,10 @@ import { STALE_TIME } from '../utils';
 
 type PostsResponse = AxiosResponse<Post[]>;
 
-type PostsOptions = Omit<UseQueryOptions<PostsResponse, Error, Post[]>, 'queryKey' | 'queryFn'>;
-type UseCreatePostOptions = Omit<UseMutationOptions<AxiosResponse<Post>, Error, PostGeneratedImage>, 'mutationFn'>;
-type UseLikePostOptions = Omit<UseMutationOptions<AxiosResponse<Post>>, 'mutationFn'>;
-type UseDeletePostOptions = Omit<UseMutationOptions, 'mutationFn'>;
+type PostsOptions = Omit<UseSuspenseQueryOptions<PostsResponse, Error, Post[]>, 'queryKey' | 'queryFn'>;
+type CreatePostOptions = Omit<UseMutationOptions<AxiosResponse<Post>, Error, PostGeneratedImage>, 'mutationFn'>;
+type LikePostOptions = Omit<UseMutationOptions<AxiosResponse<Post>>, 'mutationFn'>;
+type DeletePostOptions = Omit<UseMutationOptions, 'mutationFn'>;
 
 export const postKeys = {
   posts: ['posts'] as const,
@@ -17,7 +23,7 @@ export const postKeys = {
 };
 
 export const usePosts = (options?: PostsOptions) =>
-  useQuery({
+  useSuspenseQuery({
     queryKey: postKeys.posts,
     queryFn: () => getPosts(),
     select: (res) => res.data,
@@ -25,7 +31,16 @@ export const usePosts = (options?: PostsOptions) =>
     ...options
   });
 
-export const useCreatePost = (options?: UseCreatePostOptions) => {
+export const useUserPosts = (userId: string, options?: PostsOptions) =>
+  useSuspenseQuery({
+    queryKey: postKeys.userPosts(userId),
+    queryFn: () => getUserPosts(userId),
+    select: (res) => res.data,
+    staleTime: STALE_TIME,
+    ...options
+  });
+
+export const useCreatePost = (options?: CreatePostOptions) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -56,7 +71,7 @@ export const useCreatePost = (options?: UseCreatePostOptions) => {
   });
 };
 
-export const useLikePost = (postId: string, userId: string, options?: UseLikePostOptions) => {
+export const useLikePost = (postId: string, userId: string, options?: LikePostOptions) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -96,7 +111,7 @@ export const useLikePost = (postId: string, userId: string, options?: UseLikePos
   });
 };
 
-export const useDeletePost = (postId: string, options?: UseDeletePostOptions) => {
+export const useDeletePost = (postId: string, options?: DeletePostOptions) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -119,12 +134,3 @@ export const useDeletePost = (postId: string, options?: UseDeletePostOptions) =>
     }
   });
 };
-
-export const useUserPosts = (userId: string, options?: PostsOptions) =>
-  useQuery({
-    queryKey: postKeys.userPosts(userId),
-    queryFn: () => getUserPosts(userId),
-    select: (res) => res.data,
-    staleTime: STALE_TIME,
-    ...options
-  });
