@@ -33,9 +33,9 @@
   "components": {
     "filters": {
       "title": "Filters",
-      "Date": "Date",
-      "Name": "Name",
-      "Likes": "Likes"
+      "date": "Date",
+      "name": "Name",
+      "likes": "Likes"
     },
 
     "post_card": {

@@ -33,9 +33,9 @@
   "components": {
     "filters": {
       "title": "Filtre",
-      "Date": "Dată",
-      "Name": "Nume",
-      "Likes": "Aprecieri"
+      "date": "Dată",
+      "name": "Nume",
+      "likes": "Aprecieri"
     },
 
     "post_card": {

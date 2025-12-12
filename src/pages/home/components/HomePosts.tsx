@@ -32,7 +32,6 @@ export const HomePosts = () => {
               color='violet'
               radius='md'
               onClick={() => {
-                resetSearch();
                 refetch();
               }}
               loading={isFetching}

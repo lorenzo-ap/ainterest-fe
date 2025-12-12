@@ -1,19 +1,19 @@
 import { ActionIcon, Button, Popover, Tooltip } from '@mantine/core';
 import { IconArrowsSort, IconChevronDown, IconChevronUp, IconX } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { FilterCriteria, FiltersState } from '../types';
+import { FiltersState, SortCriteria, SortOrder } from '../types';
 
 interface FiltersProps {
   disabled?: boolean;
   filters: FiltersState;
-  onFiltersChange: (criteria: FilterCriteria) => void;
+  onFiltersChange: (criteria: SortCriteria) => void;
   onReset: () => void;
 }
 
 export const Filters = ({ disabled, filters, onFiltersChange, onReset }: FiltersProps) => {
   const { t } = useTranslation();
 
-  const isDefaultFilters = filters.criteria === FilterCriteria.Date && filters.isAscending;
+  const isDefaultFilters = filters.criteria === SortCriteria.DATE && filters.order === SortOrder.ASCENDING;
 
   return (
     <Popover
@@ -55,13 +55,13 @@ export const Filters = ({ disabled, filters, onFiltersChange, onReset }: Filters
       </div>
 
       <Popover.Dropdown className='flex flex-col items-start p-0'>
-        {Object.values(FilterCriteria).map((label) => (
+        {Object.values(SortCriteria).map((label) => (
           <Button
             key={label}
             className={`flex w-full items-center border-x-0 px-4 ${
-              label === FilterCriteria.Date
+              label === SortCriteria.DATE
                 ? 'rounded-b-none border-none'
-                : label === FilterCriteria.Likes
+                : label === SortCriteria.LIKES
                   ? 'rounded-t-none border-none'
                   : 'rounded-none'
             }`}
@@ -71,7 +71,7 @@ export const Filters = ({ disabled, filters, onFiltersChange, onReset }: Filters
             <span className='me-0.5'>{t(`components.filters.${label}`)}</span>
 
             {filters.criteria === label &&
-              (filters.isAscending ? (
+              (filters.order === SortOrder.ASCENDING ? (
                 <IconChevronDown size={18} color='violet' />
               ) : (
                 <IconChevronUp size={18} color='violet' />
