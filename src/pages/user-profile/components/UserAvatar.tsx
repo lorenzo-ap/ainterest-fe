@@ -178,37 +178,39 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
       </label>
 
       <Modal opened={cropModalOpen} onClose={resetFileInput} withCloseButton={false} size='lg' centered>
-        {uploadedPhotoUrl && (
-          <ReactCrop
-            crop={crop}
-            onChange={(_, percentCrop) => setCrop(percentCrop)}
-            onComplete={(c) => setCompletedCrop(c)}
-            aspect={1}
-            circularCrop
-          >
-            <img
-              ref={imgRef}
-              src={uploadedPhotoUrl}
-              alt={t('common.avatar')}
-              onLoad={onImageLoad}
-              className='max-h-[70vh] w-full object-contain'
-            />
-          </ReactCrop>
-        )}
+        <div className='flex flex-col items-center'>
+          {uploadedPhotoUrl && (
+            <ReactCrop
+              crop={crop}
+              onChange={(_, percentCrop) => setCrop(percentCrop)}
+              onComplete={(c) => setCompletedCrop(c)}
+              aspect={1}
+              circularCrop
+            >
+              <img
+                ref={imgRef}
+                src={uploadedPhotoUrl}
+                alt={t('common.avatar')}
+                onLoad={onImageLoad}
+                className='!max-h-[70vh] w-full object-contain'
+              />
+            </ReactCrop>
+          )}
 
-        <div className='mt-3 flex items-center justify-end gap-x-3'>
-          <Button variant='subtle' color='red' onClick={resetFileInput} disabled={isPending}>
-            {t('common.cancel')}
-          </Button>
+          <div className='mt-3 flex items-center justify-end gap-x-3 self-end'>
+            <Button variant='subtle' color='red' onClick={resetFileInput} disabled={isPending}>
+              {t('common.cancel')}
+            </Button>
 
-          <Button
-            color='teal'
-            onClick={editUser}
-            loading={isPending}
-            disabled={!completedCrop || completedCrop.width <= 1 || completedCrop.height <= 1}
-          >
-            {t('common.save')}
-          </Button>
+            <Button
+              color='teal'
+              onClick={editUser}
+              loading={isPending}
+              disabled={!completedCrop || completedCrop.width <= 1 || completedCrop.height <= 1}
+            >
+              {t('common.save')}
+            </Button>
+          </div>
         </div>
       </Modal>
     </div>
