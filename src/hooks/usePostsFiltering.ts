@@ -30,14 +30,17 @@ export const usePostsFiltering = (posts: Post[], options: UsePostsFilteringOptio
   const debouncedSearch = useDebounce(searchText);
 
   useEffect(() => {
-    setSearchParams((prevParams) => {
-      if (debouncedSearch) {
-        prevParams.set('search', debouncedSearch);
-      } else {
-        prevParams.delete('search');
-      }
-      return prevParams;
-    });
+    setSearchParams(
+      (prevParams) => {
+        if (debouncedSearch) {
+          prevParams.set('search', debouncedSearch);
+        } else {
+          prevParams.delete('search');
+        }
+        return prevParams;
+      },
+      { replace: true }
+    );
   }, [debouncedSearch, setSearchParams]);
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -62,23 +65,29 @@ export const usePostsFiltering = (posts: Post[], options: UsePostsFilteringOptio
       order
     });
 
-    setSearchParams((prevParams) => {
-      prevParams.set('sortBy', criteria);
-      prevParams.set('order', order);
+    setSearchParams(
+      (prevParams) => {
+        prevParams.set('sortBy', criteria);
+        prevParams.set('order', order);
 
-      return prevParams;
-    });
+        return prevParams;
+      },
+      { replace: true }
+    );
   };
 
   const resetFilters = () => {
     setFilters(DEFAULT_FILTERS);
 
-    setSearchParams((prevParams) => {
-      prevParams.delete('sortBy');
-      prevParams.delete('order');
+    setSearchParams(
+      (prevParams) => {
+        prevParams.delete('sortBy');
+        prevParams.delete('order');
 
-      return prevParams;
-    });
+        return prevParams;
+      },
+      { replace: true }
+    );
   };
 
   const filteredPosts = useMemo(() => {
