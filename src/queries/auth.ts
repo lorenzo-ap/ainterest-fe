@@ -1,13 +1,14 @@
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import { signIn, signOut, signUp } from '../api';
+import { googleSignIn, signIn, signOut, signUp } from '../api';
 import { SignInForm, SignUpForm, User } from '../types';
 import { userKeys } from './user';
 
-type UseSignInOptions = UseMutationOptions<AxiosResponse<User>, Error, SignInForm>;
-type UseSignUpOptions = UseMutationOptions<AxiosResponse<User>, Error, SignUpForm>;
+type SignInOptions = UseMutationOptions<AxiosResponse<User>, Error, SignInForm>;
+type GoogleSignInOptions = UseMutationOptions<AxiosResponse<User>, Error, string>;
+type SignUpOptions = UseMutationOptions<AxiosResponse<User>, Error, SignUpForm>;
 
-export const useSignIn = (options?: UseSignInOptions) => {
+export const useSignIn = (options?: SignInOptions) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -21,7 +22,21 @@ export const useSignIn = (options?: UseSignInOptions) => {
   });
 };
 
-export const useSignUp = (options?: UseSignUpOptions) => {
+export const useGoogleSignIn = (options?: GoogleSignInOptions) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    ...options,
+    mutationFn: (credential) => googleSignIn(credential),
+    onSuccess: (...args) => {
+      const [data] = args;
+      queryClient.setQueryData(userKeys.current, data);
+      options?.onSuccess?.(...args);
+    }
+  });
+};
+
+export const useSignUp = (options?: SignUpOptions) => {
   const queryClient = useQueryClient();
 
   return useMutation({

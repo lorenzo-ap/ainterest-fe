@@ -1,6 +1,7 @@
-import { Button, Modal, Text, TextInput } from '@mantine/core';
+import { Button, Divider, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
+import { GoogleSignInButton } from '../../../components';
 import { useFormValidation } from '../../../hooks';
 import { useSignIn } from '../../../queries';
 import { toastService } from '../../../services/toast';
@@ -78,6 +79,10 @@ export const SignInModal = (props: SignInModalProps) => {
           {t('common.sign_in')}
         </Button>
       </form>
+
+      <Divider label={t('pages.components.modals.sign_in.or_continue_with')} labelPosition='center' className='my-4' />
+
+      <GoogleSignInButton onSuccess={closeModal} />
 
       <Text className='mt-4 flex items-center justify-center gap-x-1' size='sm'>
         <span>{t('pages.components.modals.sign_in.dont_have_an_account')}</span>{' '}

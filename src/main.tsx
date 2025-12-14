@@ -1,3 +1,4 @@
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import i18next from 'i18next';
 import { StrictMode } from 'react';
@@ -21,10 +22,12 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <I18nextProvider i18n={i18next}>
-        <App />
-      </I18nextProvider>
-    </QueryClientProvider>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <QueryClientProvider client={queryClient}>
+        <I18nextProvider i18n={i18next}>
+          <App />
+        </I18nextProvider>
+      </QueryClientProvider>
+    </GoogleOAuthProvider>
   </StrictMode>
 );

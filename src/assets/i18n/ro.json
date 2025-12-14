@@ -58,6 +58,7 @@
     "components": {
       "modals": {
         "sign_in": {
+          "or_continue_with": "Sau continuă cu",
           "dont_have_an_account": "Nu ai un cont?",
           "errors": {
             "email": {
@@ -70,6 +71,7 @@
           }
         },
         "sign_up": {
+          "or_continue_with": "Sau continuă cu",
           "already_have_an_account": "Ai deja un cont?",
           "errors": {
             "username": {
