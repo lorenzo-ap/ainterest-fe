@@ -1,6 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { apis } from '../assets/apis/apis';
-import { toastService } from '../services/toast';
+import { toastService } from '../services';
 import { refreshToken } from './auth';
 
 export const req = axios.create({

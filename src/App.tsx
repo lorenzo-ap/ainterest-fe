@@ -4,6 +4,7 @@ import '@mantine/notifications/styles.css';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useNotificationListener } from './hooks';
 import { CreatePostPage, ErrorPage, HomePage, UserProfilePage } from './pages';
 import { Page, ProtectedRoute } from './pages/components';
 import { Header } from './pages/components/Header';
@@ -13,11 +14,11 @@ const App = () => {
   useCurrentUser({
     enabled: true
   });
+  useNotificationListener();
 
   return (
     <MantineProvider defaultColorScheme='light' withCssVariables>
       <Notifications position='bottom-right' zIndex={1000} autoClose={3000} />
-
       <BrowserRouter
         future={{
           v7_relativeSplatPath: true,

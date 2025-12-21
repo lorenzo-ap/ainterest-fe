@@ -1,10 +1,11 @@
 import { Button, Divider, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { GoogleSignInButton } from '../../../components';
 import { useFormValidation } from '../../../hooks';
-import { useSignIn } from '../../../queries';
-import { toastService } from '../../../services/toast';
+import { notificationKeys, useSignIn } from '../../../queries';
+import { toastService } from '../../../services';
 import { SignInForm } from '../../../types';
 
 interface SignInModalProps {
@@ -15,6 +16,7 @@ interface SignInModalProps {
 
 export const SignInModal = (props: SignInModalProps) => {
   const { t, i18n } = useTranslation();
+  const queryClient = useQueryClient();
 
   const form = useForm<SignInForm>({
     mode: 'uncontrolled',
@@ -46,6 +48,9 @@ export const SignInModal = (props: SignInModalProps) => {
     onSuccess: () => {
       closeModal();
       toastService.success(t('apis.auth.success_sign_in'));
+      queryClient.invalidateQueries({
+        queryKey: notificationKeys.notifications
+      });
     }
   });
 

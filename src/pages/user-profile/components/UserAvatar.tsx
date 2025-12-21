@@ -7,7 +7,7 @@ import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactCrop, { centerCrop, Crop, makeAspectCrop } from 'react-image-crop';
 import { postKeys, useCurrentUser, useUpdateCurrentUser } from '../../../queries';
-import { toastService } from '../../../services/toast';
+import { toastService } from '../../../services';
 import { User } from '../../../types';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;

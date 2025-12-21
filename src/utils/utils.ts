@@ -1,6 +1,6 @@
 import FileSaver from 'file-saver';
 import { surpriseMePrompts } from '../constants';
-import { toastService } from '../services/toast';
+import { toastService } from '../services';
 
 export const getRandomPrompt = (prompt: string): string => {
   const randomIndex = Math.floor(Math.random() * surpriseMePrompts.length);

@@ -14,6 +14,8 @@
     "close": "Închide",
     "save": "Salvează",
     "avatar": "Previzualizare avatar",
+    "language": "Limbă",
+    "theme": "Temă",
     "languages": {
       "en": "English",
       "ro": "Română"
@@ -26,7 +28,6 @@
     "like_post": "Apreciază postarea",
     "unlike_post": "Înlătură aprecierea postării",
     "profile": "Profil",
-    "change_language": "Schimbă limba",
     "clear": "Șterge"
   },
 
@@ -59,6 +60,7 @@
       "modals": {
         "sign_in": {
           "or_continue_with": "Sau continuă cu",
+          "sign_in_with_google": "Conectează-te cu Google",
           "dont_have_an_account": "Nu ai un cont?",
           "errors": {
             "email": {
@@ -72,6 +74,7 @@
         },
         "sign_up": {
           "or_continue_with": "Sau continuă cu",
+          "sign_in_with_google": "Conectează-te cu Google",
           "already_have_an_account": "Ai deja un cont?",
           "errors": {
             "username": {
@@ -105,9 +108,21 @@
         "sign_in": "Conectare",
         "switch_to_light_mode": "Treci la modul luminos",
         "switch_to_dark_mode": "Treci la modul întunecat",
-        "change_language": "Schimbă limba",
+        "notifications": "Notificări",
         "sign_out": "Deconectare",
         "are_you_sure": "Ești sigur că vrei să te deconectezi?"
+      },
+
+      "notifications": {
+        "title": "Notificări",
+        "mark_all_as_read": "Marchează toate ca citite",
+        "delete_all": "Șterge toate",
+        "no_notifications_yet": "Nicio notificare încă",
+        "liked_your_post": "a apreciat postarea ta",
+        "unread": "Necitit",
+        "post_image": "Imaginea postării",
+        "mark_as_read": "Marchează ca citit",
+        "delete": "Șterge"
       },
 
       "search_posts_input": {
@@ -176,6 +191,10 @@
     },
     "generate": {
       "error": "Cererea conține conținut explicit/adult, te rugăm să încerci alta."
+    },
+    "notifications": {
+      "read_all": "Toate notificările au fost marcate ca citite",
+      "delete_all": "Toate notificările au fost șterse"
     }
   }
 }

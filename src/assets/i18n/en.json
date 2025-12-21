@@ -14,6 +14,8 @@
     "close": "Close",
     "save": "Save",
     "avatar": "Avatar preview",
+    "language": "Language",
+    "theme": "Theme",
     "languages": {
       "en": "English",
       "ro": "Română"
@@ -26,7 +28,6 @@
     "like_post": "Like post",
     "unlike_post": "Unlike post",
     "profile": "Profile",
-    "change_language": "Change language",
     "clear": "Clear"
   },
 
@@ -59,6 +60,7 @@
       "modals": {
         "sign_in": {
           "or_continue_with": "Or continue with",
+          "sign_in_with_google": "Sign in with Google",
           "dont_have_an_account": "Don't have an account?",
           "errors": {
             "email": {
@@ -72,6 +74,7 @@
         },
         "sign_up": {
           "or_continue_with": "Or continue with",
+          "sign_in_with_google": "Sign in with Google",
           "already_have_an_account": "Already have an account?",
           "errors": {
             "username": {
@@ -105,9 +108,21 @@
         "sign_in": "Sign In",
         "switch_to_light_mode": "Switch to light mode",
         "switch_to_dark_mode": "Switch to dark mode",
-        "change_language": "Change language",
+        "notifications": "Notifications",
         "sign_out": "Sign Out",
         "are_you_sure": "Are you sure you want to sign out?"
+      },
+
+      "notifications": {
+        "title": "Notifications",
+        "mark_all_as_read": "Mark all as read",
+        "delete_all": "Delete all",
+        "no_notifications_yet": "No notifications yet",
+        "liked_your_post": "liked your post",
+        "unread": "Unread",
+        "post_image": "Post image",
+        "mark_as_read": "Mark as read",
+        "delete": "Delete"
       },
 
       "search_posts_input": {
@@ -176,6 +191,10 @@
     },
     "generate": {
       "error": "Prompt contains explicit/adult content, please try a different one."
+    },
+    "notifications": {
+      "read_all": "All notifications marked as read",
+      "delete_all": "All notifications deleted"
     }
   }
 }

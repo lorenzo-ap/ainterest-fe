@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { getUserByUsername, getUserPosts } from '../api';
 import { postKeys, useCurrentUser, useDeletePost, useLikePost, userKeys } from '../queries';
-import { toastService } from '../services/toast';
+import { toastService } from '../services';
 import { Post, UserRole } from '../types';
 import { downloadImage, STALE_TIME } from '../utils';
 import { PostImageModal } from './PostImageModal';
@@ -177,7 +177,7 @@ export const PostCard = (props: Post) => {
                 </div>
 
                 <Text
-                  className='prompt max-h-[100px] overflow-y-scroll pr-0.5 text-white max-lg:text-sm'
+                  className='scrollbar max-h-[100px] overflow-y-scroll pr-0.5 text-white max-lg:text-sm'
                   tabIndex={isHovered || showInfo ? 0 : -1}
                 >
                   {props.prompt}
@@ -188,7 +188,6 @@ export const PostCard = (props: Post) => {
                 <Link
                   className='flex items-center gap-x-1.5 hover:opacity-85'
                   to={`/account/${props.user.username}`}
-                  state={props.user}
                   style={{ pointerEvents: profileUsername === props.user.username ? 'none' : 'auto' }}
                   tabIndex={isHovered || showInfo ? 0 : -1}
                   onMouseEnter={prefetchUserData}

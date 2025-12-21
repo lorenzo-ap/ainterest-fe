@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFormValidation } from '../../hooks';
 import { useCreatePost, useGenerateImage } from '../../queries';
-import { toastService } from '../../services/toast';
+import { toastService } from '../../services';
 import { CreatePostForm, GenerateImageBody } from '../../types';
 import { getRandomPrompt } from '../../utils';
 import { PostGeneratedImage } from './components';

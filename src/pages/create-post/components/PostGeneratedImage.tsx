@@ -43,7 +43,7 @@ export const PostGeneratedImage = (props: GeneratedImageProps) => {
         {props.imageSource ? (
           <img className='h-full w-full rounded-xl object-cover' src={props.imageSource} alt={props.imageAlt} />
         ) : (
-          <IconPhoto className='opacity-50' size='256' color={props.isImageMissing ? '#E03131' : '#E5E7EB'} />
+          <IconPhoto className='opacity-50' size='256' color={props.isImageMissing ? '#E03131' : 'gray'} />
         )}
 
         {props.isGenerating && (

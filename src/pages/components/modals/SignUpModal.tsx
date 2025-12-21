@@ -1,10 +1,11 @@
 import { Button, Divider, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { GoogleSignInButton } from '../../../components';
 import { useFormValidation } from '../../../hooks';
-import { useSignUp } from '../../../queries';
-import { toastService } from '../../../services/toast';
+import { notificationKeys, useSignUp } from '../../../queries';
+import { toastService } from '../../../services';
 import { SignUpForm } from '../../../types';
 
 interface SignUpModalProps {
@@ -15,6 +16,7 @@ interface SignUpModalProps {
 
 export const SignUpModal = (props: SignUpModalProps) => {
   const { t, i18n } = useTranslation();
+  const queryClient = useQueryClient();
 
   const form = useForm<SignUpForm>({
     mode: 'uncontrolled',
@@ -81,6 +83,9 @@ export const SignUpModal = (props: SignUpModalProps) => {
     onSuccess: () => {
       closeModal();
       toastService.success(t('apis.auth.success_sign_up'));
+      queryClient.invalidateQueries({
+        queryKey: notificationKeys.notifications
+      });
     }
   });
 
