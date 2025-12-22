@@ -10,7 +10,7 @@ export const UserProfilePage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [params.username]);
 
   if (!params.username) {
     navigate('/');
@@ -20,11 +20,11 @@ export const UserProfilePage = () => {
   return (
     <>
       <div className='relative mx-auto max-w-7xl'>
-        <Suspense fallback={<UserHeaderSkeleton />}>
+        <Suspense fallback={<UserHeaderSkeleton />} key={`header-${params.username}`}>
           <UserHeader username={params.username} />
         </Suspense>
 
-        <Suspense fallback={<PostsSkeleton />}>
+        <Suspense fallback={<PostsSkeleton />} key={`posts-${params.username}`}>
           <UserPosts username={params.username} />
         </Suspense>
       </div>

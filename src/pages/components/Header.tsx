@@ -1,11 +1,12 @@
 import { Avatar, Button, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { HeaderMenu } from '.';
 import { ConfirmModal } from '../../components';
-import { useCurrentUser, useSignOut } from '../../queries';
+import { notificationKeys, useCurrentUser, useSignOut } from '../../queries';
 import { toastService } from '../../services';
 import { SignInModal, SignUpModal } from './modals';
 import { Notifications } from './notifications';
@@ -13,6 +14,7 @@ import { Notifications } from './notifications';
 export const Header = () => {
   const { t } = useTranslation();
   const location = useLocation();
+  const queryClient = useQueryClient();
 
   const { data: currentUser, isLoading: isCurrentUserLoading } = useCurrentUser();
 
@@ -20,6 +22,9 @@ export const Header = () => {
     onSuccess: () => {
       closeSignOutConfirmModal();
       toastService.success(t('apis.auth.success_sign_out'));
+      queryClient.removeQueries({
+        queryKey: notificationKeys.notifications
+      });
     }
   });
 
