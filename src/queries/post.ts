@@ -5,16 +5,13 @@ import {
   useSuspenseQuery,
   UseSuspenseQueryOptions
 } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
 import { createPost, deletePost, getPosts, getUserPosts, likePost } from '../api';
 import { Post, PostGeneratedImage } from '../types';
 import { STALE_TIME } from '../utils';
 
-type PostsResponse = AxiosResponse<Post[]>;
-
-type PostsOptions = Omit<UseSuspenseQueryOptions<PostsResponse, Error, Post[]>, 'queryKey' | 'queryFn'>;
-type CreatePostOptions = Omit<UseMutationOptions<AxiosResponse<Post>, Error, PostGeneratedImage>, 'mutationFn'>;
-type LikePostOptions = Omit<UseMutationOptions<AxiosResponse<Post>>, 'mutationFn'>;
+type PostsOptions = Omit<UseSuspenseQueryOptions<Post[], Error, Post[]>, 'queryKey' | 'queryFn'>;
+type CreatePostOptions = Omit<UseMutationOptions<Post, Error, PostGeneratedImage>, 'mutationFn'>;
+type LikePostOptions = Omit<UseMutationOptions<Post>, 'mutationFn'>;
 type DeletePostOptions = Omit<UseMutationOptions, 'mutationFn'>;
 
 export const postKeys = {
@@ -26,7 +23,6 @@ export const usePosts = (options?: PostsOptions) =>
   useSuspenseQuery({
     queryKey: postKeys.posts,
     queryFn: () => getPosts(),
-    select: (res) => res.data,
     staleTime: STALE_TIME,
     ...options
   });
@@ -35,7 +31,6 @@ export const useUserPosts = (userId: string, options?: PostsOptions) =>
   useSuspenseQuery({
     queryKey: postKeys.userPosts(userId),
     queryFn: () => getUserPosts(userId),
-    select: (res) => res.data,
     staleTime: STALE_TIME,
     ...options
   });
@@ -48,22 +43,16 @@ export const useCreatePost = (options?: CreatePostOptions) => {
     mutationFn: (generatedImage) => createPost(generatedImage),
     onSuccess: (...args) => {
       const [res] = args;
-      const userId = res.data.user._id;
+      const userId = res.user._id;
 
-      queryClient.setQueryData<PostsResponse>(postKeys.posts, (oldData) => {
-        if (!oldData) return oldData;
-        return {
-          ...oldData,
-          data: [res.data, ...oldData.data]
-        };
+      queryClient.setQueryData<Post[]>(postKeys.posts, (oldPosts) => {
+        if (!oldPosts) return oldPosts;
+        return [res, ...oldPosts];
       });
 
-      queryClient.setQueryData<PostsResponse>(postKeys.userPosts(userId), (oldData) => {
-        if (!oldData) return oldData;
-        return {
-          ...oldData,
-          data: [res.data, ...oldData.data]
-        };
+      queryClient.setQueryData<Post[]>(postKeys.userPosts(userId), (oldPosts) => {
+        if (!oldPosts) return oldPosts;
+        return [res, ...oldPosts];
       });
 
       options?.onSuccess?.(...args);
@@ -80,25 +69,22 @@ export const useLikePost = (postId: string, userId: string, options?: LikePostOp
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: postKeys.posts });
 
-      const previous = queryClient.getQueriesData<PostsResponse>({
+      const previous = queryClient.getQueriesData<Post[]>({
         queryKey: postKeys.posts
       });
 
-      queryClient.setQueriesData<PostsResponse>({ queryKey: postKeys.posts }, (oldData) => {
-        if (!oldData) return oldData;
+      queryClient.setQueriesData<Post[]>({ queryKey: postKeys.posts }, (oldPosts) => {
+        if (!oldPosts) return oldPosts;
 
-        return {
-          ...oldData,
-          data: oldData.data.map((post) => {
-            if (post._id === postId) {
-              const newLikes = post.likes.includes(userId)
-                ? post.likes.filter((like) => like !== userId)
-                : [...post.likes, userId];
-              return { ...post, likes: newLikes };
-            }
-            return post;
-          })
-        };
+        return oldPosts.map((post) => {
+          if (post._id === postId) {
+            const newLikes = post.likes.includes(userId)
+              ? post.likes.filter((like) => like !== userId)
+              : [...post.likes, userId];
+            return { ...post, likes: newLikes };
+          }
+          return post;
+        });
       });
 
       return { previous };
@@ -118,16 +104,13 @@ export const useDeletePost = (postId: string, options?: DeletePostOptions) => {
     ...options,
     mutationFn: () => deletePost(postId),
     onSuccess: (...args) => {
-      queryClient.setQueriesData<PostsResponse>(
+      queryClient.setQueriesData<Post[]>(
         {
           queryKey: postKeys.posts
         },
-        (oldData) => {
-          if (!oldData) return oldData;
-          return {
-            ...oldData,
-            data: oldData.data.filter((post) => post._id !== postId)
-          };
+        (oldPosts) => {
+          if (!oldPosts) return oldPosts;
+          return oldPosts.filter((post) => post._id !== postId);
         }
       );
       options?.onSuccess?.(...args);

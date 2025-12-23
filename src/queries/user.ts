@@ -7,14 +7,13 @@ import {
   useSuspenseQuery,
   UseSuspenseQueryOptions
 } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
 import { getCurrentUser, getUserByUsername, updateCurrentUser } from '../api';
 import { User } from '../types';
 import { STALE_TIME } from '../utils';
 
-type CurrentUserOptions = Omit<UseQueryOptions<AxiosResponse<User>, Error, User>, 'queryKey' | 'queryFn'>;
-type UpdateCurrentUserOptions = Omit<UseMutationOptions<AxiosResponse<User>, Error, User>, 'mutationFn'>;
-type UserByUsernameOptions = Omit<UseSuspenseQueryOptions<AxiosResponse<User>, Error, User>, 'queryKey' | 'queryFn'>;
+type CurrentUserOptions = Omit<UseQueryOptions<User, Error, User>, 'queryKey' | 'queryFn'>;
+type UpdateCurrentUserOptions = Omit<UseMutationOptions<User, Error, User>, 'mutationFn'>;
+type UserByUsernameOptions = Omit<UseSuspenseQueryOptions<User, Error, User>, 'queryKey' | 'queryFn'>;
 
 export const userKeys = {
   current: ['user', 'current'] as const,
@@ -25,7 +24,6 @@ export const useCurrentUser = (options?: CurrentUserOptions) =>
   useQuery({
     queryKey: userKeys.current,
     queryFn: () => getCurrentUser(),
-    select: (res) => res.data,
     staleTime: Infinity,
     retry: false,
     refetchOnWindowFocus: false,
@@ -51,7 +49,6 @@ export const useUserByUsername = (username: string, options?: UserByUsernameOpti
   useSuspenseQuery({
     queryKey: userKeys.user(username),
     queryFn: () => getUserByUsername(username),
-    select: (res) => res.data,
     staleTime: STALE_TIME,
     ...options
   });

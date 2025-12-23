@@ -1,12 +1,11 @@
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
 import { googleSignIn, signIn, signOut, signUp } from '../api';
 import { SignInForm, SignUpForm, User } from '../types';
 import { userKeys } from './user';
 
-type SignInOptions = UseMutationOptions<AxiosResponse<User>, Error, SignInForm>;
-type GoogleSignInOptions = UseMutationOptions<AxiosResponse<User>, Error, string>;
-type SignUpOptions = UseMutationOptions<AxiosResponse<User>, Error, SignUpForm>;
+type SignInOptions = UseMutationOptions<User, Error, SignInForm>;
+type GoogleSignInOptions = UseMutationOptions<User, Error, string>;
+type SignUpOptions = UseMutationOptions<User, Error, SignUpForm>;
 
 export const useSignIn = (options?: SignInOptions) => {
   const queryClient = useQueryClient();
@@ -57,7 +56,7 @@ export const useSignOut = (options?: UseMutationOptions) => {
     ...options,
     mutationFn: () => signOut(),
     onSuccess: (...args) => {
-      queryClient.setQueryData(userKeys.current, { data: null });
+      queryClient.setQueryData(userKeys.current, null);
       options?.onSuccess?.(...args);
     }
   });

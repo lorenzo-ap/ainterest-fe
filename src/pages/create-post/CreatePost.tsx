@@ -19,7 +19,7 @@ export const CreatePostPage = () => {
 
   const { mutate: generateImage, isPending: isGenerating } = useGenerateImage({
     onSuccess: (res, variables) => {
-      form.setFieldValue('postGeneratedImage', { prompt: variables.text, photo: res.data.image });
+      form.setFieldValue('postGeneratedImage', { prompt: variables.text, photo: res.image });
       setIsImageMissing(false);
     },
     onError: (err) => {

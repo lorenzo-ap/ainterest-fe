@@ -1,10 +1,10 @@
 import FileSaver from 'file-saver';
-import { surpriseMePrompts } from '../constants';
+import { RANDOM_PROMPTS } from '../constants';
 import { toastService } from '../services';
 
 export const getRandomPrompt = (prompt: string): string => {
-  const randomIndex = Math.floor(Math.random() * surpriseMePrompts.length);
-  const randomPrompt = surpriseMePrompts[randomIndex];
+  const randomIndex = Math.floor(Math.random() * RANDOM_PROMPTS.length);
+  const randomPrompt = RANDOM_PROMPTS[randomIndex];
 
   if (randomPrompt === prompt) {
     return getRandomPrompt(prompt);

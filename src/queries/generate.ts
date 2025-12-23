@@ -1,11 +1,11 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { generateImage } from '../api';
-import { GeneratedImage } from '../types';
+import { GenerateImageResponse } from '../types';
 
 type UseGenerateImageOptions = Omit<
   UseMutationOptions<
-    AxiosResponse<GeneratedImage>,
+    GenerateImageResponse,
     AxiosError<{ message: string; nsfw: boolean }>,
     { text: string; size: number }
   >,

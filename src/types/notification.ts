@@ -15,6 +15,14 @@ export interface Notification {
   createdAt: string;
 }
 
-export interface NotificationsUnreadCount {
+export interface NotificationsUnreadCountResponse {
   count: number;
+}
+
+export interface MarkAllNotificationsAsReadResponse {
+  modifiedCount: number;
+}
+
+export interface DeleteAllNotificationsResponse {
+  deletedCount: number;
 }
