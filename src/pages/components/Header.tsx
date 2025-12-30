@@ -8,7 +8,7 @@ import { HeaderMenu } from '.';
 import { ConfirmModal } from '../../components';
 import { notificationKeys, useCurrentUser, useSignOut } from '../../queries';
 import { toastService } from '../../services';
-import { SignInModal, SignUpModal } from './modals';
+import { ForgotPasswordModal, SignInModal, SignUpModal } from './modals';
 import { Notifications } from './notifications';
 
 export const Header = () => {
@@ -32,6 +32,8 @@ export const Header = () => {
 
   const [signInModalOpened, { open: openSignInModal, close: closeSignInModal }] = useDisclosure(false);
   const [signUpModalOpened, { open: openSignUpModal, close: closeSignUpModal }] = useDisclosure(false);
+  const [forgotPasswordModalOpened, { open: openForgotPasswordModal, close: closeForgotPasswordModal }] =
+    useDisclosure(false);
   const [signOutConfirmModalOpened, { open: openSignOutConfirmModal, close: closeSignOutConfirmModal }] =
     useDisclosure(false);
 
@@ -90,8 +92,18 @@ export const Header = () => {
         </div>
       </header>
 
-      <SignInModal opened={signInModalOpened} close={closeSignInModal} openSignUpModal={openSignUpModal} />
+      <SignInModal
+        opened={signInModalOpened}
+        close={closeSignInModal}
+        openSignUpModal={openSignUpModal}
+        openForgotPasswordModal={openForgotPasswordModal}
+      />
       <SignUpModal opened={signUpModalOpened} close={closeSignUpModal} openSignInModal={openSignInModal} />
+      <ForgotPasswordModal
+        opened={forgotPasswordModalOpened}
+        close={closeForgotPasswordModal}
+        openSignInModal={openSignInModal}
+      />
       <ConfirmModal
         title={t('pages.components.header.sign_out')}
         message={t('pages.components.header.are_you_sure')}

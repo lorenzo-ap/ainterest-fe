@@ -5,7 +5,7 @@ import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useNotificationListener } from './hooks';
-import { CreatePostPage, ErrorPage, HomePage, UserProfilePage } from './pages';
+import { CreatePostPage, ErrorPage, HomePage, ResetPasswordPage, UserProfilePage } from './pages';
 import { Page, ProtectedRoute } from './pages/components';
 import { Header } from './pages/components/Header';
 import { useCurrentUser } from './queries';
@@ -39,6 +39,15 @@ const App = () => {
             />
 
             <Route path='/account/:username' element={<UserProfilePage />} />
+
+            <Route
+              path='/reset-password/:token'
+              element={
+                <Page title='Reset password'>
+                  <ResetPasswordPage />
+                </Page>
+              }
+            />
 
             <Route element={<ProtectedRoute />}>
               <Route

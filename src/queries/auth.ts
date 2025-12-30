@@ -1,6 +1,6 @@
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
-import { googleSignIn, signIn, signOut, signUp } from '../api';
-import { SignInForm, SignUpForm, User } from '../types';
+import { forgotPassword, googleSignIn, resetPassword, signIn, signOut, signUp } from '../api';
+import { ForgotPasswordForm, PasswordResponse, ResetPasswordForm, SignInForm, SignUpForm, User } from '../types';
 import { userKeys } from './user';
 
 type SignInOptions = UseMutationOptions<User, Error, SignInForm>;
@@ -57,6 +57,28 @@ export const useSignOut = (options?: UseMutationOptions) => {
     mutationFn: () => signOut(),
     onSuccess: (...args) => {
       queryClient.setQueryData(userKeys.current, null);
+      options?.onSuccess?.(...args);
+    }
+  });
+};
+
+export const useForgotPassword = (options?: UseMutationOptions<PasswordResponse, Error, ForgotPasswordForm>) => {
+  return useMutation({
+    ...options,
+    mutationFn: ({ email }) => forgotPassword(email),
+    onSuccess: (...args) => {
+      options?.onSuccess?.(...args);
+    }
+  });
+};
+
+type ResetPasswordParams = ResetPasswordForm & { token: string };
+
+export const useResetPassword = (options?: UseMutationOptions<PasswordResponse, Error, ResetPasswordParams>) => {
+  return useMutation({
+    ...options,
+    mutationFn: (body) => resetPassword(body),
+    onSuccess: (...args) => {
       options?.onSuccess?.(...args);
     }
   });

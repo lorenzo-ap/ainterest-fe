@@ -1,4 +1,4 @@
-import { Button, Divider, Modal, Text, TextInput } from '@mantine/core';
+import { Button, Divider, Modal, PasswordInput, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -114,17 +114,15 @@ export const SignUpModal = (props: SignUpModalProps) => {
           {...form.getInputProps('username')}
         />
         <TextInput size='md' label={t('common.email')} key={form.key('email')} {...form.getInputProps('email')} />
-        <TextInput
+        <PasswordInput
           size='md'
           label={t('common.password')}
-          type='password'
           key={form.key('password')}
           {...form.getInputProps('password')}
         />
-        <TextInput
+        <PasswordInput
           size='md'
           label={t('common.confirm_password')}
-          type='password'
           key={form.key('confirmPassword')}
           {...form.getInputProps('confirmPassword')}
         />
@@ -141,7 +139,7 @@ export const SignUpModal = (props: SignUpModalProps) => {
       <Text className='mt-4 flex items-center justify-center gap-x-1' size='sm'>
         <span>{t('pages.components.modals.sign_up.already_have_an_account')}</span>{' '}
         <Button
-          className='p-0 underline-offset-2 hover:underline'
+          className='p-0 hover:opacity-80'
           color='violet'
           variant='transparent'
           onClick={() => {

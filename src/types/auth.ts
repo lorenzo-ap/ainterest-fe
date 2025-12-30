@@ -10,6 +10,19 @@ export interface SignUpForm {
   confirmPassword: string;
 }
 
+export interface ForgotPasswordForm {
+  email: string;
+}
+
+export interface ResetPasswordForm {
+  password: string;
+  confirmPassword: string;
+}
+
+export interface PasswordResponse {
+  message: string;
+}
+
 export interface AccessToken {
   accessToken: string;
 }

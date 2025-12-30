@@ -6,6 +6,8 @@
     "confirm_password": "Confirmă parola",
     "sign_in": "Conectare",
     "sign_up": "Înregistrare",
+    "forgot_password": "Ai uitat parola?",
+    "reset_password": "Resetează parola",
     "continue": "Continuă",
     "cancel": "Anulează",
     "back": "Înapoi",
@@ -62,6 +64,7 @@
           "or_continue_with": "Sau continuă cu",
           "sign_in_with_google": "Conectează-te cu Google",
           "dont_have_an_account": "Nu ai un cont?",
+          "forgot_password": "Ai uitat parola?",
           "errors": {
             "email": {
               "required": "E-mailul este obligatoriu",
@@ -99,6 +102,16 @@
             "confirmPassword": {
               "required": "Confirmarea parolei este obligatorie",
               "mismatch": "Parolele nu se potrivesc"
+            }
+          }
+        },
+        "forgot_password": {
+          "send_reset_link": "Trimite linkul de resetare",
+          "back_to_sign_in": "Înapoi la autentificare",
+          "errors": {
+            "email": {
+              "required": "E-mailul este obligatoriu",
+              "invalid": "Adresa de e-mail este invalidă"
             }
           }
         }
@@ -148,6 +161,31 @@
       "generate_image": "Generează o imagine"
     },
 
+    "reset_password": {
+      "title": "Resetează parola",
+      "description": "Introdu noua parolă",
+      "new_password": "Noua parolă",
+      "confirm_new_password": "Confirmă noua parolă",
+      "reset_password": "Resetează parola",
+      "errors": {
+        "password": {
+          "required": "Parola este obligatorie",
+          "requirements": {
+            "minLength": "Parola trebuie să aibă minimum 8 caractere",
+            "uppercase": "Trebuie să conțină o literă mare",
+            "lowercase": "Trebuie să conțină o literă mică",
+            "number": "Trebuie să conțină un număr",
+            "special": "Trebuie să conțină un caracter special (!@#$%^&*)"
+          }
+        },
+        "confirmPassword": {
+          "required": "Te rugăm să confirmi parola",
+          "mismatch": "Parolele nu se potrivesc"
+        },
+        "invalid_token": "Token de resetare invalid sau lipsă"
+      }
+    },
+
     "generate_image": {
       "heading": "Generează o imagine",
       "subheading": "Creează imagini imaginative și impresionante prin AI și împărtășește-le cu comunitatea",
@@ -178,7 +216,9 @@
     "auth": {
       "success_sign_in": "Conectare realizată cu succes!",
       "success_sign_up": "Înregistrare realizată cu succes!",
-      "success_sign_out": "Deconectare realizată cu succes!"
+      "success_sign_out": "Deconectare realizată cu succes!",
+      "success_forgot_password": "Linkul de resetare a fost trimis pe e-mail!",
+      "success_reset_password": "Parola a fost resetată cu succes!"
     },
     "user": {
       "update": "Imaginea de profil a fost actualizată cu succes!",

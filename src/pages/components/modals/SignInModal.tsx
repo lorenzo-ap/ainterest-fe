@@ -1,4 +1,4 @@
-import { Button, Divider, Modal, Text, TextInput } from '@mantine/core';
+import { Button, Divider, Modal, PasswordInput, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ interface SignInModalProps {
   opened: boolean;
   close: () => void;
   openSignUpModal: () => void;
+  openForgotPasswordModal: () => void;
 }
 
 export const SignInModal = (props: SignInModalProps) => {
@@ -73,13 +74,31 @@ export const SignInModal = (props: SignInModalProps) => {
     >
       <form className='flex flex-col gap-y-3' onSubmit={form.onSubmit(submit)}>
         <TextInput size='md' label={t('common.email')} key={form.key('email')} {...form.getInputProps('email')} />
-        <TextInput
+        <PasswordInput
           size='md'
           label={t('common.password')}
-          type='password'
           key={form.key('password')}
           {...form.getInputProps('password')}
+          inputContainer={(children) => (
+            <>
+              {children}
+
+              <Button
+                className='absolute right-0 top-0 h-[1.563rem] p-0 text-xs font-medium hover:opacity-80'
+                color='violet'
+                variant='transparent'
+                onClick={() => {
+                  closeModal();
+                  props.openForgotPasswordModal();
+                }}
+              >
+                {t('pages.components.modals.sign_in.forgot_password')}
+              </Button>
+            </>
+          )}
+          className='relative'
         />
+
         <Button className='mt-2' color='violet' size='md' type='submit' loading={isPending}>
           {t('common.sign_in')}
         </Button>
@@ -92,7 +111,7 @@ export const SignInModal = (props: SignInModalProps) => {
       <Text className='mt-4 flex items-center justify-center gap-x-1' size='sm'>
         <span>{t('pages.components.modals.sign_in.dont_have_an_account')}</span>{' '}
         <Button
-          className='p-0 underline-offset-2 hover:underline'
+          className='p-0 hover:opacity-80'
           color='violet'
           variant='transparent'
           onClick={() => {
