@@ -1,5 +1,6 @@
 import { ActionIcon, Menu, useMantineColorScheme } from '@mantine/core';
-import { IconLogout, IconMenu2, IconMoon, IconSunHigh, IconWorld } from '@tabler/icons-react';
+import { IconLogout, IconMenu2, IconMoon, IconSunHigh, IconWorld, IconX } from '@tabler/icons-react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../queries';
 import { Language } from '../../types';
@@ -11,6 +12,7 @@ interface HeaderMenuProps {
 export const HeaderMenu = ({ openSignOutConfirmModal }: HeaderMenuProps) => {
   const { t, i18n } = useTranslation();
   const { colorScheme, setColorScheme } = useMantineColorScheme();
+  const [menuOpened, setMenuOpened] = useState(false);
 
   const { data: currentUser } = useCurrentUser();
 
@@ -24,10 +26,21 @@ export const HeaderMenu = ({ openSignOutConfirmModal }: HeaderMenuProps) => {
   };
 
   return (
-    <Menu position='bottom-end' withArrow arrowSize={10} arrowOffset={16} shadow='md' closeOnItemClick={false}>
+    <Menu
+      position='bottom-end'
+      withArrow
+      arrowSize={10}
+      arrowOffset={16}
+      shadow='md'
+      closeOnItemClick={false}
+      opened={menuOpened}
+      onChange={setMenuOpened}
+    >
       <Menu.Target>
         <ActionIcon variant='default' radius='md' size={36}>
-          <IconMenu2 size={18} />
+          <span className={`transition-transform duration-200 ease-in-out ${menuOpened ? 'rotate-90' : 'rotate-0'}`}>
+            {menuOpened ? <IconX size={18} /> : <IconMenu2 size={18} />}
+          </span>
         </ActionIcon>
       </Menu.Target>
 
