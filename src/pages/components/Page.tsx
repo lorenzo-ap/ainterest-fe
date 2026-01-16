@@ -1,8 +1,8 @@
 import { PropsWithChildren, useEffect } from 'react';
 
-interface PageProps extends PropsWithChildren {
+type PageProps = PropsWithChildren<{
   title: string;
-}
+}>;
 
 export const Page = (props: PageProps) => {
   useEffect(() => {
