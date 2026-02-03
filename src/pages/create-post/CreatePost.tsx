@@ -1,17 +1,20 @@
 import { Button, Select, Text, Textarea, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconArrowLeft, IconPhotoUp, IconSparkles } from '@tabler/icons-react';
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFormValidation } from '../../hooks';
 import { useCreatePost, useGenerateImage } from '../../queries';
 import { toastService } from '../../services';
-import { CreatePostForm, GenerateImageBody } from '../../types';
+import { CreatePostForm } from '../../types';
 import { getRandomPrompt } from '../../utils';
 import { PostGeneratedImage } from './components';
 
-const SIZE_OPTIONS = ['256x256', '512x512', '1024x1024'];
+const SIZE_OPTIONS = ['256x256', '512x512', '1024x1024'] as const;
+
+const PROMPT_MIN_LENGTH = 5;
+const PROMPT_MAX_LENGTH = 200;
 
 export const CreatePostPage = () => {
   const { t, i18n } = useTranslation();
@@ -49,23 +52,12 @@ export const CreatePostPage = () => {
 
     validate: {
       prompt: (value) => {
-        if (!value.trim()) {
-          return t('pages.generate_image.errors.prompt.required');
-        }
-
-        if (value.length < 5) {
-          return t('pages.generate_image.errors.prompt.min_length');
-        }
-
-        if (value.length > 200) {
-          return t('pages.generate_image.errors.prompt.max_length');
-        }
+        const trimmed = value.trim();
+        if (!trimmed) return t('pages.generate_image.errors.prompt.required');
+        if (trimmed.length < PROMPT_MIN_LENGTH) return t('pages.generate_image.errors.prompt.min_length');
+        if (trimmed.length > PROMPT_MAX_LENGTH) return t('pages.generate_image.errors.prompt.max_length');
       },
-      size: (value) => {
-        if (!value) {
-          return t('pages.generate_image.errors.size.required');
-        }
-      }
+      size: (value) => (!value ? t('pages.generate_image.errors.size.required') : undefined)
     }
   });
 
@@ -73,61 +65,47 @@ export const CreatePostPage = () => {
 
   const handleSurpriseMe = () => {
     const randomPrompt = getRandomPrompt(form.getValues().prompt);
-
     form.setFieldValue('prompt', randomPrompt);
   };
 
-  const generatePostImage = (prompt: string, size: number) => {
-    const body: GenerateImageBody = {
-      text: prompt,
-      size
-    };
-
-    generateImage(body);
-  };
-
   const onGenerate = () => {
-    const promptValidation = form.validateField('prompt');
-    const sizeValidation = form.validateField('size');
-
     setIsImageMissing(false);
 
-    if (promptValidation.hasError || sizeValidation.hasError) {
-      form.validateField('prompt');
-      form.validateField('size');
-      return;
-    }
+    const validation = form.validate();
+    if (validation.hasErrors) return;
 
-    const size = +form.getValues().size.split('x')[0];
-    const { prompt } = form.getValues();
+    const { prompt, size: sizeStr } = form.getValues();
+    const size = parseInt(sizeStr.split('x')[0], 10);
 
-    generatePostImage(prompt, size);
+    generateImage({ text: prompt, size });
   };
 
-  const sharePost = (formData: CreatePostForm) => {
-    setIsImageMissing(false);
+  const submitForm = (values: CreatePostForm) => {
+    const { postGeneratedImage } = values;
 
-    const body = { ...formData.postGeneratedImage };
-    createPost(body);
-  };
+    console.log('qwe');
 
-  const submitForm = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!form.getValues().postGeneratedImage.photo) {
-      form.clearFieldError('prompt');
-      form.clearFieldError('size');
+    if (!postGeneratedImage.photo) {
+      form.clearErrors();
       setIsImageMissing(true);
       return;
     }
 
-    sharePost(form.getValues());
+    setIsImageMissing(false);
+    createPost(postGeneratedImage);
+  };
+
+  const generatedImageProps = {
+    imageSource: form.getValues().postGeneratedImage.photo,
+    imageAlt: form.getValues().prompt,
+    isGenerating,
+    isImageMissing
   };
 
   return (
     <section className='mx-auto flex max-w-7xl flex-col items-start'>
       <div className='flex w-full flex-col items-center justify-between gap-5 lg:flex-row lg:items-start'>
-        <form className='max-w-xl lg:max-w-md xl:max-w-lg' onSubmit={submitForm}>
+        <form className='max-w-xl lg:max-w-md xl:max-w-lg' onSubmit={form.onSubmit((values) => submitForm(values))}>
           <Button
             color='violet'
             size='compact-md'
@@ -145,15 +123,7 @@ export const CreatePostPage = () => {
             <Text className='mb-5 mt-2 max-w-[500px] opacity-60 lg:mb-8'>{t('pages.generate_image.subheading')}</Text>
           </div>
 
-          <PostGeneratedImage
-            {...{
-              imageSource: form.getValues().postGeneratedImage.photo,
-              imageAlt: form.getValues().prompt,
-              isGenerating,
-              isImageMissing,
-              hiddenOnLargeScreen: true
-            }}
-          />
+          <PostGeneratedImage {...generatedImageProps} hiddenOnLargeScreen />
 
           <div className='flex flex-col justify-between gap-5 md:flex-row'>
             <div className='flex flex-grow flex-col gap-3 md:min-w-96'>
@@ -219,14 +189,7 @@ export const CreatePostPage = () => {
           <Text className='mt-3 text-sm opacity-60 md:mt-4'>{t('pages.generate_image.info')}</Text>
         </form>
 
-        <PostGeneratedImage
-          {...{
-            imageSource: form.getValues().postGeneratedImage.photo,
-            imageAlt: form.getValues().prompt,
-            isGenerating,
-            isImageMissing
-          }}
-        />
+        <PostGeneratedImage {...generatedImageProps} />
       </div>
     </section>
   );
