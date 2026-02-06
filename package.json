@@ -7,7 +7,6 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "prepare": "pnpm dlx husky init",
     "check": "ultracite check",
     "fix": "ultracite fix"
   },
@@ -39,7 +38,8 @@
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "autoprefixer": "^10.4.22",
-    "lint-staged": "^15.5.2",
+    "lefthook": "^2.1.0",
+    "lint-staged": "^16.2.7",
     "postcss": "^8.5.6",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
@@ -50,7 +50,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
-      "pnpm dlx ultracite fix"
+      "pnpx ultracite fix"
     ]
   }
 }

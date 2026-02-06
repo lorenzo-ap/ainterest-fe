@@ -1,6 +1,5 @@
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
-
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -19,6 +18,7 @@ const App = () => {
 	return (
 		<MantineProvider defaultColorScheme='light' withCssVariables>
 			<Notifications autoClose={3000} position='bottom-right' zIndex={1000} />
+
 			<BrowserRouter
 				future={{
 					v7_relativeSplatPath: true,
