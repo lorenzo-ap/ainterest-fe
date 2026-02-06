@@ -1,28 +1,29 @@
-export enum NotificationType {
-  Like = 'like'
-}
+export const NotificationType = {
+	Like: 'like'
+} as const;
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
 
 export interface Notification {
-  _id: string;
-  userId: string;
-  actorId: string;
-  actorUsername: string;
-  actorPhoto: string;
-  type: NotificationType;
-  postId: string;
-  postPhoto: string;
-  read: boolean;
-  createdAt: string;
+	_id: string;
+	userId: string;
+	actorId: string;
+	actorUsername: string;
+	actorPhoto: string;
+	type: NotificationType;
+	postId: string;
+	postPhoto: string;
+	read: boolean;
+	createdAt: string;
 }
 
 export interface NotificationsUnreadCountResponse {
-  count: number;
+	count: number;
 }
 
 export interface MarkAllNotificationsAsReadResponse {
-  modifiedCount: number;
+	modifiedCount: number;
 }
 
 export interface DeleteAllNotificationsResponse {
-  deletedCount: number;
+	deletedCount: number;
 }

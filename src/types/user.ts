@@ -1,13 +1,14 @@
-export interface User {
-  _id: string;
-  username: string;
-  email: string;
-  photo: string;
-  role: UserRole;
-  accessToken: string;
+export interface UserModel {
+	_id: string;
+	username: string;
+	email: string;
+	photo: string;
+	role: UserRole;
+	accessToken: string;
 }
 
-export enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user'
-}
+export const UserRole = {
+	ADMIN: 'admin',
+	USER: 'user'
+} as const;
+export type UserRole = (typeof UserRole)[keyof typeof UserRole];

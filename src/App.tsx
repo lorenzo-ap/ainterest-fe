@@ -11,68 +11,68 @@ import { Header } from './pages/components/Header';
 import { useCurrentUser } from './queries';
 
 const App = () => {
-  useCurrentUser({
-    enabled: true
-  });
-  useNotificationListener();
+	useCurrentUser({
+		enabled: true
+	});
+	useNotificationListener();
 
-  return (
-    <MantineProvider defaultColorScheme='light' withCssVariables>
-      <Notifications position='bottom-right' zIndex={1000} autoClose={3000} />
-      <BrowserRouter
-        future={{
-          v7_relativeSplatPath: true,
-          v7_startTransition: true
-        }}
-      >
-        <Header />
+	return (
+		<MantineProvider defaultColorScheme='light' withCssVariables>
+			<Notifications autoClose={3000} position='bottom-right' zIndex={1000} />
+			<BrowserRouter
+				future={{
+					v7_relativeSplatPath: true,
+					v7_startTransition: true
+				}}
+			>
+				<Header />
 
-        <main className='min-h-[calc(100vh-77px)] w-full px-4 py-8 sm:px-8'>
-          <Routes>
-            <Route
-              path='/'
-              element={
-                <Page title='AInterest'>
-                  <HomePage />
-                </Page>
-              }
-            />
+				<main className='min-h-[calc(100vh-77px)] w-full px-4 py-8 sm:px-8'>
+					<Routes>
+						<Route
+							element={
+								<Page title='AInterest'>
+									<HomePage />
+								</Page>
+							}
+							path='/'
+						/>
 
-            <Route path='/account/:username' element={<UserProfilePage />} />
+						<Route element={<UserProfilePage />} path='/account/:username' />
 
-            <Route
-              path='/reset-password/:token'
-              element={
-                <Page title='Reset password'>
-                  <ResetPasswordPage />
-                </Page>
-              }
-            />
+						<Route
+							element={
+								<Page title='Reset password'>
+									<ResetPasswordPage />
+								</Page>
+							}
+							path='/reset-password/:token'
+						/>
 
-            <Route element={<ProtectedRoute />}>
-              <Route
-                path='/generate-image'
-                element={
-                  <Page title='Generate image'>
-                    <CreatePostPage />
-                  </Page>
-                }
-              />
-            </Route>
+						<Route element={<ProtectedRoute />}>
+							<Route
+								element={
+									<Page title='Generate image'>
+										<CreatePostPage />
+									</Page>
+								}
+								path='/generate-image'
+							/>
+						</Route>
 
-            <Route
-              path='*'
-              element={
-                <Page title='404'>
-                  <ErrorPage />
-                </Page>
-              }
-            />
-          </Routes>
-        </main>
-      </BrowserRouter>
-    </MantineProvider>
-  );
+						<Route
+							element={
+								<Page title='404'>
+									<ErrorPage />
+								</Page>
+							}
+							path='*'
+						/>
+					</Routes>
+				</main>
+			</BrowserRouter>
+		</MantineProvider>
+	);
 };
 
 export default App;

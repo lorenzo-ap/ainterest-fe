@@ -6,5 +6,4 @@ export * from './notification';
 export * from './post';
 export * from './query';
 export * from './sse';
-export * from './store';
 export * from './user';

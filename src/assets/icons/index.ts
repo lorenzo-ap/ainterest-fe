@@ -1,3 +1,1 @@
-import GoogleIcon from './google.svg';
-
-export { GoogleIcon };
+export { default as GoogleIcon } from './google.svg';

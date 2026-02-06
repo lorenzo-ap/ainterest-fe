@@ -1,26 +1,26 @@
-import { User } from './user';
+import type { UserModel } from './user';
 
-export interface Post {
-  _id: string;
-  prompt: string;
-  photo: string;
-  createdAt: string;
-  user: User;
-  likes: string[];
+export interface PostModel {
+	_id: string;
+	prompt: string;
+	photo: string;
+	createdAt: string;
+	user: UserModel;
+	likes: string[];
 }
 
 export interface UpdatePost {
-  postId: string;
-  userId: string;
+	postId: string;
+	userId: string;
 }
 
 export interface CreatePostForm {
-  prompt: string;
-  size: string;
-  postGeneratedImage: PostGeneratedImage;
+	prompt: string;
+	size: string;
+	postGeneratedImage: PostGeneratedImage;
 }
 
 export interface PostGeneratedImage {
-  prompt: string;
-  photo: string;
+	prompt: string;
+	photo: string;
 }

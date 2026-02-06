@@ -1,10 +1,10 @@
-import { Notification } from './notification';
+import type { Notification } from './notification';
 
 export type SSEMessageType = 'notification' | 'heartbeat';
 
 export interface SSEMessage {
-  type: SSEMessageType;
-  payload?: Notification;
+	type: SSEMessageType;
+	payload?: Notification;
 }
 
 export type MessageHandler = (message: SSEMessage) => void;

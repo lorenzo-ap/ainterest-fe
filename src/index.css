@@ -1,60 +1,85 @@
+/* biome-ignore-start lint: Tailwind CSS directives are processed by PostCSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+/* biome-ignore-end lint: End */
 * {
-  font-family: 'Inter', sans-serif;
+	font-family: "Inter", sans-serif;
 }
 
 body,
 .scrollbar {
-  &::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    background: light-dark(var(--mantine-color-gray-5), var(--mantine-color-dark-3));
-  }
+	&::-webkit-scrollbar-thumb {
+		border-radius: 5px;
+		background: light-dark(
+			var(--mantine-color-gray-5),
+			var(--mantine-color-dark-3)
+		);
+	}
 
-  &::-webkit-scrollbar-thumb:hover {
-    background: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
-  }
+	&::-webkit-scrollbar-thumb:hover {
+		background: light-dark(
+			var(--mantine-color-gray-6),
+			var(--mantine-color-dark-2)
+		);
+	}
 
-  &::-webkit-scrollbar-thumb:active {
-    background: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1));
-  }
+	&::-webkit-scrollbar-thumb:active {
+		background: light-dark(
+			var(--mantine-color-gray-7),
+			var(--mantine-color-dark-1)
+		);
+	}
 }
 
 body {
-  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7));
-  color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
+	background-color: light-dark(
+		var(--mantine-color-gray-0),
+		var(--mantine-color-dark-7)
+	);
+	color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
 
-  &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
+	&::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
 
-  &::-webkit-scrollbar-track {
-    background: light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-4));
-  }
+	&::-webkit-scrollbar-track {
+		background: light-dark(
+			var(--mantine-color-gray-4),
+			var(--mantine-color-dark-4)
+		);
+	}
 }
 
 .scrollbar {
-  &::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
+	&::-webkit-scrollbar {
+		width: 5px;
+		height: 5px;
+	}
 }
 
 .header {
-  border-color: light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
-  background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
+	border-color: light-dark(
+		var(--mantine-color-gray-3),
+		var(--mantine-color-dark-4)
+	);
+	background-color: light-dark(
+		var(--mantine-color-white),
+		var(--mantine-color-dark-6)
+	);
 }
 
 .border-color {
-  border-color: light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+	border-color: light-dark(
+		var(--mantine-color-gray-3),
+		var(--mantine-color-dark-4)
+	);
 }
 
 @media screen and (min-width: 1280px) {
-  .card:nth-child(7n + 1) {
-    grid-column: auto/span 2;
-    grid-row: auto/span 2;
-  }
+	.card:nth-child(7n + 1) {
+		grid-column: auto / span 2;
+		grid-row: auto / span 2;
+	}
 }

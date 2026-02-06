@@ -1,28 +1,28 @@
 export interface SignInForm {
-  email: string;
-  password: string;
+	email: string;
+	password: string;
 }
 
 export interface SignUpForm {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
+	username: string;
+	email: string;
+	password: string;
+	confirmPassword: string;
 }
 
 export interface ForgotPasswordForm {
-  email: string;
+	email: string;
 }
 
 export interface ResetPasswordForm {
-  password: string;
-  confirmPassword: string;
+	password: string;
+	confirmPassword: string;
 }
 
 export interface PasswordResponse {
-  message: string;
+	message: string;
 }
 
 export interface AccessToken {
-  accessToken: string;
+	accessToken: string;
 }

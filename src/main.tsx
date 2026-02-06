@@ -11,23 +11,29 @@ import './index.css';
 import { Language } from './types';
 
 i18next.init({
-  lng: localStorage.getItem('lang') || Language.EN,
-  resources: {
-    en: { translation: en },
-    ro: { translation: ro }
-  }
+	lng: localStorage.getItem('lang') || Language.EN,
+	resources: {
+		en: { translation: en },
+		ro: { translation: ro }
+	}
 });
 
 const queryClient = new QueryClient();
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <QueryClientProvider client={queryClient}>
-        <I18nextProvider i18n={i18next}>
-          <App />
-        </I18nextProvider>
-      </QueryClientProvider>
-    </GoogleOAuthProvider>
-  </StrictMode>
+const rootElement = document.getElementById('root');
+
+if (!rootElement) {
+	throw new Error('Root element #root not found');
+}
+
+ReactDOM.createRoot(rootElement).render(
+	<StrictMode>
+		<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+			<QueryClientProvider client={queryClient}>
+				<I18nextProvider i18n={i18next}>
+					<App />
+				</I18nextProvider>
+			</QueryClientProvider>
+		</GoogleOAuthProvider>
+	</StrictMode>
 );

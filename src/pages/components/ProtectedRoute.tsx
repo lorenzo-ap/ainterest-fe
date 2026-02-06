@@ -5,32 +5,32 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '../../queries';
 
 export const ProtectedRoute = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { data: currentUser, isLoading: isCurrentUserLoading } = useCurrentUser();
+	const { t } = useTranslation();
+	const navigate = useNavigate();
+	const { data: currentUser, isLoading: isCurrentUserLoading } = useCurrentUser();
 
-  if (isCurrentUserLoading) {
-    return <Loader color='violet' size='lg' className='mx-auto mt-24 block' />;
-  }
+	if (isCurrentUserLoading) {
+		return <Loader className='mx-auto mt-24 block' color='violet' size='lg' />;
+	}
 
-  if (!currentUser) {
-    return (
-      <div className='flex min-h-[calc(100vh-200px)] items-center justify-center'>
-        <div className='max-w-md rounded-md p-12 text-center'>
-          <IconLock size={64} className='mx-auto mb-4' stroke={1.5} color='#7950F2' />
-          <Title order={2} className='mb-3'>
-            {t('pages.components.protected_route.title')}
-          </Title>
-          <Text size='md' c='dimmed' className='mb-6'>
-            {t('pages.components.protected_route.description')}
-          </Text>
-          <Button color='violet' size='md' onClick={() => navigate('/')}>
-            {t('pages.components.protected_route.go_to_home')}
-          </Button>
-        </div>
-      </div>
-    );
-  }
+	if (!currentUser) {
+		return (
+			<div className='flex min-h-[calc(100vh-200px)] items-center justify-center'>
+				<div className='max-w-md rounded-md p-12 text-center'>
+					<IconLock className='mx-auto mb-4' color='#7950F2' size={64} stroke={1.5} />
+					<Title className='mb-3' order={2}>
+						{t('pages.components.protected_route.title')}
+					</Title>
+					<Text c='dimmed' className='mb-6' size='md'>
+						{t('pages.components.protected_route.description')}
+					</Text>
+					<Button color='violet' onClick={() => navigate('/')} size='md'>
+						{t('pages.components.protected_route.go_to_home')}
+					</Button>
+				</div>
+			</div>
+		);
+	}
 
-  return <Outlet />;
+	return <Outlet />;
 };

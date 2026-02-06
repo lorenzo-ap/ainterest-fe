@@ -1,15 +1,17 @@
-export enum SortCriteria {
-  DATE = 'date',
-  NAME = 'name',
-  LIKES = 'likes'
-}
+export const SortCriteria = {
+	DATE: 'date',
+	NAME: 'name',
+	LIKES: 'likes'
+} as const;
+export type SortCriteria = (typeof SortCriteria)[keyof typeof SortCriteria];
 
-export enum SortOrder {
-  ASCENDING = 'asc',
-  DESCENDING = 'desc'
-}
+export const SortOrder = {
+	ASCENDING: 'asc',
+	DESCENDING: 'desc'
+} as const;
+export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
 
 export interface FiltersState {
-  criteria: SortCriteria;
-  order: SortOrder;
+	criteria: SortCriteria;
+	order: SortOrder;
 }

@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "prepare": "pnpm dlx husky init"
+    "prepare": "pnpm dlx husky init",
+    "check": "ultracite check",
+    "fix": "ultracite fix"
   },
   "dependencies": {
     "@mantine/core": "^7.17.8",
@@ -31,6 +33,7 @@
     "react-router-dom": "^6.30.2"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.3.13",
     "@eslint/js": "^9.39.1",
     "@tanstack/eslint-plugin-query": "^5.91.2",
     "@types/file-saver": "^2.0.7",
@@ -53,13 +56,12 @@
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^3.4.18",
     "typescript": "^5.9.3",
+    "ultracite": "7.1.4",
     "vite": "^7.2.7"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "eslint",
-      "prettier --write"
-    ],
-    "src/**/*.css": "prettier --write"
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
+      "pnpm dlx ultracite fix"
+    ]
   }
 }

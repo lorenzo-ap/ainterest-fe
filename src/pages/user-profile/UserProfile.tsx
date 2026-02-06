@@ -5,31 +5,31 @@ import { UserHeader, UserHeaderSkeleton } from './components/UserHeader';
 import { UserPosts } from './components/UserPosts';
 
 export const UserProfilePage = () => {
-  const params = useParams<{ username: string }>();
-  const navigate = useNavigate();
+	const params = useParams<{ username: string }>();
+	const navigate = useNavigate();
+	// biome-ignore lint: Intentional scroll to top when profile page changes
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [params.username]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [params.username]);
+	if (!params.username) {
+		navigate('/');
+		return;
+	}
 
-  if (!params.username) {
-    navigate('/');
-    return;
-  }
+	return (
+		<>
+			<div className='relative mx-auto max-w-7xl'>
+				<Suspense fallback={<UserHeaderSkeleton />} key={`header-${params.username}`}>
+					<UserHeader username={params.username} />
+				</Suspense>
 
-  return (
-    <>
-      <div className='relative mx-auto max-w-7xl'>
-        <Suspense fallback={<UserHeaderSkeleton />} key={`header-${params.username}`}>
-          <UserHeader username={params.username} />
-        </Suspense>
+				<Suspense fallback={<PostsSkeleton />} key={`posts-${params.username}`}>
+					<UserPosts username={params.username} />
+				</Suspense>
+			</div>
 
-        <Suspense fallback={<PostsSkeleton />} key={`posts-${params.username}`}>
-          <UserPosts username={params.username} />
-        </Suspense>
-      </div>
-
-      <ScrollToTopButton />
-    </>
-  );
+			<ScrollToTopButton />
+		</>
+	);
 };
