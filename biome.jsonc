@@ -15,9 +15,6 @@
       "performance": {
         "noBarrelFile": "off"
       },
-      "a11y": {
-        "noNoninteractiveElementInteractions": "off"
-      },
       "correctness": {
         "useImageSize": "off"
       }
@@ -28,11 +25,6 @@
       "quoteStyle": "single",
       "jsxQuoteStyle": "single",
       "trailingCommas": "none"
-    }
-  },
-  "css": {
-    "parser": {
-      "tailwindDirectives": true
     }
   }
 }

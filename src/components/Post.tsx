@@ -41,6 +41,7 @@ export const Post = (post: PostModel) => {
 					/>
 				)}
 
+				{/* biome-ignore lint: onLoad is not a user interaction */}
 				<img
 					alt={post.prompt}
 					className={`h-auto w-full rounded-xl object-cover ${loading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}

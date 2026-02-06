@@ -7,6 +7,7 @@ import { UserPosts } from './components/UserPosts';
 export const UserProfilePage = () => {
 	const params = useParams<{ username: string }>();
 	const navigate = useNavigate();
+
 	// biome-ignore lint: Intentional scroll to top when profile page changes
 	useEffect(() => {
 		window.scrollTo(0, 0);

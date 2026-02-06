@@ -83,8 +83,6 @@ export const CreatePostPage = () => {
 	const submitForm = (values: CreatePostForm) => {
 		const { postGeneratedImage } = values;
 
-		console.log('qwe');
-
 		if (!postGeneratedImage.photo) {
 			form.clearErrors();
 			setIsImageMissing(true);

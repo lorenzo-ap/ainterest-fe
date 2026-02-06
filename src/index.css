@@ -1,8 +1,9 @@
-/* biome-ignore-start lint: Tailwind CSS directives are processed by PostCSS */
+/* biome-ignore-start lint: TailwindCSS directives are processed by PostCSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 /* biome-ignore-end lint: End */
+
 * {
 	font-family: "Inter", sans-serif;
 }

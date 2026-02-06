@@ -188,6 +188,7 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 							onChange={(_, percentCrop) => setCrop(percentCrop)}
 							onComplete={(c) => setCompletedCrop(c)}
 						>
+							{/* biome-ignore lint: onLoad is not a user interaction */}
 							<img
 								alt={t('common.avatar')}
 								className='!max-h-[70vh] w-full object-contain'
