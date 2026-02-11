@@ -1,5 +1,4 @@
 import type { Locale } from 'date-fns/locale';
-import FileSaver from 'file-saver';
 import { locales, RANDOM_PROMPTS } from '../constants';
 import { toastService } from '../services';
 
@@ -14,9 +13,16 @@ export const getRandomPrompt = (prompt: string): string => {
 	return randomPrompt;
 };
 
-export const downloadImage = (desc: string, photo: string, username: string) => {
+export const downloadImage = async (desc: string, photo: string, username: string) => {
 	const id = generateIdFromString(desc);
-	FileSaver.saveAs(photo, `${username}-${id}.png`);
+	const response = await fetch(photo);
+	const blob = await response.blob();
+	const url = URL.createObjectURL(blob);
+	const link = document.createElement('a');
+	link.href = url;
+	link.download = `${username}-${id}.png`;
+	link.click();
+	URL.revokeObjectURL(url);
 	toastService.success('Image downloaded successfully!', 2500);
 };
 
