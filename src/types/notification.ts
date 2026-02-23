@@ -1,10 +1,10 @@
 export const NotificationType = {
-	Like: 'like'
+	Like: 'LIKE'
 } as const;
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
 
 export interface Notification {
-	_id: string;
+	id: string;
 	userId: string;
 	actorId: string;
 	actorUsername: string;

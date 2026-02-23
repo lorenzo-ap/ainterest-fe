@@ -50,7 +50,7 @@ export const useMarkNotificationAsRead = (notificationId: string, options?: Muta
 			queryClient.setQueryData<Notification[]>(notificationKeys.notifications, (oldNotifications) => {
 				if (!oldNotifications) return oldNotifications;
 				return oldNotifications.map((notification) =>
-					notification._id === notificationId ? { ...notification, read: true } : notification
+					notification.id === notificationId ? { ...notification, read: true } : notification
 				);
 			});
 
@@ -93,7 +93,7 @@ export const useDeleteNotification = (notificationId: string, options?: DeleteNo
 
 			queryClient.setQueryData<Notification[]>(notificationKeys.notifications, (oldNotifications) => {
 				if (!oldNotifications) return oldNotifications;
-				return oldNotifications.filter((n) => n._id !== notificationId);
+				return oldNotifications.filter((n) => n.id !== notificationId);
 			});
 
 			if (res.read) return;

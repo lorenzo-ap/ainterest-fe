@@ -20,7 +20,7 @@ export const PostActions = ({ post, isHovered, showInfo }: PostActionsProps) => 
 
 	const [postImageModalOpened, { open: openPostImageModal, close: closePostImageModal }] = useDisclosure(false);
 
-	const { mutate: deletePost, isPending: isDeletePostLoading } = useDeletePost(post._id, {
+	const { mutate: deletePost, isPending: isDeletePostLoading } = useDeletePost(post.id, {
 		onSuccess: () => {
 			toastService.success(t('apis.post.delete'));
 		}
@@ -57,7 +57,7 @@ export const PostActions = ({ post, isHovered, showInfo }: PostActionsProps) => 
 					</ActionIcon>
 				</Tooltip>
 
-				{(currentUser?.role === UserRole.ADMIN || post.user._id === currentUser?._id) && (
+				{(currentUser?.role === UserRole.ADMIN || post.user.id === currentUser?.id) && (
 					<Tooltip label={t('components.post_card.delete_post')} withArrow>
 						<ActionIcon
 							aria-label={t('components.post_card.delete_post')}

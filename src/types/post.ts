@@ -1,7 +1,7 @@
 import type { UserModel } from './user';
 
 export interface PostModel {
-	_id: string;
+	id: string;
 	prompt: string;
 	photo: string;
 	createdAt: string;

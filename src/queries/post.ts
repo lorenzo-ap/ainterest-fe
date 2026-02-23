@@ -43,7 +43,7 @@ export const useCreatePost = (options?: CreatePostOptions) => {
 		mutationFn: (generatedImage) => createPost(generatedImage),
 		onSuccess: (...args) => {
 			const [res] = args;
-			const userId = res.user._id;
+			const userId = res.user.id;
 
 			queryClient.setQueryData<PostModel[]>(postKeys.posts, (oldPosts) => {
 				if (!oldPosts) return oldPosts;
@@ -77,7 +77,7 @@ export const useLikePost = (postId: string, userId: string, options?: LikePostOp
 				if (!oldPosts) return oldPosts;
 
 				return oldPosts.map((post) => {
-					if (post._id === postId) {
+					if (post.id === postId) {
 						const newLikes = post.likes.includes(userId)
 							? post.likes.filter((like) => like !== userId)
 							: [...post.likes, userId];
@@ -112,7 +112,7 @@ export const useDeletePost = (postId: string, options?: DeletePostOptions) => {
 				},
 				(oldPosts) => {
 					if (!oldPosts) return oldPosts;
-					return oldPosts.filter((post) => post._id !== postId);
+					return oldPosts.filter((post) => post.id !== postId);
 				}
 			);
 			options?.onSuccess?.(...args);

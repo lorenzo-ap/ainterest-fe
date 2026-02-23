@@ -11,7 +11,6 @@ import { toastService } from '../../../services';
 import type { UserModel } from '../../../types';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const DATA_URL_PREFIX_REGEX = /^.+,/;
 
 type UserAvatarProps = {
 	user: UserModel;
@@ -132,7 +131,7 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 		reader.readAsDataURL(croppedImage);
 
 		reader.onload = () => {
-			const photo = reader.result?.toString().replace('data:', '').replace(DATA_URL_PREFIX_REGEX, '');
+			const photo = reader.result?.toString();
 			if (!(photo && user)) {
 				toastService.error(t('apis.user.error_upload'));
 				return;

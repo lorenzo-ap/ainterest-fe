@@ -66,7 +66,7 @@ export const NotificationDropdown = () => {
 			<div className='scrollbar flex-1 overflow-y-auto overflow-x-hidden'>
 				{notifications.length ? (
 					notifications.map((notification, i) => (
-						<Fragment key={notification._id}>
+						<Fragment key={notification.id}>
 							<NotificationItem notification={notification} />
 							{i < notifications.length - 1 && <Divider />}
 						</Fragment>

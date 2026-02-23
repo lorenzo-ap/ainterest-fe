@@ -12,7 +12,7 @@ export const UserPosts = ({ username }: UserPostsProps) => {
 	const { t } = useTranslation();
 
 	const { data: user } = useUserByUsername(username);
-	const { data: userPosts } = useUserPosts(user._id);
+	const { data: userPosts } = useUserPosts(user.id);
 
 	const { searchText, handleSearchChange, resetSearch, filters, handleFiltersChange, resetFilters, filteredPosts } =
 		usePostsFiltering(userPosts);

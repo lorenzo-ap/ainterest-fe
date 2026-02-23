@@ -44,7 +44,7 @@ export const RenderPosts = ({ posts, searchText, loading }: RenderPostsProps) =>
 
 			<div className='grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4'>
 				{loading && <PostSkeleton />}
-				{!loading && posts.length > 0 && posts.map((post) => <Post key={post._id} {...post} />)}
+				{!loading && posts.length > 0 && posts.map((post) => <Post key={post.id} {...post} />)}
 				{!loading && posts.length === 0 && (
 					<Title c='violet' className='col-span-full mt-4 uppercase' order={2}>
 						{t('components.render_posts.no_posts_found')}

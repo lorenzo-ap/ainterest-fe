@@ -23,14 +23,14 @@ export const PostMetaBar = ({ post, isHovered, showInfo }: PostMetaBarProps) => 
 
 	const [profileUsername, setProfileUsername] = useState<string>('');
 
-	const { mutate: likePost } = useLikePost(post._id, currentUser?._id || '');
+	const { mutate: likePost } = useLikePost(post.id, currentUser?.id || '');
 
 	useEffect(() => {
 		setProfileUsername(location.pathname.split('/').reverse()[0]);
 	}, [location.pathname]);
 
 	const prefetchUserData = () => {
-		const { _id: id, username } = post.user;
+		const { id, username } = post.user;
 
 		queryClient.prefetchQuery({
 			queryKey: userKeys.user(username),
@@ -63,7 +63,7 @@ export const PostMetaBar = ({ post, isHovered, showInfo }: PostMetaBarProps) => 
 			<div className='flex items-center gap-x-1'>
 				<ActionIcon
 					aria-label={t(
-						post.likes.includes(currentUser?._id ?? '')
+						post.likes.includes(currentUser?.id ?? '')
 							? 'components.post_card.unlike_post'
 							: 'components.post_card.like_post'
 					)}
@@ -74,7 +74,7 @@ export const PostMetaBar = ({ post, isHovered, showInfo }: PostMetaBarProps) => 
 					tabIndex={isHovered || showInfo ? 0 : -1}
 					variant='transparent'
 				>
-					{post.likes.includes(currentUser?._id ?? '') ? (
+					{post.likes.includes(currentUser?.id ?? '') ? (
 						<IconHeartFilled className='text-slate-300' color='firebrick' size={24} />
 					) : (
 						<IconHeart className='text-slate-300' size={24} />

@@ -14,8 +14,8 @@ type NotificationItemProps = {
 export const NotificationItem = ({ notification }: NotificationItemProps) => {
 	const { t, i18n } = useTranslation();
 
-	const { mutate: markAsRead, isPending: isMarkAsReadPending } = useMarkNotificationAsRead(notification._id);
-	const { mutate: deleteNotification, isPending: isDeletePending } = useDeleteNotification(notification._id);
+	const { mutate: markAsRead, isPending: isMarkAsReadPending } = useMarkNotificationAsRead(notification.id);
+	const { mutate: deleteNotification, isPending: isDeletePending } = useDeleteNotification(notification.id);
 
 	const locale = getLocale(i18n.language);
 	const timeAgo = formatDistanceToNow(new Date(notification.createdAt), {
