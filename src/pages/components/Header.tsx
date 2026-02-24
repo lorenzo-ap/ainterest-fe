@@ -1,7 +1,7 @@
 import { Avatar, Button, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { ConfirmModal } from '../../components';
@@ -13,7 +13,7 @@ import { Notifications } from './notifications';
 
 export const Header = () => {
 	const { t } = useTranslation();
-	const location = useLocation();
+	const { pathname } = useLocation();
 	const queryClient = useQueryClient();
 
 	const { data: currentUser, isLoading: isCurrentUserLoading } = useCurrentUser();
@@ -27,8 +27,6 @@ export const Header = () => {
 			});
 		}
 	});
-
-	const { pathname } = useMemo(() => location, [location]);
 
 	const [signInModalOpened, { open: openSignInModal, close: closeSignInModal }] = useDisclosure(false);
 	const [signUpModalOpened, { open: openSignUpModal, close: closeSignUpModal }] = useDisclosure(false);

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useCurrentUser, useUserByUsername } from '../../../queries';
 import { UserRole } from '../../../types';
-import { UserAvatar } from './UserAvatar';
+import { UserAvatar } from '.';
 
 export const UserHeaderSkeleton = () => (
 	<div className='mb-5 flex flex-wrap items-center justify-between gap-y-5'>

@@ -26,7 +26,9 @@ export const downloadImage = async (desc: string, photo: string, username: strin
 	toastService.success('Image downloaded successfully!', 2500);
 };
 
-export const generateIdFromString = (text: string) => {
+export const getLocale = (language: string): Locale => (locales as Record<string, Locale>)[language];
+
+const generateIdFromString = (text: string) => {
 	let hash = 0;
 	for (let i = 0; i < text.length; i++) {
 		const char = text.charCodeAt(i);
@@ -39,5 +41,3 @@ export const generateIdFromString = (text: string) => {
 
 	return String(fiveDigitId).padStart(5, '0');
 };
-
-export const getLocale = (language: string): Locale => (locales as Record<string, Locale>)[language];

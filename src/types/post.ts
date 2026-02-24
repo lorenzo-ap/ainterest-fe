@@ -9,11 +9,6 @@ export interface PostModel {
 	likes: string[];
 }
 
-export interface UpdatePost {
-	postId: string;
-	userId: string;
-}
-
 export interface CreatePostForm {
 	prompt: string;
 	size: string;

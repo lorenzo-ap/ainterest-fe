@@ -1,8 +1,7 @@
 import { Suspense, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PostsSkeleton, ScrollToTopButton } from '../../components';
-import { UserHeader, UserHeaderSkeleton } from './components/UserHeader';
-import { UserPosts } from './components/UserPosts';
+import { UserHeader, UserHeaderSkeleton, UserPosts } from './components';
 
 export const UserProfilePage = () => {
 	const params = useParams<{ username: string }>();

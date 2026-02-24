@@ -1,6 +1,6 @@
 import type { Notification } from './notification';
 
-export type SSEMessageType = 'notification' | 'heartbeat';
+type SSEMessageType = 'notification' | 'heartbeat';
 
 export interface SSEMessage {
 	type: SSEMessageType;

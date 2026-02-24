@@ -1,6 +1,7 @@
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { Avatar, Button, Modal } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { IconPhotoEdit } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { type ChangeEvent, type SyntheticEvent, useRef, useState } from 'react';
@@ -32,11 +33,10 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 		}
 	});
 
-	const [uploadedPhoto, setUploadedPhoto] = useState<File | null>(null);
-	const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
-	const [cropModalOpen, setCropModalOpen] = useState(false);
+	const [uploadedPhoto, setUploadedPhoto] = useState<string>();
 	const [crop, setCrop] = useState<Crop>();
 	const [completedCrop, setCompletedCrop] = useState<Crop | null>(null);
+	const [cropModalOpened, { open: openCropModal, close: closeCropModal }] = useDisclosure(false);
 
 	const imgRef = useRef<HTMLImageElement>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
@@ -53,22 +53,18 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 		}
 
 		const objectUrl = URL.createObjectURL(selectedFile);
-		setUploadedPhoto(selectedFile);
-		setUploadedPhotoUrl(objectUrl);
-		setCropModalOpen(true);
+		setUploadedPhoto(objectUrl);
+		openCropModal();
 	};
 
 	const resetFileInput = () => {
-		setCropModalOpen(false);
-		setTimeout(() => {
-			if (fileInputRef.current) {
-				fileInputRef.current.value = '';
-			}
-			setUploadedPhoto(null);
-			setUploadedPhotoUrl(null);
-			setCrop(undefined);
-			setCompletedCrop(null);
-		}, 150);
+		closeCropModal();
+		if (fileInputRef.current) {
+			fileInputRef.current.value = '';
+		}
+		setUploadedPhoto(undefined);
+		setCrop(undefined);
+		setCompletedCrop(null);
 	};
 
 	const onImageLoad = (e: SyntheticEvent<HTMLImageElement>) => {
@@ -177,9 +173,9 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 				)}
 			</label>
 
-			<Modal centered onClose={resetFileInput} opened={cropModalOpen} size='lg' withCloseButton={false}>
+			<Modal centered onClose={resetFileInput} opened={cropModalOpened} size='lg' withCloseButton={false}>
 				<div className='flex flex-col items-center'>
-					{uploadedPhotoUrl && (
+					{uploadedPhoto && (
 						<ReactCrop
 							aspect={1}
 							circularCrop
@@ -193,7 +189,7 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 								className='!max-h-[70vh] w-full object-contain'
 								onLoad={onImageLoad}
 								ref={imgRef}
-								src={uploadedPhotoUrl}
+								src={uploadedPhoto}
 							/>
 						</ReactCrop>
 					)}
