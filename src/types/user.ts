@@ -2,7 +2,7 @@ export interface UserModel {
 	id: string;
 	username: string;
 	email: string;
-	photo: string;
+	photo?: string;
 	role: UserRole;
 	accessToken: string;
 }

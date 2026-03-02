@@ -1,11 +1,16 @@
-import type { UserModel } from './user';
+interface PostUserModel {
+	id: string;
+	username: string;
+	email: string;
+	photo?: string;
+}
 
 export interface PostModel {
 	id: string;
 	prompt: string;
 	photo: string;
 	createdAt: string;
-	user: UserModel;
+	user: PostUserModel;
 	likes: string[];
 }
 

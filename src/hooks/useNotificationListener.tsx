@@ -13,6 +13,17 @@ export const useNotificationListener = () => {
 	const queryClient = useQueryClient();
 
 	const { data: currentUser } = useCurrentUser();
+	const currentUserId = currentUser?.id;
+
+	useEffect(() => {
+		if (!currentUserId) return;
+
+		sseService.connect(url);
+
+		return () => {
+			sseService.disconnect();
+		};
+	}, [currentUserId]);
 
 	const handleNewNotification = useCallback(
 		(notification: Notification) => {
@@ -30,11 +41,9 @@ export const useNotificationListener = () => {
 	);
 
 	useEffect(() => {
-		if (!currentUser) return;
+		if (!currentUserId) return;
 
-		sseService.connect(url);
-
-		const unsubscribe = sseService.onMessage((message) => {
+		return sseService.onMessage((message) => {
 			if (!message.payload) return;
 
 			switch (message.type) {
@@ -45,10 +54,5 @@ export const useNotificationListener = () => {
 					break;
 			}
 		});
-
-		return () => {
-			unsubscribe();
-			sseService.disconnect();
-		};
-	}, [currentUser, handleNewNotification]);
+	}, [currentUserId, handleNewNotification]);
 };

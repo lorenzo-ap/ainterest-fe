@@ -82,7 +82,7 @@ class SSEService {
 	}
 
 	isConnected(): boolean {
-		return this.source?.readyState === EventSource.OPEN;
+		return this.source?.readyState === EventSource.OPEN || this.source?.readyState === EventSource.CONNECTING;
 	}
 }
 
