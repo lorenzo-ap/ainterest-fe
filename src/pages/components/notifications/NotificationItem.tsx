@@ -30,22 +30,22 @@ export const NotificationItem = ({ notification }: NotificationItemProps) => {
 			}`}
 		>
 			<Avatar
-				alt={notification.actorUsername}
+				alt={notification.actor.username}
 				className='flex-shrink-0'
 				color='initials'
-				name={notification.actorUsername}
+				name={notification.actor.username}
 				size={40}
-				src={notification.actorPhoto}
+				src={notification.actor.photo}
 			>
-				{notification.actorUsername[0].toUpperCase()}
+				{notification.actor.username[0].toUpperCase()}
 			</Avatar>
 
 			<div className='flex flex-grow items-start justify-between gap-8'>
 				<div className='min-w-0 flex-1'>
 					<div>
-						<Link to={`/account/${notification.actorUsername}`}>
+						<Link to={`/account/${notification.actor.username}`}>
 							<Text c='violet' className='font-semibold text-sm hover:opacity-85' component='span'>
-								{notification.actorUsername}
+								{notification.actor.username}
 							</Text>
 						</Link>
 
@@ -73,7 +73,7 @@ export const NotificationItem = ({ notification }: NotificationItemProps) => {
 				<img
 					alt={t('pages.components.notifications.post_image')}
 					className='h-12 w-12 flex-shrink-0 self-center rounded object-cover transition-transform group-hover:-translate-x-6'
-					src={notification.postPhoto}
+					src={notification.post.photo}
 				/>
 			</div>
 

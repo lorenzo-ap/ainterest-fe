@@ -6,14 +6,22 @@ export type NotificationType = (typeof NotificationType)[keyof typeof Notificati
 export interface Notification {
 	id: string;
 	userId: string;
-	actorId: string;
-	actorUsername: string;
-	actorPhoto: string;
 	type: NotificationType;
-	postId: string;
-	postPhoto: string;
 	read: boolean;
+	actor: NotificationActor;
+	post: NotificationPost;
 	createdAt: string;
+}
+
+export interface NotificationActor {
+	id: string;
+	username: string;
+	photo: string;
+}
+
+export interface NotificationPost {
+	id: string;
+	photo: string;
 }
 
 export interface NotificationsUnreadCountResponse {

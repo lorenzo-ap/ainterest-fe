@@ -33,7 +33,7 @@ export const useNotificationListener = () => {
 			queryClient.setQueryData<number>(notificationKeys.notificationsUnreadCount, (old) => (old ?? 0) + 1);
 
 			toastService.success(
-				`${notification.actorUsername} ${t('pages.components.notifications.liked_your_post')}`,
+				`${notification.actor.username} ${t('pages.components.notifications.liked_your_post')}`,
 				3000
 			);
 		},
