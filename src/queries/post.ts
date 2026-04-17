@@ -6,8 +6,9 @@ import {
 	useSuspenseQuery
 } from '@tanstack/react-query';
 import { createPost, deletePost, getPosts, getUserPosts, likePost } from '../api';
-import type { PostGeneratedImage, PostModel } from '../types';
+import type { Notification, PostGeneratedImage, PostModel } from '../types';
 import { STALE_TIME } from '../utils';
+import { notificationKeys } from './notification';
 
 type PostsOptions = Omit<UseSuspenseQueryOptions<PostModel[], Error, PostModel[]>, 'queryKey' | 'queryFn'>;
 type CreatePostOptions = Omit<UseMutationOptions<PostModel, Error, PostGeneratedImage>, 'mutationFn'>;
@@ -107,6 +108,8 @@ export const useDeletePost = (postId: string, options?: DeletePostOptions) => {
 		...options,
 		mutationFn: () => deletePost(postId),
 		onSuccess: (...args) => {
+			let removedUnreadCount = 0;
+
 			queryClient.setQueriesData<PostModel[]>(
 				{
 					queryKey: postKeys.posts
@@ -116,6 +119,23 @@ export const useDeletePost = (postId: string, options?: DeletePostOptions) => {
 					return oldPosts.filter((post) => post.id !== postId);
 				}
 			);
+
+			queryClient.setQueryData<Notification[]>(notificationKeys.notifications, (oldNotifications) => {
+				if (!oldNotifications) return oldNotifications;
+
+				removedUnreadCount = oldNotifications.filter(
+					(notification) => !notification.read && notification.post.id === postId
+				).length;
+
+				return oldNotifications.filter((notification) => notification.post.id !== postId);
+			});
+
+			if (removedUnreadCount) {
+				queryClient.setQueryData<number>(notificationKeys.notificationsUnreadCount, (oldCount) =>
+					Math.max((oldCount ?? 0) - removedUnreadCount, 0)
+				);
+			}
+
 			options?.onSuccess?.(...args);
 		}
 	});
