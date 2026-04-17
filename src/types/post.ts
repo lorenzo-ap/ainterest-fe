@@ -11,7 +11,8 @@ export interface PostModel {
 	photo: string;
 	createdAt: string;
 	user: PostUserModel;
-	likes: string[];
+	likesCount: number;
+	likedByCurrentUser: boolean;
 }
 
 export interface CreatePostForm {

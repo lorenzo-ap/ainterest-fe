@@ -1,15 +1,25 @@
 import { ActionIcon, Tooltip } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Filters, RenderPosts } from '../../../components';
 import { usePostsFiltering } from '../../../hooks';
-import { usePosts } from '../../../queries';
+import { postKeys, usePosts } from '../../../queries';
 import { SearchPostsInput } from '../../components';
 
 export const HomePosts = () => {
 	const { t } = useTranslation();
+	const queryClient = useQueryClient();
 
-	const { data: posts, isFetching, refetch } = usePosts();
+	const { data: posts } = usePosts();
+
+	const { mutate: refreshPosts, isPending: isManualRefreshPending } = useMutation({
+		mutationFn: () =>
+			queryClient.refetchQueries({
+				queryKey: postKeys.posts,
+				type: 'active'
+			})
+	});
 
 	const { searchText, handleSearchChange, resetSearch, filters, handleFiltersChange, resetFilters, filteredPosts } =
 		usePostsFiltering(posts, { searchByUsername: true });
@@ -20,7 +30,7 @@ export const HomePosts = () => {
 				<div className='mt-8 flex items-end gap-x-2'>
 					<SearchPostsInput
 						handleSearchChange={handleSearchChange}
-						loading={isFetching}
+						loading={isManualRefreshPending}
 						placeholder={t('pages.components.search_posts_input.enter_prompt_or_username')}
 						resetSearch={resetSearch}
 						searchText={searchText}
@@ -30,9 +40,9 @@ export const HomePosts = () => {
 						<ActionIcon
 							aria-label={t('pages.home.refresh_posts')}
 							color='violet'
-							loading={isFetching}
+							loading={isManualRefreshPending}
 							onClick={() => {
-								refetch();
+								refreshPosts();
 							}}
 							radius='md'
 							size={42}
@@ -42,7 +52,7 @@ export const HomePosts = () => {
 					</Tooltip>
 
 					<Filters
-						disabled={isFetching}
+						disabled={isManualRefreshPending}
 						filters={filters}
 						onFiltersChange={handleFiltersChange}
 						onReset={resetFilters}
@@ -50,7 +60,7 @@ export const HomePosts = () => {
 				</div>
 			)}
 
-			<RenderPosts loading={isFetching} posts={filteredPosts} searchText={searchText} />
+			<RenderPosts loading={isManualRefreshPending} posts={filteredPosts} searchText={searchText} />
 		</>
 	);
 };

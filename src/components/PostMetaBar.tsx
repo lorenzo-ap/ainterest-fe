@@ -23,7 +23,7 @@ export const PostMetaBar = ({ post, isHovered, showInfo }: PostMetaBarProps) => 
 
 	const [profileUsername, setProfileUsername] = useState<string>('');
 
-	const { mutate: likePost } = useLikePost(post.id, currentUser?.id || '');
+	const { mutate: likePost } = useLikePost(post.id);
 
 	useEffect(() => {
 		setProfileUsername(location.pathname.split('/').reverse()[0]);
@@ -63,9 +63,7 @@ export const PostMetaBar = ({ post, isHovered, showInfo }: PostMetaBarProps) => 
 			<div className='flex items-center gap-x-1'>
 				<ActionIcon
 					aria-label={t(
-						post.likes.includes(currentUser?.id ?? '')
-							? 'components.post_card.unlike_post'
-							: 'components.post_card.like_post'
+						post.likedByCurrentUser ? 'components.post_card.unlike_post' : 'components.post_card.like_post'
 					)}
 					className={currentUser ? '' : 'pointer-events-none'}
 					onClick={() => {
@@ -74,14 +72,14 @@ export const PostMetaBar = ({ post, isHovered, showInfo }: PostMetaBarProps) => 
 					tabIndex={isHovered || showInfo ? 0 : -1}
 					variant='transparent'
 				>
-					{post.likes.includes(currentUser?.id ?? '') ? (
+					{post.likedByCurrentUser ? (
 						<IconHeartFilled className='text-slate-300' color='firebrick' size={24} />
 					) : (
 						<IconHeart className='text-slate-300' size={24} />
 					)}
 				</ActionIcon>
 
-				{post.likes.length > 0 && <Text className='text-sm text-white'>{post.likes.length}</Text>}
+				{post.likesCount > 0 && <Text className='text-sm text-white'>{post.likesCount}</Text>}
 			</div>
 		</div>
 	);

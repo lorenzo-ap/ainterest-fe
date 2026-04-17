@@ -8,6 +8,7 @@ import type {
 	SignUpForm,
 	UserModel
 } from '../types';
+import { postKeys } from './post';
 import { userKeys } from './user';
 
 type SignInOptions = UseMutationOptions<UserModel, Error, SignInForm>;
@@ -23,6 +24,7 @@ export const useSignIn = (options?: SignInOptions) => {
 		onSuccess: (...args) => {
 			const [data] = args;
 			queryClient.setQueryData(userKeys.current, data);
+			queryClient.invalidateQueries({ queryKey: postKeys.posts });
 			options?.onSuccess?.(...args);
 		}
 	});
@@ -37,6 +39,7 @@ export const useGoogleSignIn = (options?: GoogleSignInOptions) => {
 		onSuccess: (...args) => {
 			const [data] = args;
 			queryClient.setQueryData(userKeys.current, data);
+			queryClient.invalidateQueries({ queryKey: postKeys.posts });
 			options?.onSuccess?.(...args);
 		}
 	});
@@ -51,6 +54,7 @@ export const useSignUp = (options?: SignUpOptions) => {
 		onSuccess: (...args) => {
 			const [data] = args;
 			queryClient.setQueryData(userKeys.current, data);
+			queryClient.invalidateQueries({ queryKey: postKeys.posts });
 			options?.onSuccess?.(...args);
 		}
 	});
@@ -64,6 +68,7 @@ export const useSignOut = (options?: UseMutationOptions) => {
 		mutationFn: () => signOut(),
 		onSuccess: (...args) => {
 			queryClient.setQueryData(userKeys.current, null);
+			queryClient.invalidateQueries({ queryKey: postKeys.posts });
 			options?.onSuccess?.(...args);
 		}
 	});

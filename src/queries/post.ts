@@ -60,7 +60,7 @@ export const useCreatePost = (options?: CreatePostOptions) => {
 	});
 };
 
-export const useLikePost = (postId: string, userId: string, options?: LikePostOptions) => {
+export const useLikePost = (postId: string, options?: LikePostOptions) => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
@@ -78,10 +78,11 @@ export const useLikePost = (postId: string, userId: string, options?: LikePostOp
 
 				return oldPosts.map((post) => {
 					if (post.id === postId) {
-						const newLikes = post.likes.includes(userId)
-							? post.likes.filter((like) => like !== userId)
-							: [...post.likes, userId];
-						return { ...post, likes: newLikes };
+						return {
+							...post,
+							likedByCurrentUser: !post.likedByCurrentUser,
+							likesCount: post.likesCount + (post.likedByCurrentUser ? -1 : 1)
+						};
 					}
 					return post;
 				});

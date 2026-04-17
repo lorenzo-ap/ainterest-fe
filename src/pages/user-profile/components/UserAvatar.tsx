@@ -167,7 +167,7 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 				</Avatar>
 
 				{!uploadedPhoto && isCurrentUser && (
-					<div className='pointer-events-none absolute -bottom-20 left-1/2 flex h-full w-full -translate-x-1/2 items-start justify-center rounded-full bg-black bg-opacity-50 pt-1.5 text-slate-300 transition-all md:group-hover:-bottom-12'>
+					<div className='pointer-events-none absolute -bottom-20 left-1/2 flex h-full w-full -translate-x-1/2 items-start justify-center rounded-full bg-black/50 pt-1.5 text-slate-300 transition-all md:group-hover:-bottom-12'>
 						<IconPhotoEdit size={16} />
 					</div>
 				)}

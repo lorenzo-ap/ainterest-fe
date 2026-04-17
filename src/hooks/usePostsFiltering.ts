@@ -115,7 +115,7 @@ export const usePostsFiltering = (posts: PostModel[], options: UsePostsFiltering
 					comparison = a.prompt.localeCompare(b.prompt);
 					break;
 				case SortCriteria.LIKES:
-					comparison = b.likes.length - a.likes.length;
+					comparison = b.likesCount - a.likesCount;
 					break;
 				default:
 					break;
