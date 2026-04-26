@@ -3,6 +3,7 @@ export * from './filters';
 export * from './generate';
 export * from './i18n';
 export * from './notification';
+export * from './passkeys';
 export * from './post';
 export * from './query';
 export * from './sse';

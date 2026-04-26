@@ -3,13 +3,12 @@ import { useTranslation } from 'react-i18next';
 import type { PostModel } from '../types';
 import { Post } from './Post';
 
+const SKELETON_KEYS = Array.from({ length: 10 }).map(() => crypto.randomUUID());
+
 const PostSkeleton = () => (
 	<>
-		{Array.from({ length: 10 }).map((_, index) => (
-			<div
-				className='card flex aspect-square flex-col rounded-xl border border-color p-4'
-				key={`skeleton-${index}-${Math.random().toString(36).substring(2, 11)}`}
-			>
+		{SKELETON_KEYS.map((key) => (
+			<div className='card flex aspect-square flex-col rounded-xl border border-color p-4' key={key}>
 				<Skeleton className='mb-4 flex-grow' radius='md' />
 				<Skeleton className='w-3/4' height={24} radius='md' />
 			</div>

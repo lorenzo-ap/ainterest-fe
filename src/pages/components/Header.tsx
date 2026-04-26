@@ -8,7 +8,7 @@ import { ConfirmModal } from '../../components';
 import { notificationKeys, useCurrentUser, useSignOut } from '../../queries';
 import { toastService } from '../../services';
 import { HeaderMenu } from '.';
-import { ForgotPasswordModal, SignInModal, SignUpModal } from './modals';
+import { ForgotPasswordModal, PasskeysModal, SignInModal, SignUpModal } from './modals';
 import { Notifications } from './notifications';
 
 export const Header = () => {
@@ -32,6 +32,7 @@ export const Header = () => {
 	const [signUpModalOpened, { open: openSignUpModal, close: closeSignUpModal }] = useDisclosure(false);
 	const [forgotPasswordModalOpened, { open: openForgotPasswordModal, close: closeForgotPasswordModal }] =
 		useDisclosure(false);
+	const [passkeysModalOpened, { open: openPasskeysModal, close: closePasskeysModal }] = useDisclosure(false);
 	const [signOutConfirmModalOpened, { open: openSignOutConfirmModal, close: closeSignOutConfirmModal }] =
 		useDisclosure(false);
 
@@ -85,7 +86,7 @@ export const Header = () => {
 							</Button>
 						)}
 
-						<HeaderMenu openSignOutConfirmModal={openSignOutConfirmModal} />
+						<HeaderMenu openPasskeysModal={openPasskeysModal} openSignOutConfirmModal={openSignOutConfirmModal} />
 					</div>
 				</div>
 			</header>
@@ -97,6 +98,7 @@ export const Header = () => {
 				openSignUpModal={openSignUpModal}
 			/>
 			<SignUpModal close={closeSignUpModal} opened={signUpModalOpened} openSignInModal={openSignInModal} />
+			<PasskeysModal close={closePasskeysModal} opened={passkeysModalOpened} />
 			<ForgotPasswordModal
 				close={closeForgotPasswordModal}
 				opened={forgotPasswordModalOpened}

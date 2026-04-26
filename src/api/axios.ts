@@ -3,6 +3,12 @@ import { apis } from '../assets/apis/apis';
 import { toastService } from '../services';
 import { refreshToken } from './auth';
 
+declare module 'axios' {
+	export interface AxiosRequestConfig {
+		skipErrorToast?: boolean;
+	}
+}
+
 export const req = axios.create({
 	baseURL: apis.root,
 	withCredentials: true
@@ -13,10 +19,18 @@ let refreshTokenPromise: Promise<void> | null = null;
 req.interceptors.response.use(
 	(response) => response,
 	async (error: AxiosError) => {
-		const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+		const originalRequest = error.config as InternalAxiosRequestConfig & {
+			_retry?: boolean;
+			skipErrorToast?: boolean;
+		};
 
 		if (error.response?.status !== 401 && error.response?.status !== 403) {
-			if (error.response?.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
+			if (
+				!originalRequest.skipErrorToast &&
+				error.response?.data &&
+				typeof error.response.data === 'object' &&
+				'message' in error.response.data
+			) {
 				toastService.error(error.response.data.message as string);
 			}
 			return Promise.reject(error);

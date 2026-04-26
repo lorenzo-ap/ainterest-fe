@@ -1,5 +1,13 @@
 import { ActionIcon, Menu, useMantineColorScheme } from '@mantine/core';
-import { IconLogout, IconMenu2, IconMoon, IconSunHigh, IconWorld, IconX } from '@tabler/icons-react';
+import {
+	IconFingerprintScan,
+	IconLogout,
+	IconMenu2,
+	IconMoon,
+	IconSunHigh,
+	IconWorld,
+	IconX
+} from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../queries';
@@ -7,9 +15,10 @@ import { Language } from '../../types';
 
 type HeaderMenuProps = {
 	openSignOutConfirmModal: () => void;
+	openPasskeysModal: () => void;
 };
 
-export const HeaderMenu = ({ openSignOutConfirmModal }: HeaderMenuProps) => {
+export const HeaderMenu = ({ openPasskeysModal, openSignOutConfirmModal }: HeaderMenuProps) => {
 	const { t, i18n } = useTranslation();
 	const { colorScheme, setColorScheme } = useMantineColorScheme();
 	const [menuOpened, setMenuOpened] = useState(false);
@@ -76,6 +85,15 @@ export const HeaderMenu = ({ openSignOutConfirmModal }: HeaderMenuProps) => {
 				{currentUser && (
 					<>
 						<Menu.Divider />
+
+						<Menu.Item
+							closeMenuOnClick={true}
+							leftSection={<IconFingerprintScan size={16} />}
+							onClick={openPasskeysModal}
+						>
+							{t('pages.passkeys.title')}
+						</Menu.Item>
+
 						<Menu.Item
 							closeMenuOnClick={true}
 							color='red'

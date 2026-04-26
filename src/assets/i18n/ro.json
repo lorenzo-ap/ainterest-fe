@@ -21,6 +21,11 @@
     "languages": {
       "en": "English",
       "ro": "Română"
+    },
+    "errors": {
+      "password_required": "Parola este obligatorie",
+      "email_required": "E-mailul este obligatoriu",
+      "passkey_name_required": "Numele cheii de acces este obligatoriu"
     }
   },
 
@@ -63,8 +68,10 @@
         "sign_in": {
           "or_continue_with": "Sau continuă cu",
           "sign_in_with_google": "Conectează-te cu Google",
+          "sign_in_with_passkey": "Conectează-te cu cheia de acces",
           "dont_have_an_account": "Nu ai un cont?",
           "forgot_password": "Ai uitat parola?",
+          "change_email": "Schimbă e-mailul",
           "errors": {
             "email": {
               "required": "E-mailul este obligatoriu",
@@ -209,6 +216,24 @@
         },
         "image_should_be_generated": "Imaginea trebuie să fie generată cu succes"
       }
+    },
+
+    "passkeys": {
+      "title": "Chei de acces",
+      "description": "Adaugă chei de acces pentru a te conecta fără parolă. Cheile tale sunt sigure și funcționează pe toate dispozitivele.",
+      "sign_in_with_passkey": "Conectează-te cu cheia de acces",
+      "continue": "Continuă",
+      "add_passkey": "Adaugă cheie de acces",
+      "passkey_name": "Nume cheie de acces",
+      "passkey_name_placeholder": "MacBook-ul meu, iPhone-ul meu etc.",
+      "current_password": "Parola actuală",
+      "passkey": "Cheie de acces",
+      "created_at": "Creată",
+      "last_used": "Ultima utilizare",
+      "revoke": "Revocă",
+      "revoke_confirm": "Sigur vrei să revoci această cheie de acces? Nu te vei mai putea conecta cu ea.",
+      "no_passkeys": "Nu ai încă nicio cheie de acces. Adaugă una ca să te conectezi fără parolă.",
+      "your_passkeys": "Cheile tale de acces"
     }
   },
 
@@ -235,6 +260,16 @@
     "notifications": {
       "read_all": "Toate notificările au fost marcate ca citite",
       "delete_all": "Toate notificările au fost șterse"
+    },
+    "passkeys": {
+      "success_register": "Cheia de acces a fost înregistrată cu succes!",
+      "success_login": "Conectare realizată cu succes!",
+      "success_revoke": "Cheia de acces a fost revocată cu succes!",
+      "errors": {
+        "registration_failed": "Înregistrarea cheii de acces a eșuat. Încearcă din nou.",
+        "authentication_failed": "Autentificarea cu cheia de acces a eșuat. Încearcă din nou.",
+        "no_passkey_found": "Nu a fost găsită nicio cheie de acces pentru acest e-mail."
+      }
     }
   }
 }
