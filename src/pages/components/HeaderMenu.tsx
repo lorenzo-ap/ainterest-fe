@@ -1,4 +1,5 @@
 import { ActionIcon, Menu, useMantineColorScheme } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import {
 	IconFingerprintScan,
 	IconLogout,
@@ -12,18 +13,17 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../queries';
 import { Language } from '../../types';
+import { PasskeysModal, SignOutModal } from './modals';
 
-type HeaderMenuProps = {
-	openSignOutConfirmModal: () => void;
-	openPasskeysModal: () => void;
-};
-
-export const HeaderMenu = ({ openPasskeysModal, openSignOutConfirmModal }: HeaderMenuProps) => {
+export const HeaderMenu = () => {
 	const { t, i18n } = useTranslation();
 	const { colorScheme, setColorScheme } = useMantineColorScheme();
-	const [menuOpened, setMenuOpened] = useState(false);
 
 	const { data: currentUser } = useCurrentUser();
+
+	const [menuOpened, setMenuOpened] = useState(false);
+	const [passkeysModalOpened, { open: openPasskeysModal, close: closePasskeysModal }] = useDisclosure(false);
+	const [signOutModalOpened, { open: openSignOutModal, close: closeSignOutModal }] = useDisclosure(false);
 
 	const changeLang = (newLanguage: Language) => {
 		i18n.changeLanguage(newLanguage);
@@ -35,76 +35,81 @@ export const HeaderMenu = ({ openPasskeysModal, openSignOutConfirmModal }: Heade
 	};
 
 	return (
-		<Menu
-			arrowOffset={16}
-			arrowSize={10}
-			closeOnItemClick={false}
-			onChange={setMenuOpened}
-			opened={menuOpened}
-			position='bottom-end'
-			shadow='md'
-			withArrow
-		>
-			<Menu.Target>
-				<ActionIcon radius='md' size={36} variant='default'>
-					<span className={`transition-transform duration-200 ease-in-out ${menuOpened ? 'rotate-90' : 'rotate-0'}`}>
-						{menuOpened ? <IconX size={18} /> : <IconMenu2 size={18} />}
-					</span>
-				</ActionIcon>
-			</Menu.Target>
+		<>
+			<Menu
+				arrowOffset={16}
+				arrowSize={10}
+				closeOnItemClick={false}
+				onChange={setMenuOpened}
+				opened={menuOpened}
+				position='bottom-end'
+				shadow='md'
+				withArrow
+			>
+				<Menu.Target>
+					<ActionIcon radius='md' size={36} variant='default'>
+						<span className={`transition-transform duration-200 ease-in-out ${menuOpened ? 'rotate-90' : 'rotate-0'}`}>
+							{menuOpened ? <IconX size={18} /> : <IconMenu2 size={18} />}
+						</span>
+					</ActionIcon>
+				</Menu.Target>
 
-			<Menu.Dropdown>
-				<Menu.Label>{t('common.language')}</Menu.Label>
-				<Menu.Item
-					disabled={i18n.language === Language.EN}
-					leftSection={<IconWorld size={16} />}
-					onClick={() => changeLang(Language.EN)}
-				>
-					{t('common.languages.en')}
-				</Menu.Item>
-				<Menu.Item
-					disabled={i18n.language === Language.RO}
-					leftSection={<IconWorld size={16} />}
-					onClick={() => changeLang(Language.RO)}
-				>
-					{t('common.languages.ro')}
-				</Menu.Item>
+				<Menu.Dropdown>
+					<Menu.Label>{t('common.language')}</Menu.Label>
+					<Menu.Item
+						disabled={i18n.language === Language.EN}
+						leftSection={<IconWorld size={16} />}
+						onClick={() => changeLang(Language.EN)}
+					>
+						{t('common.languages.en')}
+					</Menu.Item>
+					<Menu.Item
+						disabled={i18n.language === Language.RO}
+						leftSection={<IconWorld size={16} />}
+						onClick={() => changeLang(Language.RO)}
+					>
+						{t('common.languages.ro')}
+					</Menu.Item>
 
-				<Menu.Divider />
+					<Menu.Divider />
 
-				<Menu.Label>{t('common.theme')}</Menu.Label>
-				<Menu.Item
-					leftSection={colorScheme === 'dark' ? <IconSunHigh size={16} /> : <IconMoon size={16} />}
-					onClick={toggleColorScheme}
-				>
-					{colorScheme === 'dark'
-						? t('pages.components.header.switch_to_light_mode')
-						: t('pages.components.header.switch_to_dark_mode')}
-				</Menu.Item>
+					<Menu.Label>{t('common.theme')}</Menu.Label>
+					<Menu.Item
+						leftSection={colorScheme === 'dark' ? <IconSunHigh size={16} /> : <IconMoon size={16} />}
+						onClick={toggleColorScheme}
+					>
+						{colorScheme === 'dark'
+							? t('pages.components.header.switch_to_light_mode')
+							: t('pages.components.header.switch_to_dark_mode')}
+					</Menu.Item>
 
-				{currentUser && (
-					<>
-						<Menu.Divider />
+					{currentUser && (
+						<>
+							<Menu.Divider />
 
-						<Menu.Item
-							closeMenuOnClick={true}
-							leftSection={<IconFingerprintScan size={16} />}
-							onClick={openPasskeysModal}
-						>
-							{t('pages.passkeys.title')}
-						</Menu.Item>
+							<Menu.Item
+								closeMenuOnClick={true}
+								leftSection={<IconFingerprintScan size={16} />}
+								onClick={openPasskeysModal}
+							>
+								{t('pages.components.modals.passkeys.title')}
+							</Menu.Item>
 
-						<Menu.Item
-							closeMenuOnClick={true}
-							color='red'
-							leftSection={<IconLogout size={16} />}
-							onClick={openSignOutConfirmModal}
-						>
-							{t('pages.components.header.sign_out')}
-						</Menu.Item>
-					</>
-				)}
-			</Menu.Dropdown>
-		</Menu>
+							<Menu.Item
+								closeMenuOnClick={true}
+								color='red'
+								leftSection={<IconLogout size={16} />}
+								onClick={openSignOutModal}
+							>
+								{t('pages.components.header.sign_out')}
+							</Menu.Item>
+						</>
+					)}
+				</Menu.Dropdown>
+			</Menu>
+
+			<PasskeysModal onClose={closePasskeysModal} opened={passkeysModalOpened} />
+			<SignOutModal onClose={closeSignOutModal} opened={signOutModalOpened} />
+		</>
 	);
 };

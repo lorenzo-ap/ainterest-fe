@@ -1,5 +1,5 @@
 import { Button, Container, PasswordInput, Text } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { Form, useForm } from '@mantine/form';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -56,7 +56,7 @@ export const ResetPasswordPage = () => {
 		}
 	});
 
-	const submit = (values: ResetPasswordForm) => {
+	const handleSubmit = (values: ResetPasswordForm) => {
 		if (!params.token) return;
 		resetPassword({ token: params.token, ...values });
 	};
@@ -68,7 +68,7 @@ export const ResetPasswordPage = () => {
 				{t('pages.reset_password.description')}
 			</Text>
 
-			<form className='mx-auto flex max-w-screen-xxs flex-col gap-y-3' onSubmit={form.onSubmit(submit)}>
+			<Form className='mx-auto flex max-w-screen-xxs flex-col gap-y-3' form={form} onSubmit={handleSubmit}>
 				<PasswordInput
 					key={form.key('password')}
 					label={t('pages.reset_password.new_password')}
@@ -86,7 +86,7 @@ export const ResetPasswordPage = () => {
 				<Button className='mt-2' color='violet' loading={isPending} size='md' type='submit'>
 					{t('pages.reset_password.reset_password')}
 				</Button>
-			</form>
+			</Form>
 		</Container>
 	);
 };

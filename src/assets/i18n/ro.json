@@ -24,8 +24,7 @@
     },
     "errors": {
       "password_required": "Parola este obligatorie",
-      "email_required": "E-mailul este obligatoriu",
-      "passkey_name_required": "Numele cheii de acces este obligatoriu"
+      "email_required": "E-mailul este obligatoriu"
     }
   },
 
@@ -65,6 +64,34 @@
   "pages": {
     "components": {
       "modals": {
+        "passkeys": {
+          "title": "Chei de acces",
+          "add_passkey": "Adaugă cheie de acces"
+        },
+        "add_passkey": {
+          "title": "Adaugă cheie de acces",
+          "name": "Nume cheie de acces",
+          "name_placeholder": "MacBook-ul meu, iPhone-ul meu etc.",
+          "password": "Parola actuală",
+          "submit": "Adaugă cheie de acces",
+          "errors": {
+            "name": {
+              "required": "Numele cheii de acces este obligatoriu"
+            },
+            "password": {
+              "required": "Parola este obligatorie"
+            }
+          }
+        },
+        "passkeys_list": {
+          "no_passkeys": "Nu ai încă nicio cheie de acces."
+        },
+        "passkey_item": {
+          "created_at": "Creată",
+          "last_used": "Ultima utilizare",
+          "revoke": "Revocă",
+          "revoke_confirm": "Sigur vrei să revoci această cheie de acces? Nu te vei mai putea conecta cu ea."
+        },
         "sign_in": {
           "or_continue_with": "Sau continuă cu",
           "sign_in_with_google": "Conectează-te cu Google",
@@ -216,24 +243,6 @@
         },
         "image_should_be_generated": "Imaginea trebuie să fie generată cu succes"
       }
-    },
-
-    "passkeys": {
-      "title": "Chei de acces",
-      "description": "Adaugă chei de acces pentru a te conecta fără parolă. Cheile tale sunt sigure și funcționează pe toate dispozitivele.",
-      "sign_in_with_passkey": "Conectează-te cu cheia de acces",
-      "continue": "Continuă",
-      "add_passkey": "Adaugă cheie de acces",
-      "passkey_name": "Nume cheie de acces",
-      "passkey_name_placeholder": "MacBook-ul meu, iPhone-ul meu etc.",
-      "current_password": "Parola actuală",
-      "passkey": "Cheie de acces",
-      "created_at": "Creată",
-      "last_used": "Ultima utilizare",
-      "revoke": "Revocă",
-      "revoke_confirm": "Sigur vrei să revoci această cheie de acces? Nu te vei mai putea conecta cu ea.",
-      "no_passkeys": "Nu ai încă nicio cheie de acces. Adaugă una ca să te conectezi fără parolă.",
-      "your_passkeys": "Cheile tale de acces"
     }
   },
 

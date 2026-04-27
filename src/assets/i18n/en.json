@@ -24,8 +24,7 @@
     },
     "errors": {
       "password_required": "Password is required",
-      "email_required": "Email is required",
-      "passkey_name_required": "Passkey name is required"
+      "email_required": "Email is required"
     }
   },
 
@@ -65,6 +64,34 @@
   "pages": {
     "components": {
       "modals": {
+        "passkeys": {
+          "title": "Passkeys",
+          "add_passkey": "Add Passkey"
+        },
+        "add_passkey": {
+          "title": "Add Passkey",
+          "name": "Passkey Name",
+          "name_placeholder": "My MacBook, iPhone, etc.",
+          "password": "Current Password",
+          "submit": "Add Passkey",
+          "errors": {
+            "name": {
+              "required": "Passkey name is required"
+            },
+            "password": {
+              "required": "Password is required"
+            }
+          }
+        },
+        "passkeys_list": {
+          "no_passkeys": "No passkeys added yet."
+        },
+        "passkey_item": {
+          "created_at": "Created",
+          "last_used": "Last Used",
+          "revoke": "Revoke",
+          "revoke_confirm": "Are you sure you want to revoke this passkey? You won't be able to sign in with it anymore."
+        },
         "sign_in": {
           "or_continue_with": "Or continue with",
           "sign_in_with_google": "Sign in with Google",
@@ -216,24 +243,6 @@
         },
         "image_should_be_generated": "Image should be successfully generated"
       }
-    },
-
-    "passkeys": {
-      "title": "Passkeys",
-      "description": "Add passkeys to sign in without a password. Your passkeys are secure and work across all your devices.",
-      "sign_in_with_passkey": "Sign in with Passkey",
-      "continue": "Continue",
-      "add_passkey": "Add Passkey",
-      "passkey_name": "Passkey Name",
-      "passkey_name_placeholder": "My MacBook, iPhone, etc.",
-      "current_password": "Current Password",
-      "passkey": "Passkey",
-      "created_at": "Created",
-      "last_used": "Last Used",
-      "revoke": "Revoke",
-      "revoke_confirm": "Are you sure you want to revoke this passkey? You won't be able to sign in with it anymore.",
-      "no_passkeys": "No passkeys added yet. Add a passkey to sign in without a password.",
-      "your_passkeys": "Your Passkeys"
     }
   },
 

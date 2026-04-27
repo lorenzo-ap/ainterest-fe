@@ -1,5 +1,5 @@
 import { Button, Modal, Text, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { Form, useForm } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
 import { EMAIL_REGEX } from '../../../constants';
 import { useFormValidation } from '../../../hooks';
@@ -49,7 +49,7 @@ export const ForgotPasswordModal = (props: ForgotPasswordModalProps) => {
 		form.reset();
 	};
 
-	const submit = (values: ForgotPasswordForm) => {
+	const handleSubmit = (values: ForgotPasswordForm) => {
 		forgotPassword(values);
 	};
 
@@ -61,13 +61,13 @@ export const ForgotPasswordModal = (props: ForgotPasswordModalProps) => {
 			radius='md'
 			title={<Text className='text-center font-bold text-2xl'>{t('common.forgot_password')}</Text>}
 		>
-			<form className='flex flex-col gap-y-3' onSubmit={form.onSubmit(submit)}>
+			<Form className='flex flex-col gap-y-3' form={form} onSubmit={handleSubmit}>
 				<TextInput key={form.key('email')} label={t('common.email')} size='md' {...form.getInputProps('email')} />
 
 				<Button className='mt-2' color='violet' loading={isPending} size='md' type='submit'>
 					{t('pages.components.modals.forgot_password.send_reset_link')}
 				</Button>
-			</form>
+			</Form>
 
 			<Text className='mt-4 flex items-center justify-center gap-x-1' size='sm'>
 				<Button

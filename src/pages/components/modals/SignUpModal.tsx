@@ -1,5 +1,5 @@
 import { Button, Divider, Modal, PasswordInput, Text, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { Form, useForm } from '@mantine/form';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { GoogleSignInButton } from '../../../components';
@@ -86,7 +86,7 @@ export const SignUpModal = (props: SignUpModalProps) => {
 		form.reset();
 	};
 
-	const submit = (values: SignUpForm) => {
+	const handleSubmit = (values: SignUpForm) => {
 		signUp(values);
 	};
 
@@ -98,7 +98,7 @@ export const SignUpModal = (props: SignUpModalProps) => {
 			radius='md'
 			title={<Text className='text-center font-bold text-2xl'>{t('common.sign_up')}</Text>}
 		>
-			<form className='flex flex-col gap-y-3' onSubmit={form.onSubmit(submit)}>
+			<Form className='flex flex-col gap-y-3' form={form} onSubmit={handleSubmit}>
 				<TextInput
 					key={form.key('username')}
 					label={t('common.username')}
@@ -122,7 +122,7 @@ export const SignUpModal = (props: SignUpModalProps) => {
 				<Button className='mt-2' color='violet' loading={isPending} size='md' type='submit'>
 					{t('common.sign_up')}
 				</Button>
-			</form>
+			</Form>
 
 			<Divider className='my-4' label={t('pages.components.modals.sign_up.or_continue_with')} labelPosition='center' />
 

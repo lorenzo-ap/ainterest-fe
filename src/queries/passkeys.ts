@@ -7,55 +7,72 @@ import {
 } from '@tanstack/react-query';
 import {
 	getAuthenticationOptions,
+	getPasskeys,
 	getRegistrationOptions,
-	listPasskeys,
 	revokePasskey,
 	verifyAuthentication,
 	verifyRegistration
 } from '../api';
 import type {
+	AuthenticationOptionsRequest,
 	AuthenticationOptionsResponse,
 	AuthenticationVerifiedResponse,
+	AuthenticationVerifyRequest,
 	PasskeyCredential,
+	RegistrationOptionsRequest,
 	RegistrationOptionsResponse,
-	RegistrationVerifiedResponse
+	RegistrationVerifiedResponse,
+	RegistrationVerifyRequest
 } from '../types/passkeys';
-import { STALE_TIME } from '../utils';
 import { postKeys } from './post';
 import { userKeys } from './user';
 
+type PasskeysQueryOptions = Omit<UseSuspenseQueryOptions<PasskeyCredential[]>, 'queryKey' | 'queryFn'>;
+type RegistrationOptionsMutationOptions = Omit<
+	UseMutationOptions<RegistrationOptionsResponse, Error, RegistrationOptionsRequest>,
+	'mutationFn'
+>;
+type VerifyRegistrationMutationOptions = Omit<
+	UseMutationOptions<RegistrationVerifiedResponse, Error, RegistrationVerifyRequest>,
+	'mutationFn'
+>;
+type GetAuthenticationOptionsMutationOptions = Omit<
+	UseMutationOptions<AuthenticationOptionsResponse, Error, AuthenticationOptionsRequest>,
+	'mutationFn'
+>;
+type VerifyAuthenticationMutationOptions = Omit<
+	UseMutationOptions<AuthenticationVerifiedResponse, Error, AuthenticationVerifyRequest>,
+	'mutationFn'
+>;
+type RevokePasskeyMutationOptions = Omit<UseMutationOptions, 'mutationFn'>;
+
 export const passkeyKeys = {
-	all: ['passkeys'] as const,
-	passkeys: () => [...passkeyKeys.all, 'passkeys'] as const
+	passkeys: ['passkeys'] as const
 };
 
-export const usePasskeys = (
-	options?: Omit<UseSuspenseQueryOptions<PasskeyCredential[], Error>, 'queryKey' | 'queryFn'>
-) =>
+export const usePasskeys = (options?: PasskeysQueryOptions) =>
 	useSuspenseQuery({
-		queryKey: passkeyKeys.passkeys(),
-		queryFn: () => listPasskeys(),
-		staleTime: STALE_TIME,
+		queryKey: passkeyKeys.passkeys,
+		queryFn: () => getPasskeys(),
+		staleTime: Number.POSITIVE_INFINITY,
 		...options
 	});
 
-export const useGetRegistrationOptions = (options?: UseMutationOptions<RegistrationOptionsResponse, Error, string>) =>
+export const useRegistrationOptions = (options?: RegistrationOptionsMutationOptions) =>
 	useMutation({
 		...options,
-		mutationFn: (password) => getRegistrationOptions({ password })
+		mutationFn: (body) => getRegistrationOptions(body)
 	});
 
-export const useVerifyRegistration = (
-	options?: UseMutationOptions<RegistrationVerifiedResponse, Error, { name: string; credential: unknown }>
-) => {
+export const useVerifyRegistration = (options?: VerifyRegistrationMutationOptions) => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
 		...options,
-		mutationFn: ({ name, credential }) => verifyRegistration({ name, credential }),
+		mutationFn: (body) => verifyRegistration(body),
 		onSuccess: (...args) => {
 			const [data] = args;
-			queryClient.setQueryData<PasskeyCredential[]>(passkeyKeys.passkeys(), (oldPasskeys) => {
+			queryClient.setQueryData<PasskeyCredential[]>(passkeyKeys.passkeys, (oldPasskeys) => {
 				if (!oldPasskeys) return [data.passkey];
 				return [...oldPasskeys, data.passkey];
 			});
@@ -64,22 +81,18 @@ export const useVerifyRegistration = (
 	});
 };
 
-export const useGetAuthenticationOptions = (
-	options?: UseMutationOptions<AuthenticationOptionsResponse, Error, string>
-) =>
+export const useGetAuthenticationOptions = (options?: GetAuthenticationOptionsMutationOptions) =>
 	useMutation({
 		...options,
-		mutationFn: (email) => getAuthenticationOptions({ email })
+		mutationFn: (body) => getAuthenticationOptions(body)
 	});
 
-export const useVerifyAuthentication = (
-	options?: UseMutationOptions<AuthenticationVerifiedResponse, Error, { email: string; credential: unknown }>
-) => {
+export const useVerifyAuthentication = (options?: VerifyAuthenticationMutationOptions) => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
 		...options,
-		mutationFn: ({ email, credential }) => verifyAuthentication({ email, credential }),
+		mutationFn: (body) => verifyAuthentication(body),
 		onSuccess: (...args) => {
 			const [data] = args;
 			queryClient.setQueryData(userKeys.current, data);
@@ -89,15 +102,14 @@ export const useVerifyAuthentication = (
 	});
 };
 
-export const useRevokePasskey = (options?: UseMutationOptions<void, Error, string>) => {
+export const useRevokePasskey = (credentialId: string, options?: RevokePasskeyMutationOptions) => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
 		...options,
-		mutationFn: (credentialId) => revokePasskey(credentialId),
+		mutationFn: () => revokePasskey(credentialId),
 		onSuccess: (...args) => {
-			const [, credentialId] = args;
-			queryClient.setQueryData<PasskeyCredential[]>(passkeyKeys.passkeys(), (oldPasskeys) => {
+			queryClient.setQueryData<PasskeyCredential[]>(passkeyKeys.passkeys, (oldPasskeys) => {
 				if (!oldPasskeys) return oldPasskeys;
 				return oldPasskeys.filter((pk) => pk.credentialId !== credentialId);
 			});

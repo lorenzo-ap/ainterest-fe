@@ -1,5 +1,5 @@
 import { Button, Select, Text, Textarea, Title } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { Form, useForm } from '@mantine/form';
 import { IconArrowLeft, IconPhotoUp, IconSparkles } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -80,7 +80,7 @@ export const CreatePostPage = () => {
 		generateImage({ text: prompt, size });
 	};
 
-	const submitForm = (values: CreatePostForm) => {
+	const handleSubmit = (values: CreatePostForm) => {
 		const { postGeneratedImage } = values;
 
 		if (!postGeneratedImage.photo) {
@@ -103,7 +103,7 @@ export const CreatePostPage = () => {
 	return (
 		<section className='mx-auto flex max-w-7xl flex-col items-start'>
 			<div className='flex w-full flex-col items-center justify-between gap-5 lg:flex-row lg:items-start'>
-				<form className='max-w-xl lg:max-w-md xl:max-w-lg' onSubmit={form.onSubmit((values) => submitForm(values))}>
+				<Form className='max-w-xl lg:max-w-md xl:max-w-lg' form={form} onSubmit={handleSubmit}>
 					<Button
 						color='violet'
 						leftSection={<IconArrowLeft size={18} />}
@@ -185,7 +185,7 @@ export const CreatePostPage = () => {
 					</div>
 
 					<Text className='mt-3 text-sm opacity-60 md:mt-4'>{t('pages.generate_image.info')}</Text>
-				</form>
+				</Form>
 
 				<PostGeneratedImage {...generatedImageProps} />
 			</div>

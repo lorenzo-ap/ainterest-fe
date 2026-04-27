@@ -8,6 +8,7 @@ import type {
 	SignUpForm,
 	UserModel
 } from '../types';
+import { passkeyKeys } from './passkeys';
 import { postKeys } from './post';
 import { userKeys } from './user';
 
@@ -69,6 +70,7 @@ export const useSignOut = (options?: UseMutationOptions) => {
 		onSuccess: (...args) => {
 			queryClient.setQueryData(userKeys.current, null);
 			queryClient.invalidateQueries({ queryKey: postKeys.posts });
+			queryClient.invalidateQueries({ queryKey: passkeyKeys.passkeys });
 			options?.onSuccess?.(...args);
 		}
 	});

@@ -1,39 +1,22 @@
 import { Avatar, Button, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
-import { ConfirmModal } from '../../components';
-import { notificationKeys, useCurrentUser, useSignOut } from '../../queries';
-import { toastService } from '../../services';
+import { useCurrentUser } from '../../queries';
 import { HeaderMenu } from '.';
-import { ForgotPasswordModal, PasskeysModal, SignInModal, SignUpModal } from './modals';
+import { ForgotPasswordModal, SignInModal, SignUpModal } from './modals';
 import { Notifications } from './notifications';
 
 export const Header = () => {
 	const { t } = useTranslation();
 	const { pathname } = useLocation();
-	const queryClient = useQueryClient();
 
 	const { data: currentUser, isLoading: isCurrentUserLoading } = useCurrentUser();
-
-	const { mutate: signOut, isPending } = useSignOut({
-		onSuccess: () => {
-			closeSignOutConfirmModal();
-			toastService.success(t('apis.auth.success_sign_out'));
-			queryClient.removeQueries({
-				queryKey: notificationKeys.notifications
-			});
-		}
-	});
 
 	const [signInModalOpened, { open: openSignInModal, close: closeSignInModal }] = useDisclosure(false);
 	const [signUpModalOpened, { open: openSignUpModal, close: closeSignUpModal }] = useDisclosure(false);
 	const [forgotPasswordModalOpened, { open: openForgotPasswordModal, close: closeForgotPasswordModal }] =
-		useDisclosure(false);
-	const [passkeysModalOpened, { open: openPasskeysModal, close: closePasskeysModal }] = useDisclosure(false);
-	const [signOutConfirmModalOpened, { open: openSignOutConfirmModal, close: closeSignOutConfirmModal }] =
 		useDisclosure(false);
 
 	useEffect(() => {
@@ -86,7 +69,7 @@ export const Header = () => {
 							</Button>
 						)}
 
-						<HeaderMenu openPasskeysModal={openPasskeysModal} openSignOutConfirmModal={openSignOutConfirmModal} />
+						<HeaderMenu />
 					</div>
 				</div>
 			</header>
@@ -98,19 +81,10 @@ export const Header = () => {
 				openSignUpModal={openSignUpModal}
 			/>
 			<SignUpModal close={closeSignUpModal} opened={signUpModalOpened} openSignInModal={openSignInModal} />
-			<PasskeysModal close={closePasskeysModal} opened={passkeysModalOpened} />
 			<ForgotPasswordModal
 				close={closeForgotPasswordModal}
 				opened={forgotPasswordModalOpened}
 				openSignInModal={openSignInModal}
-			/>
-			<ConfirmModal
-				close={closeSignOutConfirmModal}
-				confirm={signOut}
-				isLoading={isPending}
-				message={t('pages.components.header.are_you_sure')}
-				opened={signOutConfirmModalOpened}
-				title={t('pages.components.header.sign_out')}
 			/>
 		</>
 	);

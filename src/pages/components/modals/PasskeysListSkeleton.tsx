@@ -6,7 +6,7 @@ export const PasskeysListSkeleton = () => {
 		<div className='overflow-hidden rounded-xl border border-color'>
 			{[1, 2, 3].map((item, index) => (
 				<Fragment key={item}>
-					<div className='flex items-center justify-between p-3.5'>
+					<div className='flex items-center justify-between px-3.5 py-4'>
 						<div className='flex items-center gap-3'>
 							<Skeleton height={32} radius='md' width={32} />
 							<div className='space-y-1.5'>

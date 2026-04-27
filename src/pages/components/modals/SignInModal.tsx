@@ -1,5 +1,5 @@
 import { Button, Divider, Modal, PasswordInput, Text, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { Form, useForm } from '@mantine/form';
 import type { PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/browser';
 import { startAuthentication } from '@simplewebauthn/browser';
 import { IconFingerprintScan } from '@tabler/icons-react';
@@ -85,21 +85,24 @@ export const SignInModal = (props: SignInModalProps) => {
 	};
 
 	const handleEmailContinue = (email: string) => {
-		getAuthenticationOptions(email, {
-			onSuccess: (options) => {
-				if ((options as { challenge?: string }).challenge) {
-					setPasskeyOptions(options as PublicKeyCredentialRequestOptionsJSON);
-				} else {
+		getAuthenticationOptions(
+			{ email },
+			{
+				onSuccess: (options) => {
+					if ((options as { challenge?: string }).challenge) {
+						setPasskeyOptions(options as PublicKeyCredentialRequestOptionsJSON);
+					} else {
+						setPasskeyOptions(null);
+					}
+				},
+				onError: () => {
 					setPasskeyOptions(null);
+				},
+				onSettled: () => {
+					setStep('password');
 				}
-			},
-			onError: () => {
-				setPasskeyOptions(null);
-			},
-			onSettled: () => {
-				setStep('password');
 			}
-		});
+		);
 	};
 
 	const handlePasskeyLogin = () => {
@@ -127,7 +130,7 @@ export const SignInModal = (props: SignInModalProps) => {
 			});
 	};
 
-	const submit = (values: SignInForm) => {
+	const handleSubmit = (values: SignInForm) => {
 		if (step === 'email') {
 			handleEmailContinue(values.email);
 			return;
@@ -144,7 +147,7 @@ export const SignInModal = (props: SignInModalProps) => {
 			radius='md'
 			title={<Text className='text-center font-bold text-2xl'>{t('common.sign_in')}</Text>}
 		>
-			<form className='flex flex-col gap-y-3' onSubmit={form.onSubmit(submit)}>
+			<Form className='flex flex-col gap-y-3' form={form} onSubmit={handleSubmit}>
 				<TextInput
 					className='relative'
 					key={form.key('email')}
@@ -208,7 +211,7 @@ export const SignInModal = (props: SignInModalProps) => {
 						{t('common.sign_in')}
 					</Button>
 				)}
-			</form>
+			</Form>
 
 			<Divider className='my-4' label={t('pages.components.modals.sign_in.or_continue_with')} labelPosition='center' />
 
