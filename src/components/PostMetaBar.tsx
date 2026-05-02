@@ -1,5 +1,6 @@
-import { ActionIcon, Avatar, Text } from '@mantine/core';
-import { IconHeart, IconHeartFilled } from '@tabler/icons-react';
+import { ActionIcon, Avatar, Text, Tooltip } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconHeart, IconHeartFilled, IconMessage } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +9,7 @@ import { getUserByUsername, getUserPosts } from '../api';
 import { postKeys, useCurrentUser, useLikePost, userKeys } from '../queries';
 import type { PostModel } from '../types';
 import { STALE_TIME } from '../utils';
+import { CommentsModal } from './CommentsModal';
 
 type PostMetaBarProps = {
 	post: PostModel;
@@ -22,6 +24,7 @@ export const PostMetaBar = ({ post, isHovered, showInfo }: PostMetaBarProps) => 
 	const { data: currentUser } = useCurrentUser();
 
 	const [profileUsername, setProfileUsername] = useState<string>('');
+	const [isCommentsModalOpened, { open: openCommentsModal, close: closeCommentsModal }] = useDisclosure();
 
 	const { mutate: likePost } = useLikePost(post.id);
 
@@ -61,26 +64,43 @@ export const PostMetaBar = ({ post, isHovered, showInfo }: PostMetaBarProps) => 
 			</Link>
 
 			<div className='flex items-center gap-x-1'>
-				<ActionIcon
-					aria-label={t(
-						post.likedByCurrentUser ? 'components.post_card.unlike_post' : 'components.post_card.like_post'
-					)}
-					className={currentUser ? '' : 'pointer-events-none'}
-					onClick={() => {
-						likePost();
-					}}
-					tabIndex={isHovered || showInfo ? 0 : -1}
-					variant='transparent'
-				>
-					{post.likedByCurrentUser ? (
-						<IconHeartFilled className='text-slate-300' color='firebrick' size={24} />
-					) : (
-						<IconHeart className='text-slate-300' size={24} />
-					)}
-				</ActionIcon>
+				<Tooltip label={t('components.post_card.comments_count', { count: post.commentsCount })} withArrow>
+					<div className='flex items-center'>
+						<ActionIcon
+							aria-label={t('components.post_card.comments')}
+							onClick={openCommentsModal}
+							tabIndex={isHovered || showInfo ? 0 : -1}
+							variant='transparent'
+						>
+							<IconMessage className='text-slate-300' size={24} />
+						</ActionIcon>
+					</div>
+				</Tooltip>
 
-				{post.likesCount > 0 && <Text className='text-sm text-white'>{post.likesCount}</Text>}
+				<Tooltip label={t('components.post_card.likes_count', { count: post.likesCount })} withArrow>
+					<div className='flex items-center'>
+						<ActionIcon
+							aria-label={t(
+								post.likedByCurrentUser ? 'components.post_card.unlike_post' : 'components.post_card.like_post'
+							)}
+							className={currentUser ? '' : 'pointer-events-none'}
+							onClick={() => {
+								likePost();
+							}}
+							tabIndex={isHovered || showInfo ? 0 : -1}
+							variant='transparent'
+						>
+							{post.likedByCurrentUser ? (
+								<IconHeartFilled className='text-slate-300' color='firebrick' size={24} />
+							) : (
+								<IconHeart className='text-slate-300' size={24} />
+							)}
+						</ActionIcon>
+					</div>
+				</Tooltip>
 			</div>
+
+			<CommentsModal close={closeCommentsModal} opened={isCommentsModalOpened} postId={post.id} />
 		</div>
 	);
 };

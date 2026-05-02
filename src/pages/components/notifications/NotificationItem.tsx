@@ -53,7 +53,9 @@ export const NotificationItem = ({ notification }: NotificationItemProps) => {
 						<span className='inline max-xxs:hidden'>&nbsp;</span>
 
 						<Text className='text-sm' component='span'>
-							{t('pages.components.notifications.liked_your_post')}
+							{notification.type === 'LIKE'
+								? t('pages.components.notifications.liked_your_post')
+								: t('pages.components.notifications.commented_on_your_post')}
 						</Text>
 					</div>
 

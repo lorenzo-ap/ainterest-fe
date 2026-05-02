@@ -1,5 +1,6 @@
 export const NotificationType = {
-	Like: 'LIKE'
+	Like: 'LIKE',
+	Comment: 'COMMENT'
 } as const;
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
 

@@ -32,10 +32,12 @@ export const useNotificationListener = () => {
 			);
 			queryClient.setQueryData<number>(notificationKeys.notificationsUnreadCount, (old) => (old ?? 0) + 1);
 
-			toastService.success(
-				`${notification.actor.username} ${t('pages.components.notifications.liked_your_post')}`,
-				3000
-			);
+			const message =
+				notification.type === 'LIKE'
+					? t('pages.components.notifications.liked_your_post')
+					: t('pages.components.notifications.commented_on_your_post');
+
+			toastService.success(`${notification.actor.username} ${message}`, 3000);
 		},
 		[queryClient, t]
 	);

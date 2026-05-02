@@ -48,7 +48,19 @@
     "post_card": {
       "maximize_image": "Mărește imaginea",
       "download_image": "Descarcă imaginea",
-      "delete_post": "Șterge postarea"
+      "delete_post": "Șterge postarea",
+      "comments": "Comentarii",
+      "likes": "Aprecieri",
+      "likes_count": "{{count}} aprecieri",
+      "comments_count": "{{count}} comentarii"
+    },
+
+    "comments_modal": {
+      "title": "Comentarii",
+      "no_comments_yet": "Niciun comentariu încă. Fii primul care comentează!",
+      "placeholder": "Scrie un comentariu...",
+      "post": "Postează",
+      "scroll_to_bottom": "Derulează în jos"
     },
 
     "render_posts": {
@@ -166,6 +178,7 @@
         "delete_all": "Șterge toate",
         "no_notifications_yet": "Nicio notificare încă",
         "liked_your_post": "a apreciat postarea ta",
+        "commented_on_your_post": "a comentat la postarea ta",
         "unread": "Necitit",
         "post_image": "Imaginea postării",
         "mark_as_read": "Marchează ca citit",

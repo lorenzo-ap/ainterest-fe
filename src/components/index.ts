@@ -1,3 +1,4 @@
+export * from './CommentsModal';
 export * from './ConfirmModal';
 export * from './Filters';
 export * from './GoogleSignInButton';

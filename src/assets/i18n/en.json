@@ -48,7 +48,19 @@
     "post_card": {
       "maximize_image": "Maximize image",
       "download_image": "Download image",
-      "delete_post": "Delete post"
+      "delete_post": "Delete post",
+      "comments": "Comments",
+      "likes": "Likes",
+      "likes_count": "{{count}} likes",
+      "comments_count": "{{count}} comments"
+    },
+
+    "comments_modal": {
+      "title": "Comments",
+      "no_comments_yet": "No comments yet. Be the first to comment!",
+      "placeholder": "Write a comment...",
+      "post": "Post",
+      "scroll_to_bottom": "Scroll to bottom"
     },
 
     "render_posts": {
@@ -166,6 +178,7 @@
         "delete_all": "Delete all",
         "no_notifications_yet": "No notifications yet",
         "liked_your_post": "liked your post",
+        "commented_on_your_post": "commented on your post",
         "unread": "Unread",
         "post_image": "Post image",
         "mark_as_read": "Mark as read",

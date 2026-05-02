@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Filters, RenderPosts } from '../../../components';
 import { usePostsFiltering } from '../../../hooks';
-import { postKeys, usePosts } from '../../../queries';
+import { commentKeys, postKeys, usePosts } from '../../../queries';
 import { SearchPostsInput } from '../../components';
 
 export const HomePosts = () => {
@@ -18,7 +18,12 @@ export const HomePosts = () => {
 			queryClient.refetchQueries({
 				queryKey: postKeys.posts,
 				type: 'active'
-			})
+			}),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: commentKeys.all
+			});
+		}
 	});
 
 	const { searchText, handleSearchChange, resetSearch, filters, handleFiltersChange, resetFilters, filteredPosts } =

@@ -1,4 +1,5 @@
 export * from './auth';
+export * from './comment';
 export * from './filters';
 export * from './generate';
 export * from './i18n';

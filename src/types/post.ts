@@ -1,4 +1,4 @@
-interface PostUserModel {
+export interface PostUserModel {
 	id: string;
 	username: string;
 	email: string;
@@ -13,6 +13,7 @@ export interface PostModel {
 	user: PostUserModel;
 	likesCount: number;
 	likedByCurrentUser: boolean;
+	commentsCount: number;
 }
 
 export interface CreatePostForm {
