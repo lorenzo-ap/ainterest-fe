@@ -1,12 +1,16 @@
-import { ActionIcon, Divider, Text, Tooltip } from '@mantine/core';
-import { IconBellOff, IconChecks, IconTrash } from '@tabler/icons-react';
-import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+import { CheckAllIcon, TrashIcon } from '../../../components/ui';
 import { useDeleteAllNotifications, useMarkAllNotificationsAsRead, useNotifications } from '../../../queries';
 import { toastService } from '../../../services';
 import { NotificationItem } from './NotificationItem';
 
-export const NotificationDropdown = () => {
+type NotificationDropdownProps = {
+	onNavigate: () => void;
+	/** The mobile sheet fills its own width; the desktop popover sizes itself. */
+	fullWidth?: boolean;
+};
+
+export const NotificationDropdown = ({ onNavigate, fullWidth }: NotificationDropdownProps) => {
 	const { t } = useTranslation();
 
 	const { data: notifications } = useNotifications();
@@ -24,58 +28,48 @@ export const NotificationDropdown = () => {
 	});
 
 	return (
-		<div className='flex max-h-[32rem] w-96 flex-col max-xs:w-[calc(100vw-2rem)]'>
-			<div className='flex items-center justify-between px-4 py-3'>
-				<Text className='font-semibold text-lg' component='h3'>
-					{t('pages.components.notifications.title')}
-				</Text>
+		<div className={`flex max-h-[min(32rem,70vh)] flex-col md:max-h-[32rem] ${fullWidth ? 'w-full' : 'w-96'}`}>
+			<header className='flex items-center justify-between gap-2 px-4 pt-4 pb-3'>
+				<h3 className='eyebrow'>{t('pages.components.notifications.title')}</h3>
 
 				{!!notifications.length && (
 					<div className='flex items-center gap-1'>
 						{hasUnreadNotifications && (
-							<Tooltip label={t('pages.components.notifications.mark_all_as_read')} withArrow>
-								<ActionIcon
-									color='violet'
-									loading={isMarkAllAsReadPending}
-									onClick={() => markAllAsRead()}
-									size='sm'
-									variant='subtle'
-								>
-									<IconChecks size={18} />
-								</ActionIcon>
-							</Tooltip>
+							<button
+								className='icon-btn h-7 w-7 disabled:opacity-40'
+								disabled={isMarkAllAsReadPending}
+								onClick={() => markAllAsRead()}
+								title={t('pages.components.notifications.mark_all_as_read')}
+								type='button'
+							>
+								<CheckAllIcon size={16} />
+							</button>
 						)}
 
-						<Tooltip label={t('pages.components.notifications.delete_all')} withArrow>
-							<ActionIcon
-								color='red'
-								loading={isDeleteAllPending}
-								onClick={() => deleteAll()}
-								size='sm'
-								variant='subtle'
-							>
-								<IconTrash size={18} />
-							</ActionIcon>
-						</Tooltip>
+						<button
+							className='icon-btn h-7 w-7 hover:text-danger disabled:opacity-40'
+							disabled={isDeleteAllPending}
+							onClick={() => deleteAll()}
+							title={t('pages.components.notifications.delete_all')}
+							type='button'
+						>
+							<TrashIcon size={16} />
+						</button>
 					</div>
 				)}
-			</div>
+			</header>
 
-			<Divider />
-
-			<div className='scrollbar flex-1 overflow-y-auto overflow-x-hidden'>
+			<div className='scrollbar-none flex-1 overflow-y-auto overflow-x-hidden pb-2'>
 				{notifications.length ? (
-					notifications.map((notification, i) => (
-						<Fragment key={notification.id}>
-							<NotificationItem notification={notification} />
-							{i < notifications.length - 1 && <Divider />}
-						</Fragment>
-					))
+					<ul className='flex flex-col'>
+						{notifications.map((notification) => (
+							<NotificationItem key={notification.id} notification={notification} onNavigate={onNavigate} />
+						))}
+					</ul>
 				) : (
-					<div className='flex flex-col items-center justify-center px-4 py-12'>
-						<IconBellOff className='mb-3 opacity-50' color='gray' size={64} />
-						<Text className='text-sm opacity-70'>{t('pages.components.notifications.no_notifications_yet')}</Text>
-					</div>
+					<p className='px-6 py-14 text-center text-[14px] text-ink-3'>
+						{t('pages.components.notifications.no_notifications_yet')}
+					</p>
 				)}
 			</div>
 		</div>

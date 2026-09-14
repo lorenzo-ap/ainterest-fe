@@ -1,12 +1,11 @@
-import { Button, Divider, Modal, PasswordInput, Text, TextInput } from '@mantine/core';
 import { Form, useForm } from '@mantine/form';
 import type { PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/browser';
 import { startAuthentication } from '@simplewebauthn/browser';
-import { IconFingerprintScan } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GoogleSignInButton } from '../../../components';
+import { AppButton, Field, PasswordField } from '../../../components/ui';
 import { EMAIL_REGEX } from '../../../constants';
 import { useFormValidation } from '../../../hooks';
 import {
@@ -18,6 +17,7 @@ import {
 } from '../../../queries';
 import { toastService } from '../../../services';
 import type { SignInForm } from '../../../types';
+import { AuthModalShell } from './AuthModalShell';
 
 type SignInModalProps = {
 	opened: boolean;
@@ -140,112 +140,96 @@ export const SignInModal = (props: SignInModalProps) => {
 	};
 
 	return (
-		<Modal
+		<AuthModalShell
+			description={t('pages.components.modals.sign_in.description')}
 			onClose={closeModal}
 			opened={props.opened}
-			padding='lg'
-			radius='md'
-			title={<Text className='text-center font-bold text-2xl'>{t('common.sign_in')}</Text>}
+			title={t('common.sign_in')}
 		>
-			<Form className='flex flex-col gap-y-3' form={form} onSubmit={handleSubmit}>
-				<TextInput
-					className='relative'
+			<Form className='flex flex-col gap-4' form={form} onSubmit={handleSubmit}>
+				<Field
+					action={
+						step === 'password' && (
+							<button
+								className='px-1 text-[12px] text-brand transition-opacity hover:opacity-70'
+								onClick={resetToEmailStep}
+								type='button'
+							>
+								{t('pages.components.modals.sign_in.change_email')}
+							</button>
+						)
+					}
+					autoComplete='email'
 					key={form.key('email')}
 					label={t('common.email')}
-					size='md'
-					{...form.getInputProps('email')}
-					inputContainer={(children) => (
-						<>
-							{children}
-
-							{step === 'password' && (
-								<Button
-									className='absolute top-0 right-0 h-[1.563rem] p-0 font-medium text-xs hover:opacity-80'
-									color='violet'
-									onClick={resetToEmailStep}
-									type='button'
-									variant='transparent'
-								>
-									{t('pages.components.modals.sign_in.change_email')}
-								</Button>
-							)}
-						</>
-					)}
+					placeholder='you@example.com'
 					readOnly={step === 'password'}
+					{...form.getInputProps('email')}
+					error={form.errors.email as string}
 				/>
 
 				{step === 'password' && (
-					<PasswordInput
-						className='relative'
-						key={form.key('password')}
-						label={t('common.password')}
-						size='md'
-						{...form.getInputProps('password')}
-						inputContainer={(children) => (
-							<>
-								{children}
+					<div className='animate-rise'>
+						<PasswordField
+							autoComplete='current-password'
+							key={form.key('password')}
+							label={t('common.password')}
+							{...form.getInputProps('password')}
+							error={form.errors.password as string}
+						/>
 
-								<Button
-									className='absolute top-0 right-0 h-[1.563rem] p-0 font-medium text-xs hover:opacity-80'
-									color='violet'
-									onClick={() => {
-										closeModal();
-										props.openForgotPasswordModal();
-									}}
-									type='button'
-									variant='transparent'
-								>
-									{t('pages.components.modals.sign_in.forgot_password')}
-								</Button>
-							</>
-						)}
-					/>
+						<button
+							className='mt-2.5 text-[12px] text-ink-3 transition-colors hover:text-brand'
+							onClick={() => {
+								closeModal();
+								props.openForgotPasswordModal();
+							}}
+							type='button'
+						>
+							{t('pages.components.modals.sign_in.forgot_password')}
+						</button>
+					</div>
 				)}
 
-				{step === 'email' ? (
-					<Button className='mt-2' color='violet' loading={isAuthenticationOptionsPending} size='md' type='submit'>
-						{t('common.continue')}
-					</Button>
-				) : (
-					<Button className='mt-2' color='violet' loading={isSignInPending} size='md' type='submit'>
-						{t('common.sign_in')}
-					</Button>
-				)}
+				<AppButton
+					className='mt-1'
+					fullWidth
+					loading={step === 'email' ? isAuthenticationOptionsPending : isSignInPending}
+					type='submit'
+				>
+					{t(step === 'email' ? 'common.continue' : 'common.sign_in')}
+				</AppButton>
 			</Form>
 
-			<Divider className='my-4' label={t('pages.components.modals.sign_in.or_continue_with')} labelPosition='center' />
+			<div className='my-6 flex items-center gap-3'>
+				<span className='h-px flex-1 bg-line' />
+				<span className='text-[12px] text-ink-3'>{t('pages.components.modals.sign_in.or_continue_with')}</span>
+				<span className='h-px flex-1 bg-line' />
+			</div>
 
-			{passkeyOptions && (
-				<Button
-					className='mt-2 mb-3'
-					color='violet'
-					fullWidth
-					leftSection={<IconFingerprintScan color='#9775FA' />}
-					loading={isVerifyAuthenticationPending}
-					onClick={handlePasskeyLogin}
-					size='md'
-					variant='default'
-				>
-					{t('pages.components.modals.sign_in.sign_in_with_passkey')}
-				</Button>
-			)}
+			<div className='flex flex-col gap-2.5'>
+				{passkeyOptions && (
+					<AppButton fullWidth loading={isVerifyAuthenticationPending} onClick={handlePasskeyLogin} variant='outline'>
+						{t('pages.components.modals.sign_in.sign_in_with_passkey')}
+					</AppButton>
+				)}
 
-			<GoogleSignInButton onSuccess={closeModal} />
+				<GoogleSignInButton onSuccess={closeModal} />
+			</div>
 
-			<Text className='mt-4 flex items-center justify-center gap-x-1' size='sm'>
-				<span>{t('pages.components.modals.sign_in.dont_have_an_account')}</span>{' '}
-				<Button
-					className='p-0 hover:opacity-80'
-					color='violet'
+			<p className='mt-7 text-center text-[13px] text-ink-3'>
+				{t('pages.components.modals.sign_in.dont_have_an_account')}{' '}
+				<button
+					className='font-medium text-brand transition-opacity hover:opacity-70'
 					onClick={() => {
 						closeModal();
 						props.openSignUpModal();
 					}}
-					variant='transparent'
+					type='button'
 				>
 					{t('common.sign_up')}
-				</Button>
-			</Text>
-		</Modal>
+				</button>
+			</p>
+		</AuthModalShell>
 	);
 };

@@ -1,12 +1,13 @@
-import { Button, Modal, PasswordInput, Text, TextInput } from '@mantine/core';
 import { Form, useForm } from '@mantine/form';
 import { startRegistration } from '@simplewebauthn/browser';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { AppButton, Field, PasswordField } from '../../../components/ui';
 import { useFormValidation } from '../../../hooks';
 import { useRegistrationOptions, useVerifyRegistration } from '../../../queries';
 import { toastService } from '../../../services';
 import type { AddPasskeyForm } from '../../../types';
+import { AuthModalShell } from './AuthModalShell';
 
 type AddPasskeyModalProps = {
 	opened: boolean;
@@ -64,29 +65,30 @@ export const AddPasskeyModal = ({ opened, onClose }: AddPasskeyModalProps) => {
 	};
 
 	return (
-		<Modal
+		<AuthModalShell
+			description={t('pages.components.modals.add_passkey.description')}
 			onClose={handleClose}
 			opened={opened}
-			padding='lg'
-			radius='md'
-			title={<Text className='text-center font-bold text-2xl'>{t('pages.components.modals.add_passkey.title')}</Text>}
+			title={t('pages.components.modals.add_passkey.title')}
 		>
-			<Form className='flex flex-col gap-y-3' form={form} onSubmit={handleSubmit}>
-				<TextInput
+			<Form className='flex flex-col gap-4' form={form} onSubmit={handleSubmit}>
+				<Field
 					label={t('pages.components.modals.add_passkey.name')}
 					placeholder={t('pages.components.modals.add_passkey.name_placeholder')}
-					size='md'
 					{...form.getInputProps('passkeyName')}
+					error={form.errors.passkeyName as string}
 				/>
-				<PasswordInput
+				<PasswordField
+					autoComplete='current-password'
 					label={t('pages.components.modals.add_passkey.password')}
-					size='md'
 					{...form.getInputProps('password')}
+					error={form.errors.password as string}
 				/>
-				<Button className='mt-2' color='violet' loading={isLoading} size='md' type='submit'>
+
+				<AppButton className='mt-1' fullWidth loading={isLoading} type='submit'>
 					{t('pages.components.modals.add_passkey.submit')}
-				</Button>
+				</AppButton>
 			</Form>
-		</Modal>
+		</AuthModalShell>
 	);
 };

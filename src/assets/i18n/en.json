@@ -4,8 +4,8 @@
     "email": "Email",
     "password": "Password",
     "confirm_password": "Confirm password",
-    "sign_in": "Sign In",
-    "sign_up": "Sign Up",
+    "sign_in": "Sign in",
+    "sign_up": "Sign up",
     "forgot_password": "Forgot password",
     "reset_password": "Reset password",
     "continue": "Continue",
@@ -16,8 +16,6 @@
     "close": "Close",
     "save": "Save",
     "avatar": "Avatar preview",
-    "language": "Language",
-    "theme": "Theme",
     "languages": {
       "en": "English",
       "ro": "Română"
@@ -27,65 +25,104 @@
       "email_required": "Email is required"
     }
   },
-
+  "nav": {
+    "explore": "Explore",
+    "create": "Create",
+    "profile": "Profile"
+  },
   "a11y": {
-    "reset_filters": "Reset filters",
-    "toggle_info": "Toggle info",
+    "reset_filters": "Reset sorting",
     "like_post": "Like post",
     "unlike_post": "Unlike post",
     "profile": "Profile",
-    "clear": "Clear"
+    "clear": "Clear",
+    "show_password": "Show password",
+    "hide_password": "Hide password"
   },
-
   "components": {
     "filters": {
-      "title": "Filters",
-      "date": "Date",
-      "name": "Name",
-      "likes": "Likes"
+      "title": "Sort"
     },
-
+    "discovery": {
+      "count": "{{count}} creations",
+      "sort": {
+        "date": "Latest",
+        "likes": "Most loved",
+        "name": "A–Z"
+      }
+    },
+    "error_state": {
+      "title": "Something went wrong while loading this.",
+      "retry": "Try again",
+      "comments": "Couldn't load comments.",
+      "notifications": "Couldn't load notifications.",
+      "passkeys": "Couldn't load passkeys."
+    },
     "post_card": {
-      "maximize_image": "Maximize image",
+      "maximize_image": "Expand image",
       "download_image": "Download image",
-      "delete_post": "Delete post",
-      "comments": "Comments",
-      "likes": "Likes",
-      "likes_count": "{{count}} likes",
-      "comments_count": "{{count}} comments"
+      "delete_post": "Delete creation",
+      "like_post": "Like creation",
+      "unlike_post": "Remove like"
     },
-
+    "post_detail": {
+      "prompt": "Prompt",
+      "copy": "Copy",
+      "prompt_copied": "Prompt copied",
+      "download": "Download",
+      "share": "Share",
+      "previous": "Previous creation",
+      "next": "Next creation"
+    },
     "comments_modal": {
       "title": "Comments",
-      "no_comments_yet": "No comments yet. Be the first to comment!",
-      "placeholder": "Write a comment...",
-      "post": "Post",
-      "scroll_to_bottom": "Scroll to bottom"
+      "no_comments_yet": "No comments yet. Start the conversation.",
+      "placeholder": "Add a comment…",
+      "post": "Post comment",
+      "sign_in_to_comment": "Sign in to comment"
     },
-
     "render_posts": {
-      "showing_results_for": "Showing results for",
-      "no_posts_found": "No posts found"
+      "showing_results_for": "Results for",
+      "no_posts_found": "Nothing matches that",
+      "no_posts_hint": "Try another prompt, creator or keyword.",
+      "clear_search": "Clear search"
     },
-
     "scroll_to_top_button": {
-      "title": "Scroll to top"
+      "title": "Back to top"
+    },
+    "onboarding": {
+      "explore": {
+        "title": "Every image starts as a sentence",
+        "body": "Browse what the community has made. Open any piece to read the exact prompt behind it."
+      },
+      "create": {
+        "title": "Describe what you want",
+        "body": "Write it in any language, pick a size, and watch AInterest render it in seconds."
+      },
+      "share": {
+        "title": "Share it, or keep it",
+        "body": "Publish a creation to the gallery for others to find — or just download it and move on."
+      },
+      "skip": "Skip",
+      "start": "Start creating",
+      "menu_entry": "How it works"
     }
   },
-
   "pages": {
     "components": {
       "modals": {
         "passkeys": {
           "title": "Passkeys",
-          "add_passkey": "Add Passkey"
+          "description": "Sign in with your face, fingerprint or device PIN instead of a password.",
+          "add_passkey": "Add a passkey"
         },
         "add_passkey": {
-          "title": "Add Passkey",
-          "name": "Passkey Name",
+          "title": "Add a passkey",
+          "description": "Name this device and confirm your password to register it.",
+          "name": "Passkey name",
           "name_placeholder": "My MacBook, iPhone, etc.",
-          "password": "Current Password",
-          "submit": "Add Passkey",
+          "password": "Current password",
+          "submit": "Add passkey",
           "errors": {
             "name": {
               "required": "Passkey name is required"
@@ -96,21 +133,21 @@
           }
         },
         "passkeys_list": {
-          "no_passkeys": "No passkeys added yet."
+          "no_passkeys": "No passkeys yet."
         },
         "passkey_item": {
-          "created_at": "Created",
-          "last_used": "Last Used",
-          "revoke": "Revoke",
-          "revoke_confirm": "Are you sure you want to revoke this passkey? You won't be able to sign in with it anymore."
+          "revoke": "Revoke passkey",
+          "revoke_confirm": "You won't be able to sign in with this passkey anymore.",
+          "never_used": "Never used"
         },
         "sign_in": {
-          "or_continue_with": "Or continue with",
-          "sign_in_with_google": "Sign in with Google",
-          "sign_in_with_passkey": "Sign in with Passkey",
-          "dont_have_an_account": "Don't have an account?",
+          "description": "Pick up where you left off and keep creating.",
+          "or_continue_with": "or",
+          "sign_in_with_google": "Continue with Google",
+          "sign_in_with_passkey": "Continue with passkey",
+          "dont_have_an_account": "New to AInterest?",
           "forgot_password": "Forgot your password?",
-          "change_email": "Change email",
+          "change_email": "Change",
           "errors": {
             "email": {
               "required": "Email is required",
@@ -122,8 +159,10 @@
           }
         },
         "sign_up": {
-          "or_continue_with": "Or continue with",
-          "sign_in_with_google": "Sign in with Google",
+          "description": "Create an account to generate images and share them with the community.",
+          "username_placeholder": "How should we call you?",
+          "or_continue_with": "or",
+          "sign_in_with_google": "Continue with Google",
           "already_have_an_account": "Already have an account?",
           "errors": {
             "username": {
@@ -152,8 +191,9 @@
           }
         },
         "forgot_password": {
+          "description": "We'll email you a link to choose a new password.",
           "send_reset_link": "Send reset link",
-          "back_to_sign_in": "Back to Sign In",
+          "back_to_sign_in": "Back to sign in",
           "errors": {
             "email": {
               "required": "Email is required",
@@ -162,55 +202,71 @@
           }
         }
       },
-
       "header": {
-        "sign_in": "Sign In",
-        "switch_to_light_mode": "Switch to light mode",
-        "switch_to_dark_mode": "Switch to dark mode",
+        "sign_in": "Sign in",
+        "settings": "Settings",
+        "your_profile": "Your profile",
         "notifications": "Notifications",
-        "sign_out": "Sign Out",
-        "are_you_sure": "Are you sure you want to sign out?"
+        "sign_out": "Sign out",
+        "are_you_sure": "You can sign back in at any time.",
+        "appearance": "Appearance",
+        "light": "Light",
+        "dark": "Dark",
+        "language": "Language"
       },
-
       "notifications": {
         "title": "Notifications",
         "mark_all_as_read": "Mark all as read",
         "delete_all": "Delete all",
-        "no_notifications_yet": "No notifications yet",
-        "liked_your_post": "liked your post",
-        "commented_on_your_post": "commented on your post",
+        "no_notifications_yet": "Nothing here yet",
+        "liked_your_post": "liked your creation",
+        "commented_on_your_post": "commented on your creation",
         "unread": "Unread",
-        "post_image": "Post image",
+        "post_image": "Creation",
         "mark_as_read": "Mark as read",
         "delete": "Delete"
       },
-
       "search_posts_input": {
-        "search_posts": "Search posts",
-        "enter_prompt": "Enter prompt",
-        "enter_prompt_or_username": "Enter prompt or username"
+        "search_posts": "Search creations",
+        "enter_prompt": "Search prompts…",
+        "enter_prompt_or_username": "Search ideas, prompts, creators…"
       },
-
       "protected_route": {
-        "title": "Authentication required",
-        "description": "You need to be logged in to access this page. Please sign in to continue.",
-        "go_to_home": "Go to Home"
+        "title": "Sign in to start creating",
+        "description": "The studio is where you turn a sentence into an image. Sign in to open it.",
+        "go_to_home": "Back to explore"
       }
     },
-
     "home": {
-      "heading": "The Community Showcase",
-      "subheading": "Browse through a collection of imaginative and visually stunning images generated by AI",
-      "refresh_posts": "Refresh posts"
+      "headline_lead": "Imagination,",
+      "headline_accent": "rendered.",
+      "subheadline": "Free to explore — sign in to make your own.",
+      "start_creating": "Start creating",
+      "empty_title": "The wall is empty",
+      "empty_hint": "Be the first to describe something and share it with the community.",
+      "refresh_posts": "Refresh the feed"
     },
-
     "user_profile": {
-      "generate_image": "Generate image"
+      "generate_image": "Create",
+      "edit_avatar": "Crop your picture",
+      "stats": {
+        "creations": "{{count}} creations",
+        "appreciations": "{{count}} appreciations"
+      },
+      "empty_title": "No creations yet",
+      "empty_hint": "This creator hasn't shared anything with the community yet.",
+      "empty_hint_self": "Your studio is one click away — describe something and share it.",
+      "change_photo": "Change"
     },
-
+    "error": {
+      "title_lead": "This page was never",
+      "title_accent": "rendered.",
+      "description": "The link you followed doesn't lead anywhere in AInterest.",
+      "back_to_explore": "Back to explore"
+    },
     "reset_password": {
-      "title": "Reset your password",
-      "description": "Enter your new password",
+      "title": "Choose a new password",
+      "description": "Pick something you haven't used before.",
       "new_password": "New password",
       "confirm_new_password": "Confirm new password",
       "reset_password": "Reset password",
@@ -232,49 +288,56 @@
         "invalid_token": "Invalid or missing reset token"
       }
     },
-
     "generate_image": {
-      "heading": "Generate image",
-      "subheading": "Create imaginative and visually stunning images through AI and share them with the community",
       "surprise_me": "Surprise me",
-      "prompt": "Prompt (accepts any language)",
-      "prompt_example": "An oil painting by Matisse of a humanoid robot playing chess",
-      "size": "Size (px)",
-      "size_example": "Pick a value",
+      "prompt": "Prompt",
+      "prompt_example": "An oil painting by Matisse of a humanoid robot playing chess…",
+      "size": "Size",
       "generate": "Generate",
+      "generating": "Generating",
       "share": "Share with the community",
-      "info": "Once you have created the image you want, you can share it with others in the community",
-
+      "canvas": {
+        "empty_label": "Your canvas",
+        "empty_hint": "Whatever you describe will appear here."
+      },
+      "status": {
+        "interpreting": "Reading your prompt…",
+        "composing": "Composing the scene…",
+        "rendering": "Rendering pixels…",
+        "finishing": "Adding the final touches…"
+      },
       "errors": {
         "prompt": {
-          "required": "Prompt is required",
+          "required": "Describe what you want to create",
           "min_length": "Prompt must be at least 5 characters long",
           "max_length": "Prompt must be at most 200 characters long"
         },
         "size": {
-          "required": "Size is required"
+          "required": "Pick a size"
         },
-        "image_should_be_generated": "Image should be successfully generated"
+        "image_should_be_generated": "Generate an image before sharing it"
       }
     }
   },
-
   "apis": {
     "auth": {
       "success_sign_in": "Signed in successfully!",
-      "success_sign_up": "Signed up successfully!",
+      "success_sign_up": "Welcome to AInterest!",
       "success_sign_out": "Signed out successfully!",
       "success_forgot_password": "Reset link sent to your email!",
       "success_reset_password": "Password reset successfully!"
     },
     "user": {
-      "update": "Profile image updated successfully!",
+      "update": "Profile picture updated!",
       "error": "Failed to upload image.",
       "error_size": "File size exceeds 5MB limit."
     },
     "post": {
-      "success": "Post shared successfully!",
-      "delete": "Post deleted successfully!"
+      "success": "Shared with the community!",
+      "delete": "Creation deleted.",
+      "downloaded": "Image downloaded.",
+      "link_copied": "Image link copied.",
+      "copy_failed": "Couldn't copy to clipboard."
     },
     "generate": {
       "error": "Prompt contains explicit/adult content, please try a different one."

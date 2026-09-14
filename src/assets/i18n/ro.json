@@ -16,8 +16,6 @@
     "close": "Închide",
     "save": "Salvează",
     "avatar": "Previzualizare avatar",
-    "language": "Limbă",
-    "theme": "Temă",
     "languages": {
       "en": "English",
       "ro": "Română"
@@ -27,65 +25,104 @@
       "email_required": "E-mailul este obligatoriu"
     }
   },
-
-  "a11y": {
-    "reset_filters": "Resetează filtrele",
-    "toggle_info": "Comută informațiile",
-    "like_post": "Apreciază postarea",
-    "unlike_post": "Înlătură aprecierea postării",
-    "profile": "Profil",
-    "clear": "Șterge"
+  "nav": {
+    "explore": "Explorează",
+    "create": "Creează",
+    "profile": "Profil"
   },
-
+  "a11y": {
+    "reset_filters": "Resetează sortarea",
+    "like_post": "Apreciază creația",
+    "unlike_post": "Înlătură aprecierea",
+    "profile": "Profil",
+    "clear": "Șterge",
+    "show_password": "Arată parola",
+    "hide_password": "Ascunde parola"
+  },
   "components": {
     "filters": {
-      "title": "Filtre",
-      "date": "Dată",
-      "name": "Nume",
-      "likes": "Aprecieri"
+      "title": "Sortare"
     },
-
+    "discovery": {
+      "count": "{{count}} creații",
+      "sort": {
+        "date": "Recente",
+        "likes": "Apreciate",
+        "name": "A–Z"
+      }
+    },
+    "error_state": {
+      "title": "Ceva nu a mers bine la încărcare.",
+      "retry": "Încearcă din nou",
+      "comments": "Comentariile nu au putut fi încărcate.",
+      "notifications": "Notificările nu au putut fi încărcate.",
+      "passkeys": "Cheile de acces nu au putut fi încărcate."
+    },
     "post_card": {
       "maximize_image": "Mărește imaginea",
       "download_image": "Descarcă imaginea",
-      "delete_post": "Șterge postarea",
-      "comments": "Comentarii",
-      "likes": "Aprecieri",
-      "likes_count": "{{count}} aprecieri",
-      "comments_count": "{{count}} comentarii"
+      "delete_post": "Șterge creația",
+      "like_post": "Apreciază creația",
+      "unlike_post": "Înlătură aprecierea"
     },
-
+    "post_detail": {
+      "prompt": "Descriere",
+      "copy": "Copiază",
+      "prompt_copied": "Descriere copiată",
+      "download": "Descarcă",
+      "share": "Distribuie",
+      "previous": "Creația anterioară",
+      "next": "Creația următoare"
+    },
     "comments_modal": {
       "title": "Comentarii",
-      "no_comments_yet": "Niciun comentariu încă. Fii primul care comentează!",
-      "placeholder": "Scrie un comentariu...",
-      "post": "Postează",
-      "scroll_to_bottom": "Derulează în jos"
+      "no_comments_yet": "Niciun comentariu încă. Începe conversația.",
+      "placeholder": "Adaugă un comentariu…",
+      "post": "Publică comentariul",
+      "sign_in_to_comment": "Conectează-te pentru a comenta"
     },
-
     "render_posts": {
-      "showing_results_for": "Se afișează rezultatele pentru",
-      "no_posts_found": "Nicio postare găsită"
+      "showing_results_for": "Rezultate pentru",
+      "no_posts_found": "Nimic nu se potrivește",
+      "no_posts_hint": "Încearcă altă descriere, alt creator sau alt cuvânt-cheie.",
+      "clear_search": "Șterge căutarea"
     },
-
     "scroll_to_top_button": {
-      "title": "Derulează în sus"
+      "title": "Înapoi sus"
+    },
+    "onboarding": {
+      "explore": {
+        "title": "Orice imagine începe ca o propoziție",
+        "body": "Explorează ce a creat comunitatea. Deschide orice lucrare ca să vezi descrierea din spatele ei."
+      },
+      "create": {
+        "title": "Descrie ce vrei",
+        "body": "Scrie în orice limbă, alege o dimensiune și privește cum AInterest o randează în câteva secunde."
+      },
+      "share": {
+        "title": "Distribuie sau păstrează",
+        "body": "Publică o creație în galerie ca să o descopere și alții — sau pur și simplu descarc-o."
+      },
+      "skip": "Sari peste",
+      "start": "Începe să creezi",
+      "menu_entry": "Cum funcționează"
     }
   },
-
   "pages": {
     "components": {
       "modals": {
         "passkeys": {
           "title": "Chei de acces",
-          "add_passkey": "Adaugă cheie de acces"
+          "description": "Conectează-te cu fața, amprenta sau codul dispozitivului, în loc de parolă.",
+          "add_passkey": "Adaugă o cheie de acces"
         },
         "add_passkey": {
-          "title": "Adaugă cheie de acces",
+          "title": "Adaugă o cheie de acces",
+          "description": "Denumește acest dispozitiv și confirmă-ți parola pentru a-l înregistra.",
           "name": "Nume cheie de acces",
           "name_placeholder": "MacBook-ul meu, iPhone-ul meu etc.",
           "password": "Parola actuală",
-          "submit": "Adaugă cheie de acces",
+          "submit": "Adaugă cheia de acces",
           "errors": {
             "name": {
               "required": "Numele cheii de acces este obligatoriu"
@@ -96,21 +133,21 @@
           }
         },
         "passkeys_list": {
-          "no_passkeys": "Nu ai încă nicio cheie de acces."
+          "no_passkeys": "Nicio cheie de acces încă."
         },
         "passkey_item": {
-          "created_at": "Creată",
-          "last_used": "Ultima utilizare",
-          "revoke": "Revocă",
-          "revoke_confirm": "Sigur vrei să revoci această cheie de acces? Nu te vei mai putea conecta cu ea."
+          "revoke": "Revocă cheia de acces",
+          "revoke_confirm": "Nu te vei mai putea conecta cu această cheie de acces.",
+          "never_used": "Nefolosită încă"
         },
         "sign_in": {
-          "or_continue_with": "Sau continuă cu",
-          "sign_in_with_google": "Conectează-te cu Google",
-          "sign_in_with_passkey": "Conectează-te cu cheia de acces",
-          "dont_have_an_account": "Nu ai un cont?",
+          "description": "Continuă de unde ai rămas și creează în continuare.",
+          "or_continue_with": "sau",
+          "sign_in_with_google": "Continuă cu Google",
+          "sign_in_with_passkey": "Continuă cu cheia de acces",
+          "dont_have_an_account": "Ești nou pe AInterest?",
           "forgot_password": "Ai uitat parola?",
-          "change_email": "Schimbă e-mailul",
+          "change_email": "Schimbă",
           "errors": {
             "email": {
               "required": "E-mailul este obligatoriu",
@@ -122,8 +159,10 @@
           }
         },
         "sign_up": {
-          "or_continue_with": "Sau continuă cu",
-          "sign_in_with_google": "Conectează-te cu Google",
+          "description": "Creează-ți un cont ca să generezi imagini și să le distribui comunității.",
+          "username_placeholder": "Cum să îți spunem?",
+          "or_continue_with": "sau",
+          "sign_in_with_google": "Continuă cu Google",
           "already_have_an_account": "Ai deja un cont?",
           "errors": {
             "username": {
@@ -152,8 +191,9 @@
           }
         },
         "forgot_password": {
+          "description": "Îți trimitem pe e-mail un link pentru a-ți alege o parolă nouă.",
           "send_reset_link": "Trimite linkul de resetare",
-          "back_to_sign_in": "Înapoi la autentificare",
+          "back_to_sign_in": "Înapoi la conectare",
           "errors": {
             "email": {
               "required": "E-mailul este obligatoriu",
@@ -162,57 +202,73 @@
           }
         }
       },
-
       "header": {
         "sign_in": "Conectare",
-        "switch_to_light_mode": "Treci la modul luminos",
-        "switch_to_dark_mode": "Treci la modul întunecat",
+        "settings": "Setări",
+        "your_profile": "Profilul tău",
         "notifications": "Notificări",
         "sign_out": "Deconectare",
-        "are_you_sure": "Ești sigur că vrei să te deconectezi?"
+        "are_you_sure": "Te poți conecta din nou oricând.",
+        "appearance": "Aspect",
+        "light": "Luminos",
+        "dark": "Întunecat",
+        "language": "Limbă"
       },
-
       "notifications": {
         "title": "Notificări",
         "mark_all_as_read": "Marchează toate ca citite",
         "delete_all": "Șterge toate",
-        "no_notifications_yet": "Nicio notificare încă",
-        "liked_your_post": "a apreciat postarea ta",
-        "commented_on_your_post": "a comentat la postarea ta",
+        "no_notifications_yet": "Nimic aici deocamdată",
+        "liked_your_post": "ți-a apreciat creația",
+        "commented_on_your_post": "a comentat la creația ta",
         "unread": "Necitit",
-        "post_image": "Imaginea postării",
+        "post_image": "Creație",
         "mark_as_read": "Marchează ca citit",
         "delete": "Șterge"
       },
-
       "search_posts_input": {
-        "search_posts": "Caută postări",
-        "enter_prompt": "Introdu descrierea",
-        "enter_prompt_or_username": "Introdu descrierea sau numele"
+        "search_posts": "Caută creații",
+        "enter_prompt": "Caută descrieri…",
+        "enter_prompt_or_username": "Caută idei, descrieri, creatori…"
       },
-
       "protected_route": {
-        "title": "Autentificare necesară",
-        "description": "Trebuie să fii conectat pentru a accesa această pagină. Te rugăm să te conectezi pentru a continua.",
-        "go_to_home": "Du-te Acasă"
+        "title": "Conectează-te ca să începi să creezi",
+        "description": "Studioul e locul unde o propoziție devine imagine. Conectează-te ca să îl deschizi.",
+        "go_to_home": "Înapoi la explorare"
       }
     },
-
     "home": {
-      "heading": "Galeria Comunității",
-      "subheading": "Explorează o colecție de imagini imaginative și impresionante generate de AI",
-      "refresh_posts": "Reîmprospătează postările"
+      "headline_lead": "Imaginația,",
+      "headline_accent": "randată.",
+      "subheadline": "Explorarea e liberă — conectează-te ca să creezi.",
+      "start_creating": "Începe să creezi",
+      "empty_title": "Peretele e gol",
+      "empty_hint": "Fii primul care descrie ceva și îl distribuie comunității.",
+      "refresh_posts": "Reîmprospătează fluxul"
     },
-
     "user_profile": {
-      "generate_image": "Generează o imagine"
+      "generate_image": "Creează",
+      "edit_avatar": "Decupează poza",
+      "stats": {
+        "creations": "{{count}} creații",
+        "appreciations": "{{count}} aprecieri"
+      },
+      "empty_title": "Nicio creație încă",
+      "empty_hint": "Acest creator nu a distribuit încă nimic comunității.",
+      "empty_hint_self": "Studioul e la un clic distanță — descrie ceva și distribuie.",
+      "change_photo": "Schimbă"
     },
-
+    "error": {
+      "title_lead": "Pagina asta nu a fost niciodată",
+      "title_accent": "randată.",
+      "description": "Linkul pe care l-ai urmat nu duce nicăieri în AInterest.",
+      "back_to_explore": "Înapoi la explorare"
+    },
     "reset_password": {
-      "title": "Resetează parola",
-      "description": "Introdu noua parolă",
-      "new_password": "Noua parolă",
-      "confirm_new_password": "Confirmă noua parolă",
+      "title": "Alege o parolă nouă",
+      "description": "Alege ceva ce nu ai mai folosit până acum.",
+      "new_password": "Parolă nouă",
+      "confirm_new_password": "Confirmă parola nouă",
       "reset_password": "Resetează parola",
       "errors": {
         "password": {
@@ -232,49 +288,56 @@
         "invalid_token": "Token de resetare invalid sau lipsă"
       }
     },
-
     "generate_image": {
-      "heading": "Generează o imagine",
-      "subheading": "Creează imagini imaginative și impresionante prin AI și împărtășește-le cu comunitatea",
       "surprise_me": "Surprinde-mă",
-      "prompt": "Descriere (acceptă orice limbă)",
-      "prompt_example": "O pictură în ulei de Matisse cu un robot umanoid care joacă șah",
-      "size": "Dimensiune (px)",
-      "size_example": "Alege o valoare",
+      "prompt": "Descriere",
+      "prompt_example": "O pictură în ulei de Matisse cu un robot umanoid care joacă șah…",
+      "size": "Dimensiune",
       "generate": "Generează",
-      "share": "Împărtășește cu comunitatea",
-      "info": "După ce ai creat imaginea dorită, o poți împărtăși cu ceilalți din comunitate",
-
+      "generating": "Se generează",
+      "share": "Distribuie comunității",
+      "canvas": {
+        "empty_label": "Pânza ta",
+        "empty_hint": "Tot ce descrii va apărea aici."
+      },
+      "status": {
+        "interpreting": "Se citește descrierea…",
+        "composing": "Se compune scena…",
+        "rendering": "Se randează pixelii…",
+        "finishing": "Se adaugă ultimele detalii…"
+      },
       "errors": {
         "prompt": {
-          "required": "Descrierea este obligatorie",
+          "required": "Descrie ce vrei să creezi",
           "min_length": "Descrierea trebuie să aibă minimum 5 caractere",
           "max_length": "Descrierea nu poate depăși 200 de caractere"
         },
         "size": {
-          "required": "Dimensiunea este obligatorie"
+          "required": "Alege o dimensiune"
         },
-        "image_should_be_generated": "Imaginea trebuie să fie generată cu succes"
+        "image_should_be_generated": "Generează o imagine înainte de a o distribui"
       }
     }
   },
-
   "apis": {
     "auth": {
       "success_sign_in": "Conectare realizată cu succes!",
-      "success_sign_up": "Înregistrare realizată cu succes!",
+      "success_sign_up": "Bine ai venit pe AInterest!",
       "success_sign_out": "Deconectare realizată cu succes!",
       "success_forgot_password": "Linkul de resetare a fost trimis pe e-mail!",
       "success_reset_password": "Parola a fost resetată cu succes!"
     },
     "user": {
-      "update": "Imaginea de profil a fost actualizată cu succes!",
+      "update": "Poza de profil a fost actualizată!",
       "error": "Încărcarea imaginii a eșuat.",
       "error_size": "Dimensiunea fișierului depășește limita de 5 MB."
     },
     "post": {
-      "success": "Postarea a fost distribuită cu succes!",
-      "delete": "Postarea a fost ștearsă cu succes!"
+      "success": "Distribuit comunității!",
+      "delete": "Creația a fost ștearsă.",
+      "downloaded": "Imagine descărcată.",
+      "link_copied": "Linkul imaginii a fost copiat.",
+      "copy_failed": "Copierea în clipboard a eșuat."
     },
     "generate": {
       "error": "Cererea conține conținut explicit/adult, te rugăm să încerci alta."

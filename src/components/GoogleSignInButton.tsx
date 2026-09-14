@@ -1,4 +1,3 @@
-import { Button } from '@mantine/core';
 import { GoogleLogin } from '@react-oauth/google';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRef } from 'react';
@@ -6,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { GoogleIcon } from '../assets/icons';
 import { notificationKeys, useGoogleSignIn } from '../queries';
 import { toastService } from '../services';
+import { AppButton } from './ui';
 
 type GoogleSignInButtonProps = {
 	onSuccess: () => void;
@@ -35,16 +35,15 @@ export const GoogleSignInButton = ({ onSuccess }: GoogleSignInButtonProps) => {
 
 	return (
 		<>
-			<Button
+			<AppButton
 				fullWidth
-				leftSection={<img alt='Google' className='w-5' src={GoogleIcon} />}
+				leftIcon={<img alt='' className='w-[18px]' src={GoogleIcon} />}
 				loading={isPending}
 				onClick={handleCustomButtonClick}
-				size='md'
-				variant='default'
+				variant='outline'
 			>
 				{t('pages.components.modals.sign_in.sign_in_with_google')}
-			</Button>
+			</AppButton>
 
 			<div className='hidden' ref={googleButtonRef}>
 				<GoogleLogin

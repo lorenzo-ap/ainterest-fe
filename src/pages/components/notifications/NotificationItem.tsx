@@ -1,17 +1,18 @@
-import { ActionIcon, Avatar, Box, Text, Tooltip } from '@mantine/core';
-import { IconCheck, IconX } from '@tabler/icons-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { CheckIcon, CloseIcon, Initials } from '../../../components/ui';
+import { routes } from '../../../constants';
 import { useDeleteNotification, useMarkNotificationAsRead } from '../../../queries';
 import type { Notification } from '../../../types';
 import { getLocale } from '../../../utils';
 
 type NotificationItemProps = {
 	notification: Notification;
+	onNavigate: () => void;
 };
 
-export const NotificationItem = ({ notification }: NotificationItemProps) => {
+export const NotificationItem = ({ notification, onNavigate }: NotificationItemProps) => {
 	const { t, i18n } = useTranslation();
 
 	const { mutate: markAsRead, isPending: isMarkAsReadPending } = useMarkNotificationAsRead(notification.id);
@@ -24,88 +25,65 @@ export const NotificationItem = ({ notification }: NotificationItemProps) => {
 	});
 
 	return (
-		<div
-			className={`group relative flex items-center gap-3 p-3 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700/50 ${
-				notification.read ? '' : 'bg-violet-100 dark:bg-violet-900/20'
-			}`}
-		>
-			<Avatar
-				alt={notification.actor.username}
-				className='flex-shrink-0'
-				color='initials'
-				name={notification.actor.username}
-				size={40}
-				src={notification.actor.photo}
+		<li className='group relative mx-2 flex items-center gap-3 rounded-md px-2 py-2.5 transition-colors hover:bg-hover'>
+			{!notification.read && (
+				<span className='absolute top-1/2 left-0 h-5 w-[2px] -translate-y-1/2 rounded-full bg-brand' />
+			)}
+
+			<Link
+				className='shrink-0 transition-opacity hover:opacity-75'
+				onClick={onNavigate}
+				to={routes.profile(notification.actor.username)}
 			>
-				{notification.actor.username[0].toUpperCase()}
-			</Avatar>
+				<Initials name={notification.actor.username} size={36} src={notification.actor.photo} />
+			</Link>
 
-			<div className='flex flex-grow items-start justify-between gap-8'>
-				<div className='min-w-0 flex-1'>
-					<div>
-						<Link to={`/account/${notification.actor.username}`}>
-							<Text c='violet' className='font-semibold text-sm hover:opacity-85' component='span'>
-								{notification.actor.username}
-							</Text>
-						</Link>
+			<div className='min-w-0 flex-1'>
+				<p className='text-[13px] text-ink-2 leading-snug'>
+					<Link
+						className='font-medium text-ink hover:underline'
+						onClick={onNavigate}
+						to={routes.profile(notification.actor.username)}
+					>
+						{notification.actor.username}
+					</Link>{' '}
+					{notification.type === 'LIKE'
+						? t('pages.components.notifications.liked_your_post')
+						: t('pages.components.notifications.commented_on_your_post')}
+				</p>
 
-						<br className='xxs:hidden' />
-						<span className='inline max-xxs:hidden'>&nbsp;</span>
-
-						<Text className='text-sm' component='span'>
-							{notification.type === 'LIKE'
-								? t('pages.components.notifications.liked_your_post')
-								: t('pages.components.notifications.commented_on_your_post')}
-						</Text>
-					</div>
-
-					<div className='mt-1 flex items-center gap-2'>
-						<Text className='text-xs opacity-50'>{timeAgo}</Text>
-
-						{!notification.read && (
-							<Box
-								bg='violet'
-								className='h-2 w-2 rounded-full opacity-70'
-								title={t('pages.components.notifications.unread')}
-							/>
-						)}
-					</div>
-				</div>
-
-				<img
-					alt={t('pages.components.notifications.post_image')}
-					className='h-12 w-12 flex-shrink-0 self-center rounded object-cover transition-transform group-hover:-translate-x-6'
-					src={notification.post.photo}
-				/>
+				<p className='mt-1 font-mono text-[10px] text-ink-3 tracking-wide'>{timeAgo}</p>
 			</div>
 
-			<div className='absolute top-1/2 right-2 flex -translate-y-1/2 flex-col items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100'>
+			<img
+				alt={t('pages.components.notifications.post_image')}
+				className='h-11 w-11 shrink-0 rounded-sm object-cover transition-transform duration-200 group-hover:-translate-x-14'
+				src={notification.post.photo}
+			/>
+
+			<div className='absolute right-2 flex items-center gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100'>
 				{!notification.read && (
-					<Tooltip label={t('pages.components.notifications.mark_as_read')} withArrow>
-						<ActionIcon
-							color='violet'
-							loading={isMarkAsReadPending}
-							onClick={() => markAsRead()}
-							size='sm'
-							variant='light'
-						>
-							<IconCheck size={14} />
-						</ActionIcon>
-					</Tooltip>
+					<button
+						aria-label={t('pages.components.notifications.mark_as_read')}
+						className='flex h-7 w-7 items-center justify-center rounded-sm bg-brand-tint-strong text-brand transition-opacity hover:opacity-80 disabled:opacity-40'
+						disabled={isMarkAsReadPending}
+						onClick={() => markAsRead()}
+						type='button'
+					>
+						<CheckIcon size={14} />
+					</button>
 				)}
 
-				<Tooltip label={t('pages.components.notifications.delete')} withArrow>
-					<ActionIcon
-						color='red'
-						loading={isDeletePending}
-						onClick={() => deleteNotification()}
-						size='sm'
-						variant='light'
-					>
-						<IconX size={14} />
-					</ActionIcon>
-				</Tooltip>
+				<button
+					aria-label={t('pages.components.notifications.delete')}
+					className='flex h-7 w-7 items-center justify-center rounded-sm bg-danger-tint text-danger transition-opacity hover:opacity-80 disabled:opacity-40'
+					disabled={isDeletePending}
+					onClick={() => deleteNotification()}
+					type='button'
+				>
+					<CloseIcon size={14} />
+				</button>
 			</div>
-		</div>
+		</li>
 	);
 };

@@ -1,4 +1,5 @@
 export * from './AddPasskeyModal';
+export * from './AuthModalShell';
 export * from './ForgotPasswordModal';
 export * from './PasskeyItem';
 export * from './PasskeysList';

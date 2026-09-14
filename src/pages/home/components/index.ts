@@ -1,1 +1,2 @@
-export * from './HomePosts';
+export * from './ExploreFeed';
+export * from './Hero';

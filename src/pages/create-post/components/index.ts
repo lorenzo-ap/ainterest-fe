@@ -1,1 +1,2 @@
-export * from './PostGeneratedImage';
+export * from './GenerationCanvas';
+export * from './PromptComposer';

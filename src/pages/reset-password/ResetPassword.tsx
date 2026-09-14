@@ -1,8 +1,8 @@
-import { Button, Container, PasswordInput, Text } from '@mantine/core';
 import { Form, useForm } from '@mantine/form';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { AppButton, PasswordField, Wordmark } from '../../components/ui';
 import { PASSWORD_REQUIREMENTS } from '../../constants';
 import { useFormValidation } from '../../hooks';
 import { useResetPassword } from '../../queries';
@@ -62,31 +62,35 @@ export const ResetPasswordPage = () => {
 	};
 
 	return (
-		<Container className='py-12' size='xs'>
-			<Text className='mb-2 text-center font-bold text-3xl'>{t('pages.reset_password.title')}</Text>
-			<Text c='dimmed' className='mb-6 text-center' size='sm'>
-				{t('pages.reset_password.description')}
-			</Text>
+		<div className='flex min-h-[calc(100dvh-var(--header-h))] items-center justify-center px-5 py-16'>
+			<div className='w-full max-w-[420px]'>
+				<Wordmark className='!text-[15px]' />
 
-			<Form className='mx-auto flex max-w-screen-xxs flex-col gap-y-3' form={form} onSubmit={handleSubmit}>
-				<PasswordInput
-					key={form.key('password')}
-					label={t('pages.reset_password.new_password')}
-					size='md'
-					{...form.getInputProps('password')}
-				/>
+				<h1 className='mt-5 font-display text-[2rem] text-ink leading-tight'>{t('pages.reset_password.title')}</h1>
+				<p className='mt-2 text-[14px] text-ink-3 leading-relaxed'>{t('pages.reset_password.description')}</p>
 
-				<PasswordInput
-					key={form.key('confirmPassword')}
-					label={t('pages.reset_password.confirm_new_password')}
-					size='md'
-					{...form.getInputProps('confirmPassword')}
-				/>
+				<Form className='mt-7 flex flex-col gap-4' form={form} onSubmit={handleSubmit}>
+					<PasswordField
+						autoComplete='new-password'
+						key={form.key('password')}
+						label={t('pages.reset_password.new_password')}
+						{...form.getInputProps('password')}
+						error={form.errors.password as string}
+					/>
 
-				<Button className='mt-2' color='violet' loading={isPending} size='md' type='submit'>
-					{t('pages.reset_password.reset_password')}
-				</Button>
-			</Form>
-		</Container>
+					<PasswordField
+						autoComplete='new-password'
+						key={form.key('confirmPassword')}
+						label={t('pages.reset_password.confirm_new_password')}
+						{...form.getInputProps('confirmPassword')}
+						error={form.errors.confirmPassword as string}
+					/>
+
+					<AppButton className='mt-1' fullWidth loading={isPending} type='submit'>
+						{t('pages.reset_password.reset_password')}
+					</AppButton>
+				</Form>
+			</div>
+		</div>
 	);
 };

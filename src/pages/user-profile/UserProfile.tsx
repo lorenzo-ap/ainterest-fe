@@ -1,7 +1,7 @@
-import { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PostsSkeleton, ScrollToTopButton } from '../../components';
-import { UserHeader, UserHeaderSkeleton, UserPosts } from './components';
+import { GallerySkeleton, QueryBoundary } from '../../components';
+import { ProfileGallery, ProfileHeader, ProfileHeaderSkeleton } from './components';
 
 export const UserProfilePage = () => {
 	const params = useParams<{ username: string }>();
@@ -18,18 +18,19 @@ export const UserProfilePage = () => {
 	}
 
 	return (
-		<>
-			<div className='relative mx-auto max-w-7xl'>
-				<Suspense fallback={<UserHeaderSkeleton />} key={`header-${params.username}`}>
-					<UserHeader username={params.username} />
-				</Suspense>
-
-				<Suspense fallback={<PostsSkeleton />} key={`posts-${params.username}`}>
-					<UserPosts username={params.username} />
-				</Suspense>
-			</div>
-
-			<ScrollToTopButton />
-		</>
+		<QueryBoundary
+			key={params.username}
+			loading={
+				<>
+					<ProfileHeaderSkeleton />
+					<div className='mx-auto max-w-gallery px-5 pt-6 pb-24 sm:px-8'>
+						<GallerySkeleton />
+					</div>
+				</>
+			}
+		>
+			<ProfileHeader username={params.username} />
+			<ProfileGallery username={params.username} />
+		</QueryBoundary>
 	);
 };

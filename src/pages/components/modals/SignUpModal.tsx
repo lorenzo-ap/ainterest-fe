@@ -1,13 +1,14 @@
-import { Button, Divider, Modal, PasswordInput, Text, TextInput } from '@mantine/core';
 import { Form, useForm } from '@mantine/form';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { GoogleSignInButton } from '../../../components';
+import { AppButton, Field, PasswordField } from '../../../components/ui';
 import { EMAIL_REGEX, PASSWORD_REQUIREMENTS } from '../../../constants';
 import { useFormValidation } from '../../../hooks';
 import { notificationKeys, useSignUp } from '../../../queries';
 import { toastService } from '../../../services';
 import type { SignUpForm } from '../../../types';
+import { AuthModalShell } from './AuthModalShell';
 
 type SignUpModalProps = {
 	opened: boolean;
@@ -91,57 +92,70 @@ export const SignUpModal = (props: SignUpModalProps) => {
 	};
 
 	return (
-		<Modal
+		<AuthModalShell
+			description={t('pages.components.modals.sign_up.description')}
 			onClose={closeModal}
 			opened={props.opened}
-			padding='lg'
-			radius='md'
-			title={<Text className='text-center font-bold text-2xl'>{t('common.sign_up')}</Text>}
+			title={t('common.sign_up')}
 		>
-			<Form className='flex flex-col gap-y-3' form={form} onSubmit={handleSubmit}>
-				<TextInput
+			<Form className='flex flex-col gap-4' form={form} onSubmit={handleSubmit}>
+				<Field
+					autoComplete='username'
 					key={form.key('username')}
 					label={t('common.username')}
-					size='md'
+					placeholder={t('pages.components.modals.sign_up.username_placeholder')}
 					{...form.getInputProps('username')}
+					error={form.errors.username as string}
 				/>
-				<TextInput key={form.key('email')} label={t('common.email')} size='md' {...form.getInputProps('email')} />
-				<PasswordInput
+				<Field
+					autoComplete='email'
+					key={form.key('email')}
+					label={t('common.email')}
+					placeholder='you@example.com'
+					{...form.getInputProps('email')}
+					error={form.errors.email as string}
+				/>
+				<PasswordField
+					autoComplete='new-password'
 					key={form.key('password')}
 					label={t('common.password')}
-					size='md'
 					{...form.getInputProps('password')}
+					error={form.errors.password as string}
 				/>
-				<PasswordInput
+				<PasswordField
+					autoComplete='new-password'
 					key={form.key('confirmPassword')}
 					label={t('common.confirm_password')}
-					size='md'
 					{...form.getInputProps('confirmPassword')}
+					error={form.errors.confirmPassword as string}
 				/>
 
-				<Button className='mt-2' color='violet' loading={isPending} size='md' type='submit'>
+				<AppButton className='mt-1' fullWidth loading={isPending} type='submit'>
 					{t('common.sign_up')}
-				</Button>
+				</AppButton>
 			</Form>
 
-			<Divider className='my-4' label={t('pages.components.modals.sign_up.or_continue_with')} labelPosition='center' />
+			<div className='my-6 flex items-center gap-3'>
+				<span className='h-px flex-1 bg-line' />
+				<span className='text-[12px] text-ink-3'>{t('pages.components.modals.sign_up.or_continue_with')}</span>
+				<span className='h-px flex-1 bg-line' />
+			</div>
 
 			<GoogleSignInButton onSuccess={closeModal} />
 
-			<Text className='mt-4 flex items-center justify-center gap-x-1' size='sm'>
-				<span>{t('pages.components.modals.sign_up.already_have_an_account')}</span>{' '}
-				<Button
-					className='p-0 hover:opacity-80'
-					color='violet'
+			<p className='mt-7 text-center text-[13px] text-ink-3'>
+				{t('pages.components.modals.sign_up.already_have_an_account')}{' '}
+				<button
+					className='font-medium text-brand transition-opacity hover:opacity-70'
 					onClick={() => {
 						closeModal();
 						props.openSignInModal();
 					}}
-					variant='transparent'
+					type='button'
 				>
 					{t('common.sign_in')}
-				</Button>
-			</Text>
-		</Modal>
+				</button>
+			</p>
+		</AuthModalShell>
 	);
 };

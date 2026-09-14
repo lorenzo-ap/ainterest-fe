@@ -1,11 +1,12 @@
-import { Button, Modal, Text, TextInput } from '@mantine/core';
 import { Form, useForm } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
+import { AppButton, Field } from '../../../components/ui';
 import { EMAIL_REGEX } from '../../../constants';
 import { useFormValidation } from '../../../hooks';
 import { useForgotPassword } from '../../../queries';
 import { toastService } from '../../../services';
 import type { ForgotPasswordForm } from '../../../types';
+import { AuthModalShell } from './AuthModalShell';
 
 type ForgotPasswordModalProps = {
 	opened: boolean;
@@ -54,34 +55,37 @@ export const ForgotPasswordModal = (props: ForgotPasswordModalProps) => {
 	};
 
 	return (
-		<Modal
+		<AuthModalShell
+			description={t('pages.components.modals.forgot_password.description')}
 			onClose={closeModal}
 			opened={props.opened}
-			padding='lg'
-			radius='md'
-			title={<Text className='text-center font-bold text-2xl'>{t('common.forgot_password')}</Text>}
+			title={t('common.forgot_password')}
 		>
-			<Form className='flex flex-col gap-y-3' form={form} onSubmit={handleSubmit}>
-				<TextInput key={form.key('email')} label={t('common.email')} size='md' {...form.getInputProps('email')} />
+			<Form className='flex flex-col gap-4' form={form} onSubmit={handleSubmit}>
+				<Field
+					autoComplete='email'
+					key={form.key('email')}
+					label={t('common.email')}
+					placeholder='you@example.com'
+					{...form.getInputProps('email')}
+					error={form.errors.email as string}
+				/>
 
-				<Button className='mt-2' color='violet' loading={isPending} size='md' type='submit'>
+				<AppButton className='mt-1' fullWidth loading={isPending} type='submit'>
 					{t('pages.components.modals.forgot_password.send_reset_link')}
-				</Button>
+				</AppButton>
 			</Form>
 
-			<Text className='mt-4 flex items-center justify-center gap-x-1' size='sm'>
-				<Button
-					className='p-0 hover:opacity-80'
-					color='violet'
-					onClick={() => {
-						closeModal();
-						props.openSignInModal();
-					}}
-					variant='transparent'
-				>
-					{t('pages.components.modals.forgot_password.back_to_sign_in')}
-				</Button>
-			</Text>
-		</Modal>
+			<button
+				className='mt-6 w-full text-[13px] text-ink-3 transition-colors hover:text-ink'
+				onClick={() => {
+					closeModal();
+					props.openSignInModal();
+				}}
+				type='button'
+			>
+				{t('pages.components.modals.forgot_password.back_to_sign_in')}
+			</button>
+		</AuthModalShell>
 	);
 };

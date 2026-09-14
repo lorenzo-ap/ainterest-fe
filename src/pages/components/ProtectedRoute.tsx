@@ -1,32 +1,39 @@
-import { Button, Loader, Text, Title } from '@mantine/core';
-import { IconLock } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { AppButton, Spinner } from '../../components/ui';
+import { useAuthModals } from '../../providers';
 import { useCurrentUser } from '../../queries';
 
 export const ProtectedRoute = () => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
+	const { openSignIn } = useAuthModals();
 	const { data: currentUser, isLoading: isCurrentUserLoading } = useCurrentUser();
 
 	if (isCurrentUserLoading) {
-		return <Loader className='mx-auto mt-24 block' color='violet' size='lg' />;
+		return (
+			<div className='flex min-h-[calc(100dvh-var(--header-h))] items-center justify-center'>
+				<Spinner className='text-brand' size={22} />
+			</div>
+		);
 	}
 
 	if (!currentUser) {
 		return (
-			<div className='flex min-h-[calc(100vh-200px)] items-center justify-center'>
-				<div className='max-w-md rounded-md p-12 text-center'>
-					<IconLock className='mx-auto mb-4' color='#7950F2' size={64} stroke={1.5} />
-					<Title className='mb-3' order={2}>
-						{t('pages.components.protected_route.title')}
-					</Title>
-					<Text c='dimmed' className='mb-6' size='md'>
-						{t('pages.components.protected_route.description')}
-					</Text>
-					<Button color='violet' onClick={() => navigate('/')} size='md'>
+			<div className='mx-auto flex min-h-[calc(100dvh-var(--header-h))] max-w-page flex-col items-center justify-center px-5 py-20 text-center'>
+				<h1 className='max-w-lg font-display text-display-sm text-ink'>
+					{t('pages.components.protected_route.title')}
+				</h1>
+
+				<p className='mt-5 max-w-sm text-[15px] text-ink-3 leading-relaxed'>
+					{t('pages.components.protected_route.description')}
+				</p>
+
+				<div className='mt-9 flex flex-wrap items-center justify-center gap-2.5'>
+					<AppButton onClick={openSignIn}>{t('common.sign_in')}</AppButton>
+					<AppButton onClick={() => navigate('/')} variant='outline'>
 						{t('pages.components.protected_route.go_to_home')}
-					</Button>
+					</AppButton>
 				</div>
 			</div>
 		);

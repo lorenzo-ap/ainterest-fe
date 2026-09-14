@@ -1,6 +1,3 @@
-import { Divider, Text } from '@mantine/core';
-import { IconFingerprintScan } from '@tabler/icons-react';
-import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePasskeys } from '../../../queries';
 import { PasskeyItem } from './PasskeyItem';
@@ -11,25 +8,17 @@ export const PasskeysList = () => {
 
 	if (!passkeys.length) {
 		return (
-			<div className='overflow-hidden rounded-xl border border-color'>
-				<div className='flex flex-col items-center justify-center bg-white/[0.01] px-4 py-4'>
-					<IconFingerprintScan className='mb-2 opacity-20' size={48} stroke={1.5} />
-					<Text c='dimmed' size='sm'>
-						{t('pages.components.modals.passkeys_list.no_passkeys')}
-					</Text>
-				</div>
+			<div className='rounded-md bg-inset px-6 py-10 text-center'>
+				<p className='text-[14px] text-ink-3'>{t('pages.components.modals.passkeys_list.no_passkeys')}</p>
 			</div>
 		);
 	}
 
 	return (
-		<div className='overflow-hidden rounded-xl border border-color'>
-			{passkeys.map((pk, index) => (
-				<Fragment key={pk.credentialId}>
-					<PasskeyItem passkey={pk} />
-					{index < passkeys.length - 1 && <Divider />}
-				</Fragment>
+		<ul className='flex flex-col gap-2'>
+			{passkeys.map((passkey) => (
+				<PasskeyItem key={passkey.credentialId} passkey={passkey} />
 			))}
-		</div>
+		</ul>
 	);
 };

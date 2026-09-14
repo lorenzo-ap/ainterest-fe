@@ -1,53 +1,32 @@
-import { ActionIcon, Tooltip } from '@mantine/core';
-import { IconArrowUp } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ArrowUpIcon } from './ui';
 
 export const ScrollToTopButton = () => {
 	const { t } = useTranslation();
 
 	const [isVisible, setIsVisible] = useState(false);
 
-	const scrollToTop = () => {
-		window.scrollTo({
-			top: 0,
-			behavior: 'smooth'
-		});
-	};
-
 	useEffect(() => {
-		const toggleVisibility = () => {
-			if (window.scrollY > 300) {
-				setIsVisible(true);
-			} else {
-				setIsVisible(false);
-			}
-		};
+		const toggleVisibility = () => setIsVisible(window.scrollY > 600);
 
+		toggleVisibility();
 		window.addEventListener('scroll', toggleVisibility, { passive: true });
 		return () => window.removeEventListener('scroll', toggleVisibility);
 	}, []);
 
 	return (
-		<div className='fixed bottom-4 left-4 z-50'>
-			<div
-				className={`transition-all duration-300 ease-in-out ${
-					isVisible ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'
-				}`}
-			>
-				<Tooltip label={t('components.scroll_to_top_button.title')} position='left' withArrow>
-					<ActionIcon
-						aria-label={t('components.scroll_to_top_button.title')}
-						className='shadow-lg transition-shadow hover:shadow-xl'
-						color='violet'
-						onClick={scrollToTop}
-						radius='md'
-						size={42}
-					>
-						<IconArrowUp size={18} />
-					</ActionIcon>
-				</Tooltip>
-			</div>
-		</div>
+		<button
+			aria-hidden={!isVisible}
+			aria-label={t('components.scroll_to_top_button.title')}
+			className={`fixed right-4 bottom-[calc(var(--tabbar-h)+1rem+env(safe-area-inset-bottom))] z-30 flex h-10 w-10 items-center justify-center rounded-full border border-line bg-surface text-ink-2 shadow-pop transition-all duration-300 hover:text-ink md:bottom-6 ${
+				isVisible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0'
+			}`}
+			onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+			tabIndex={isVisible ? 0 : -1}
+			type='button'
+		>
+			<ArrowUpIcon size={17} />
+		</button>
 	);
 };

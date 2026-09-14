@@ -1,7 +1,8 @@
-import { Button, Modal, Stack, Text } from '@mantine/core';
+import { Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
+import { QueryBoundary } from '../../../components';
+import { AppButton, CloseIcon, PlusIcon } from '../../../components/ui';
 import { AddPasskeyModal } from './AddPasskeyModal';
 import { PasskeysList } from './PasskeysList';
 import { PasskeysListSkeleton } from './PasskeysListSkeleton';
@@ -18,23 +19,54 @@ export const PasskeysModal = (props: PasskeysModalProps) => {
 
 	return (
 		<>
-			<Modal
-				onClose={props.onClose}
-				opened={props.opened}
-				padding='lg'
-				radius='md'
-				size='lg'
-				title={<Text className='text-center font-bold text-2xl'>{t('pages.components.modals.passkeys.title')}</Text>}
-			>
-				<Stack gap='md'>
-					<Suspense fallback={<PasskeysListSkeleton />}>
-						<PasskeysList />
-					</Suspense>
+			<Modal onClose={props.onClose} opened={props.opened} padding={0} size={560} withCloseButton={false}>
+				<div className='relative px-7 pt-8 pb-8'>
+					<button
+						aria-label={t('common.close')}
+						className='icon-btn absolute top-5 right-5 h-8 w-8'
+						onClick={props.onClose}
+						type='button'
+					>
+						<CloseIcon size={17} />
+					</button>
 
-					<Button color='violet' onClick={openAddModal} radius='md' variant='light'>
+					<header className='mb-6'>
+						<h2 className='font-display text-[2rem] text-ink leading-tight'>
+							{t('pages.components.modals.passkeys.title')}
+						</h2>
+						<p className='mt-2 max-w-sm text-[14px] text-ink-3 leading-relaxed'>
+							{t('pages.components.modals.passkeys.description')}
+						</p>
+					</header>
+
+					<QueryBoundary
+						error={(retry) => (
+							<div className='flex flex-col items-center gap-3 rounded-lg border border-line py-10 text-center'>
+								<p className='text-[14px] text-ink-3'>{t('components.error_state.passkeys')}</p>
+								<button
+									className='text-[13px] text-brand transition-opacity hover:opacity-70'
+									onClick={retry}
+									type='button'
+								>
+									{t('components.error_state.retry')}
+								</button>
+							</div>
+						)}
+						loading={<PasskeysListSkeleton />}
+					>
+						<PasskeysList />
+					</QueryBoundary>
+
+					<AppButton
+						className='mt-5'
+						fullWidth
+						leftIcon={<PlusIcon size={17} />}
+						onClick={openAddModal}
+						variant='outline'
+					>
 						{t('pages.components.modals.passkeys.add_passkey')}
-					</Button>
-				</Stack>
+					</AppButton>
+				</div>
 			</Modal>
 
 			<AddPasskeyModal onClose={closeAddModal} opened={addModalOpened} />

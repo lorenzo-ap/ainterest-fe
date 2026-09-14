@@ -1,12 +1,12 @@
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { Avatar, Button, Modal } from '@mantine/core';
+import { Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconPhotoEdit } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { type ChangeEvent, type SyntheticEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from 'react-image-crop';
+import { Initials, Spinner } from '../../../components/ui';
 import { postKeys, useCurrentUser, useUpdateCurrentUser } from '../../../queries';
 import { toastService } from '../../../services';
 import type { UserModel } from '../../../types';
@@ -69,7 +69,7 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 
 	const onImageLoad = (e: SyntheticEvent<HTMLImageElement>) => {
 		const { width, height } = e.currentTarget;
-		const crop = centerCrop(
+		const centeredCrop = centerCrop(
 			makeAspectCrop(
 				{
 					unit: '%',
@@ -82,7 +82,7 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 			width,
 			height
 		);
-		setCrop(crop);
+		setCrop(centeredCrop);
 	};
 
 	const getCroppedImage = (): Promise<File> => {
@@ -141,7 +141,7 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 	};
 
 	return (
-		<div className='group relative rounded-full border border-slate-600'>
+		<div className='group relative shrink-0'>
 			<input
 				accept='image/*'
 				className='hidden'
@@ -152,28 +152,25 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 			/>
 
 			<label
-				className='relative flex cursor-pointer items-center justify-center overflow-hidden rounded-full'
+				className='relative flex cursor-pointer items-center justify-center overflow-hidden rounded-full ring-1 ring-line'
 				htmlFor='uploadImage'
 				style={{ pointerEvents: isCurrentUser ? 'auto' : 'none' }}
 			>
-				<Avatar
-					color='initials'
-					key={user.username}
-					name={user.username}
-					size={80}
-					src={isCurrentUser ? currentUser?.photo : user.photo}
-				>
-					{user.username[0].toUpperCase()}
-				</Avatar>
+				<Initials name={user.username} size={96} src={isCurrentUser ? currentUser?.photo : user.photo} />
 
-				{!uploadedPhoto && isCurrentUser && (
-					<div className='pointer-events-none absolute -bottom-20 left-1/2 flex h-full w-full -translate-x-1/2 items-start justify-center rounded-full bg-black/50 pt-1.5 text-slate-300 transition-all md:group-hover:-bottom-12'>
-						<IconPhotoEdit size={16} />
-					</div>
+				{isCurrentUser && (
+					<span className='absolute inset-0 flex items-center justify-center bg-black/55 text-[11px] text-white opacity-0 backdrop-blur-[2px] transition-opacity duration-200 group-hover:opacity-100'>
+						{t('pages.user_profile.change_photo')}
+					</span>
 				)}
 			</label>
 
-			<Modal centered onClose={resetFileInput} opened={cropModalOpened} size='lg' withCloseButton={false}>
+			<Modal
+				onClose={resetFileInput}
+				opened={cropModalOpened}
+				size='lg'
+				title={<h2 className='font-display text-2xl'>{t('pages.user_profile.edit_avatar')}</h2>}
+			>
 				<div className='flex flex-col items-center'>
 					{uploadedPhoto && (
 						<ReactCrop
@@ -186,7 +183,7 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 							{/* biome-ignore lint: onLoad is not a user interaction */}
 							<img
 								alt={t('common.avatar')}
-								className='!max-h-[70vh] w-full object-contain'
+								className='!max-h-[65vh] w-full rounded-md object-contain'
 								onLoad={onImageLoad}
 								ref={imgRef}
 								src={uploadedPhoto}
@@ -194,19 +191,25 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 						</ReactCrop>
 					)}
 
-					<div className='mt-3 flex items-center justify-end gap-x-3 self-end'>
-						<Button color='red' disabled={isPending} onClick={resetFileInput} variant='subtle'>
-							{t('common.cancel')}
-						</Button>
-
-						<Button
-							color='teal'
-							disabled={!completedCrop || completedCrop.width <= 1 || completedCrop.height <= 1}
-							loading={isPending}
-							onClick={editUser}
+					<div className='mt-6 flex items-center justify-end gap-2 self-stretch'>
+						<button
+							className='h-10 rounded-full px-4 text-[14px] text-ink-3 transition-colors hover:bg-hover hover:text-ink disabled:opacity-50'
+							disabled={isPending}
+							onClick={resetFileInput}
+							type='button'
 						>
+							{t('common.cancel')}
+						</button>
+
+						<button
+							className='flex h-10 items-center gap-2 rounded-full bg-brand px-5 font-medium text-[14px] text-white transition-opacity hover:opacity-90 disabled:opacity-40'
+							disabled={isPending || !completedCrop || completedCrop.width <= 1 || completedCrop.height <= 1}
+							onClick={editUser}
+							type='button'
+						>
+							{isPending && <Spinner size={14} />}
 							{t('common.save')}
-						</Button>
+						</button>
 					</div>
 				</div>
 			</Modal>

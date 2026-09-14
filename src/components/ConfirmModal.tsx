@@ -1,5 +1,6 @@
-import { Button, Modal, Text } from '@mantine/core';
+import { Modal } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
+import { AppButton } from './ui';
 
 type ConfirmModalProps = {
 	opened: boolean;
@@ -16,25 +17,18 @@ export const ConfirmModal = (props: ConfirmModalProps) => {
 	const { t } = useTranslation();
 
 	return (
-		<Modal
-			onClose={props.close}
-			opened={props.opened}
-			padding='lg'
-			radius='md'
-			title={<Text className='text-center font-bold text-2xl'>{props.title}</Text>}
-		>
-			<Text c='dimmed' className='mb-5'>
-				{t(props.message)}
-			</Text>
+		<Modal onClose={props.close} opened={props.opened} size={400} withCloseButton={false}>
+			<h2 className='font-display text-[1.75rem] text-ink leading-tight'>{props.title}</h2>
+			<p className='mt-3 text-[14px] text-ink-2 leading-relaxed'>{t(props.message)}</p>
 
-			<div className='flex items-center justify-end gap-x-3'>
-				<Button color='red' onClick={props.close} variant='subtle'>
+			<div className='mt-8 flex items-center justify-end gap-2'>
+				<AppButton onClick={props.close} variant='ghost'>
 					{t(props.cancelLabel || 'common.cancel')}
-				</Button>
+				</AppButton>
 
-				<Button color='teal' loading={props.isLoading} onClick={props.confirm}>
+				<AppButton loading={props.isLoading} onClick={props.confirm}>
 					{t(props.confirmLabel || 'common.continue')}
-				</Button>
+				</AppButton>
 			</div>
 		</Modal>
 	);

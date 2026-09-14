@@ -1,17 +1,14 @@
-import { Button, Select, Text, Textarea, Title } from '@mantine/core';
-import { Form, useForm } from '@mantine/form';
-import { IconArrowLeft, IconPhotoUp, IconSparkles } from '@tabler/icons-react';
+import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { AppButton, ShareIcon } from '../../components/ui';
 import { useFormValidation } from '../../hooks';
 import { useCreatePost, useGenerateImage } from '../../queries';
 import { toastService } from '../../services';
 import type { CreatePostForm } from '../../types';
 import { getRandomPrompt } from '../../utils';
-import { PostGeneratedImage } from './components';
-
-const SIZE_OPTIONS = ['256x256', '512x512', '1024x1024'] as const;
+import { GenerationCanvas, PromptComposer } from './components';
 
 const PROMPT_MIN_LENGTH = 5;
 const PROMPT_MAX_LENGTH = 200;
@@ -19,6 +16,8 @@ const PROMPT_MAX_LENGTH = 200;
 export const CreatePostPage = () => {
 	const { t, i18n } = useTranslation();
 	const navigate = useNavigate();
+
+	const [isImageMissing, setIsImageMissing] = useState(false);
 
 	const { mutate: generateImage, isPending: isGenerating } = useGenerateImage({
 		onSuccess: (res, variables) => {
@@ -30,6 +29,7 @@ export const CreatePostPage = () => {
 			toastService.error(t('apis.generate.error'));
 		}
 	});
+
 	const { mutate: createPost, isPending: isSharing } = useCreatePost({
 		onSuccess: () => {
 			navigate('/');
@@ -37,13 +37,11 @@ export const CreatePostPage = () => {
 		}
 	});
 
-	const [isImageMissing, setIsImageMissing] = useState(false);
-
 	const form = useForm<CreatePostForm>({
-		mode: 'uncontrolled',
+		mode: 'controlled',
 		initialValues: {
 			prompt: '',
-			size: '',
+			size: '512x512',
 			postGeneratedImage: {
 				prompt: '',
 				photo: ''
@@ -63,9 +61,13 @@ export const CreatePostPage = () => {
 
 	useFormValidation(form, i18n);
 
+	const values = form.getValues();
+	const generated = values.postGeneratedImage;
+	const hasResult = Boolean(generated.photo);
+
 	const handleSurpriseMe = () => {
-		const randomPrompt = getRandomPrompt(form.getValues().prompt);
-		form.setFieldValue('prompt', randomPrompt);
+		form.setFieldValue('prompt', getRandomPrompt(values.prompt));
+		form.clearFieldError('prompt');
 	};
 
 	const onGenerate = () => {
@@ -80,115 +82,63 @@ export const CreatePostPage = () => {
 		generateImage({ text: prompt, size });
 	};
 
-	const handleSubmit = (values: CreatePostForm) => {
-		const { postGeneratedImage } = values;
-
-		if (!postGeneratedImage.photo) {
+	const onShare = () => {
+		if (!generated.photo) {
 			form.clearErrors();
 			setIsImageMissing(true);
 			return;
 		}
 
 		setIsImageMissing(false);
-		createPost(postGeneratedImage);
-	};
-
-	const generatedImageProps = {
-		imageSource: form.getValues().postGeneratedImage.photo,
-		imageAlt: form.getValues().prompt,
-		isGenerating,
-		isImageMissing
+		createPost(generated);
 	};
 
 	return (
-		<section className='mx-auto flex max-w-7xl flex-col items-start'>
-			<div className='flex w-full flex-col items-center justify-between gap-5 lg:flex-row lg:items-start'>
-				<Form className='max-w-xl lg:max-w-md xl:max-w-lg' form={form} onSubmit={handleSubmit}>
-					<Button
-						color='violet'
-						leftSection={<IconArrowLeft size={18} />}
-						onClick={() => {
-							navigate(-1);
-						}}
-						size='compact-md'
-					>
-						{t('common.back')}
-					</Button>
+		<div className='mx-auto flex min-h-[calc(100dvh-var(--header-h)-var(--tabbar-h))] w-full max-w-[1120px] flex-col px-5 pt-4 pb-8 sm:px-8 md:min-h-[calc(100dvh-var(--header-h))]'>
+			<div className='flex flex-1 flex-col items-center justify-center gap-4 py-2'>
+				<GenerationCanvas
+					compact={hasResult}
+					image={generated.photo}
+					isGenerating={isGenerating}
+					isImageMissing={isImageMissing}
+					prompt={generated.prompt || values.prompt}
+				/>
 
-					<div className='mt-4 md:mt-8'>
-						<Title order={1}>{t('pages.generate_image.heading')}</Title>
+				{hasResult && !isGenerating && (
+					<div className='flex w-full max-w-[520px] animate-rise flex-col items-center gap-3'>
+						<p className='max-w-full truncate text-center font-mono text-[12px] text-ink-3'>{generated.prompt}</p>
 
-						<Text className='mt-2 mb-5 max-w-[500px] opacity-60 lg:mb-8'>{t('pages.generate_image.subheading')}</Text>
+						<AppButton
+							className='max-sm:w-full'
+							leftIcon={<ShareIcon size={17} />}
+							loading={isSharing}
+							onClick={onShare}
+						>
+							{t('pages.generate_image.share')}
+						</AppButton>
 					</div>
-
-					<PostGeneratedImage {...generatedImageProps} hiddenOnLargeScreen />
-
-					<div className='flex flex-col justify-between gap-5 md:flex-row'>
-						<div className='flex flex-grow flex-col gap-3 md:min-w-96'>
-							<Textarea
-								className='relative'
-								key={form.key('prompt')}
-								label={t('pages.generate_image.prompt')}
-								placeholder={t('pages.generate_image.prompt_example')}
-								rows={8}
-								size='md'
-								{...form.getInputProps('prompt')}
-								inputContainer={(children) => (
-									<>
-										{children}
-
-										<Button
-											className='absolute -top-0.5 right-0'
-											color='dark'
-											onClick={handleSurpriseMe}
-											size='compact-xs'
-											variant='default'
-										>
-											{t('pages.generate_image.surprise_me')}
-										</Button>
-									</>
-								)}
-							/>
-
-							<Select
-								data={SIZE_OPTIONS}
-								label={t('pages.generate_image.size')}
-								placeholder={t('pages.generate_image.size_example')}
-								size='md'
-								{...form.getInputProps('size')}
-							/>
-
-							<div className='flex flex-col items-stretch gap-3 sm:flex-row sm:items-center'>
-								<Button
-									color='teal'
-									disabled={isGenerating || isSharing}
-									leftSection={<IconSparkles size={20} />}
-									onClick={onGenerate}
-									size='md'
-								>
-									{t('pages.generate_image.generate')}
-								</Button>
-
-								<Button
-									className='flex-grow-0 sm:flex-grow'
-									color='violet'
-									disabled={isGenerating}
-									loading={isSharing}
-									rightSection={!isSharing && <IconPhotoUp size={20} />}
-									size='md'
-									type='submit'
-								>
-									{t('pages.generate_image.share')}
-								</Button>
-							</div>
-						</div>
-					</div>
-
-					<Text className='mt-3 text-sm opacity-60 md:mt-4'>{t('pages.generate_image.info')}</Text>
-				</Form>
-
-				<PostGeneratedImage {...generatedImageProps} />
+				)}
 			</div>
-		</section>
+
+			<div className='flex justify-center'>
+				<div className='w-full max-w-[860px]'>
+					<PromptComposer
+						disabled={isSharing}
+						error={form.errors.prompt as string | undefined}
+						isGenerating={isGenerating}
+						maxLength={PROMPT_MAX_LENGTH}
+						onGenerate={onGenerate}
+						onPromptChange={(value) => {
+							form.setFieldValue('prompt', value);
+							form.clearFieldError('prompt');
+						}}
+						onSizeChange={(value) => form.setFieldValue('size', value)}
+						onSurpriseMe={handleSurpriseMe}
+						prompt={values.prompt}
+						size={values.size}
+					/>
+				</div>
+			</div>
+		</div>
 	);
 };

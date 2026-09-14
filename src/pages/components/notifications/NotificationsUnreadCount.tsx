@@ -1,4 +1,3 @@
-import { Badge } from '@mantine/core';
 import { useNotificationsUnreadCount } from '../../../queries';
 
 export const NotificationsUnreadCount = () => {
@@ -7,13 +6,8 @@ export const NotificationsUnreadCount = () => {
 	if (!notificationsUnreadCount) return;
 
 	return (
-		<Badge
-			circle
-			className='pointer-events-none absolute -top-1.5 -right-1.5 h-[18px] w-[18px] p-0 text-[0.625rem]'
-			color='red'
-			size='xs'
-		>
-			{notificationsUnreadCount > 99 ? '99' : notificationsUnreadCount}
-		</Badge>
+		<span className='pointer-events-none absolute top-0.5 right-0.5 flex h-[15px] min-w-[15px] items-center justify-center rounded-full bg-brand px-1 font-mono text-[9px] text-white leading-none ring-2 ring-bg'>
+			{notificationsUnreadCount > 9 ? '9+' : notificationsUnreadCount}
+		</span>
 	);
 };
