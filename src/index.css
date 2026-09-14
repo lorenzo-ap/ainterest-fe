@@ -413,6 +413,15 @@
 	}
 }
 
+@keyframes ai-think {
+	from {
+		background-position: 200% 0;
+	}
+	to {
+		background-position: -200% 0;
+	}
+}
+
 /* opacity only: a transform here would override the centering of whatever breathes */
 @keyframes ai-breathe {
 	0%,
@@ -490,6 +499,33 @@
 
 .animate-reveal {
 	animation: ai-reveal 900ms var(--ease) both;
+}
+
+/*
+  A word being thought. A determinate-looking bar can only ever lie about how
+  far along the model is, so the status text carries the motion instead: light
+  travels through the letters and nothing claims to know the end.
+*/
+.animate-think {
+	color: var(--ink-2);
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+	.animate-think {
+		background-image: linear-gradient(
+			90deg,
+			var(--ink-2) 0%,
+			var(--ink-2) 35%,
+			var(--brand) 50%,
+			var(--ink-2) 65%,
+			var(--ink-2) 100%
+		);
+		background-size: 200% 100%;
+		background-clip: text;
+		-webkit-background-clip: text;
+		color: transparent;
+		animation: ai-think 2.8s linear infinite;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {

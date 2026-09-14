@@ -20,7 +20,7 @@ const GenerationStatus = () => {
 	}, []);
 
 	return (
-		<span className='font-mono text-[12px] text-ink-2 tracking-wider' key={step}>
+		<span className='animate-think font-mono text-[12px] tracking-wider' key={step}>
 			{t(`pages.generate_image.status.${STATUS_KEYS[step]}`)}
 		</span>
 	);
@@ -87,11 +87,8 @@ export const GenerationCanvas = (props: GenerationCanvasProps) => {
 							style={{ animation: 'ai-breathe 3.2s ease-in-out infinite' }}
 						/>
 
-						<div className='absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 p-6'>
+						<div className='absolute inset-x-0 bottom-0 flex justify-center p-6'>
 							<GenerationStatus />
-							<div className='h-px w-full max-w-[220px] overflow-hidden bg-line'>
-								<div className='h-full w-1/3 animate-shimmer bg-brand' />
-							</div>
 						</div>
 					</div>
 				)}
