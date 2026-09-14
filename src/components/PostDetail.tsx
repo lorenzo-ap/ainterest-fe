@@ -73,7 +73,7 @@ export const PostDetail = ({ posts, index, onClose, onNavigate }: PostDetailProp
 	const { t, i18n } = useTranslation();
 
 	const [loadedPostId, setLoadedPostId] = useState('');
-	const [intrinsicWidth, setIntrinsicWidth] = useState(0);
+	const [intrinsic, setIntrinsic] = useState<{ width: number; height: number }>();
 	const [cached, setCached] = useState<PostModel>();
 
 	const selected = index === null ? undefined : posts[index];
@@ -185,22 +185,34 @@ export const PostDetail = ({ posts, index, onClose, onNavigate }: PostDetailProp
 					</header>
 
 					<figure className='flex h-[52vh] shrink-0 items-center justify-center px-4 pb-6 lg:h-auto lg:min-h-0 lg:flex-1 lg:px-12 lg:pb-12'>
-						{/* biome-ignore lint: onLoad is not a user interaction */}
-						<img
-							alt={post.prompt}
-							className={`h-auto max-h-full max-w-full rounded-lg drop-shadow-[0_20px_50px_rgb(0_0_0/45%)] transition-all duration-700 ease-out ${
-								imageLoaded ? 'scale-100 opacity-100 blur-0' : 'scale-[1.02] opacity-0 blur-lg'
-							}`}
-							key={post.id}
-							onLoad={(event) => {
-								setLoadedPostId(post.id);
-								// the element box tracks the artwork itself, so the radius lands on the
-								// image; small sources may grow, but never past twice their resolution
-								setIntrinsicWidth(event.currentTarget.naturalWidth);
-							}}
-							src={post.photo}
-							style={{ width: intrinsicWidth ? intrinsicWidth * 2 : undefined }}
-						/>
+						{/*
+						  Only the width is ever set, so the browser always derives the height from
+						  the artwork's own ratio — constraining the height too would clamp one axis
+						  on its own and stretch the picture. The three terms are the room across,
+						  the room down (via the query container), and twice the source's own
+						  resolution.
+						*/}
+						<div className='flex h-full w-full items-center justify-center [container-type:size]'>
+							{/* biome-ignore lint: onLoad is not a user interaction */}
+							<img
+								alt={post.prompt}
+								className={`max-w-full rounded-lg drop-shadow-[0_20px_50px_rgb(0_0_0/45%)] transition-all duration-700 ease-out ${
+									imageLoaded ? 'scale-100 opacity-100 blur-0' : 'scale-[1.02] opacity-0 blur-lg'
+								}`}
+								key={post.id}
+								onLoad={(event) => {
+									const { naturalWidth, naturalHeight } = event.currentTarget;
+									setLoadedPostId(post.id);
+									setIntrinsic({ width: naturalWidth, height: naturalHeight });
+								}}
+								src={post.photo}
+								style={
+									intrinsic && {
+										width: `min(100%, ${(intrinsic.width / intrinsic.height).toFixed(4)} * 100cqh, ${intrinsic.width * 2}px)`
+									}
+								}
+							/>
+						</div>
 					</figure>
 				</div>
 

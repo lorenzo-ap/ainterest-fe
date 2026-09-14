@@ -1,7 +1,7 @@
 import { formatDistanceToNow } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { CheckIcon, CloseIcon, Initials } from '../../../components/ui';
+import { CheckIcon, Initials, TrashIcon } from '../../../components/ui';
 import { routes } from '../../../constants';
 import { useDeleteNotification, useMarkNotificationAsRead } from '../../../queries';
 import type { Notification } from '../../../types';
@@ -55,34 +55,40 @@ export const NotificationItem = ({ notification, onNavigate }: NotificationItemP
 				<p className='mt-1 font-mono text-[10px] text-ink-3 tracking-wide'>{timeAgo}</p>
 			</div>
 
-			<img
-				alt={t('pages.components.notifications.post_image')}
-				className='h-11 w-11 shrink-0 rounded-sm object-cover transition-transform duration-200 group-hover:-translate-x-14'
-				src={notification.post.photo}
-			/>
+			{/*
+			  The thumbnail and the row's actions share one slot and cross-fade,
+			  so reaching for an action never shifts the row or covers the text.
+			*/}
+			<div className='relative h-11 w-[68px] shrink-0'>
+				<img
+					alt={t('pages.components.notifications.post_image')}
+					className='absolute right-0 h-11 w-11 rounded-sm object-cover transition-opacity duration-200 group-hover:opacity-0'
+					src={notification.post.photo}
+				/>
 
-			<div className='absolute right-2 flex items-center gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100'>
-				{!notification.read && (
+				<div className='absolute inset-y-0 right-0 flex items-center gap-1 opacity-0 transition-opacity duration-200 group-focus-within:opacity-100 group-hover:opacity-100'>
+					{!notification.read && (
+						<button
+							aria-label={t('pages.components.notifications.mark_as_read')}
+							className='icon-btn h-8 w-8 hover:text-brand disabled:opacity-40'
+							disabled={isMarkAsReadPending}
+							onClick={() => markAsRead()}
+							type='button'
+						>
+							<CheckIcon size={15} />
+						</button>
+					)}
+
 					<button
-						aria-label={t('pages.components.notifications.mark_as_read')}
-						className='flex h-7 w-7 items-center justify-center rounded-sm bg-brand-tint-strong text-brand transition-opacity hover:opacity-80 disabled:opacity-40'
-						disabled={isMarkAsReadPending}
-						onClick={() => markAsRead()}
+						aria-label={t('pages.components.notifications.delete')}
+						className='icon-btn h-8 w-8 hover:text-danger disabled:opacity-40'
+						disabled={isDeletePending}
+						onClick={() => deleteNotification()}
 						type='button'
 					>
-						<CheckIcon size={14} />
+						<TrashIcon size={15} />
 					</button>
-				)}
-
-				<button
-					aria-label={t('pages.components.notifications.delete')}
-					className='flex h-7 w-7 items-center justify-center rounded-sm bg-danger-tint text-danger transition-opacity hover:opacity-80 disabled:opacity-40'
-					disabled={isDeletePending}
-					onClick={() => deleteNotification()}
-					type='button'
-				>
-					<CloseIcon size={14} />
-				</button>
+				</div>
 			</div>
 		</li>
 	);
