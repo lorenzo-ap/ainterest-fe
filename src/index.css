@@ -749,6 +749,12 @@
 	background-color: var(--surface-hover);
 }
 
+/* The container spans a large, mostly empty area to anchor toasts — it must
+   never itself catch a tap. Only an actual toast opts back in. */
+.mantine-Notifications-root {
+	pointer-events: none;
+}
+
 /* Toasts: a quiet pill with a single coloured dot, never a banner ------ */
 .mantine-Notification-root {
 	background-color: var(--surface);
@@ -761,6 +767,7 @@
 	width: max-content;
 	max-width: 100%;
 	margin-inline-start: auto;
+	pointer-events: auto;
 }
 
 .mantine-Notification-root::before {
