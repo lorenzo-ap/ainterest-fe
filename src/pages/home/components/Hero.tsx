@@ -27,7 +27,7 @@ export const Hero = () => {
 	};
 
 	return (
-		<section className='mx-auto w-full max-w-gallery px-5 pt-16 pb-12 sm:px-8'>
+		<section className='mx-auto w-full max-w-gallery px-5 pt-9 pb-9 sm:px-8 sm:pt-16 sm:pb-12'>
 			<h1 className='max-w-4xl animate-rise font-display text-display-lg text-ink'>
 				{t('pages.home.headline_lead')} <em className='text-brand italic'>{t('pages.home.headline_accent')}</em>
 			</h1>

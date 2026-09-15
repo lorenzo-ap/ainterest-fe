@@ -137,7 +137,7 @@ export const CommentsPanel = ({ postId, commentsCount }: CommentsPanelProps) => 
 			</QueryBoundary>
 
 			{currentUser ? (
-				<form className='sticky bottom-0 mt-5 flex items-center gap-2 bg-bg-deep/0 pt-1' onSubmit={handleSubmit}>
+				<form className='mt-5 flex items-center gap-2 pt-1 lg:sticky lg:bottom-0' onSubmit={handleSubmit}>
 					<Initials name={currentUser.username} size={30} src={currentUser.photo} />
 
 					<div className='relative flex-1'>

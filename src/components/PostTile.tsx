@@ -95,7 +95,7 @@ export const PostTile = ({ post, feature, onOpen }: PostTileProps) => {
 
 				<div className='flex items-center justify-between gap-2'>
 					<Link
-						className='pointer-events-auto flex min-w-0 items-center gap-2 transition-opacity hover:opacity-75'
+						className='pointer-events-auto -my-1.5 flex min-w-0 items-center gap-2 py-1.5 transition-opacity hover:opacity-75'
 						onMouseEnter={prefetchUserData}
 						to={routes.profile(post.user.username)}
 					>
@@ -108,7 +108,7 @@ export const PostTile = ({ post, feature, onOpen }: PostTileProps) => {
 							aria-label={t(
 								post.likedByCurrentUser ? 'components.post_card.unlike_post' : 'components.post_card.like_post'
 							)}
-							className='pointer-events-auto flex h-7 items-center gap-1 rounded-sm px-1.5 text-white/80 transition-colors hover:bg-white/15 hover:text-white'
+							className='pointer-events-auto -my-1 flex h-9 items-center gap-1 rounded-sm px-2 text-white/80 transition-colors hover:bg-white/15 hover:text-white md:my-0 md:h-7 md:px-1.5'
 							onClick={toggleLike}
 							type='button'
 						>

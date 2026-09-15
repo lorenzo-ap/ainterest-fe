@@ -47,12 +47,16 @@ export const Notifications = () => {
 				{trigger}
 
 				<Drawer
-					classNames={{ content: 'rounded-t-xl bg-surface', body: 'p-0' }}
+					/*
+					  Hug the list. Mantine sizes a bottom drawer by flex-basis, so the sheet
+					  keeps its full height unless the basis is released too — and three
+					  notifications in a full-height sheet is mostly empty surface.
+					*/
+					classNames={{ content: 'rounded-t-xl bg-surface !h-auto !max-h-[85%] !flex-none', body: 'p-0' }}
 					onClose={close}
 					opened={opened}
 					padding={0}
 					position='bottom'
-					size='85%'
 					withCloseButton={false}
 				>
 					<div className='mx-auto mt-2.5 h-1 w-9 rounded-full bg-line-strong' />

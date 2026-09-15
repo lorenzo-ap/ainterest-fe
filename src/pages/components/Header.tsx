@@ -56,11 +56,11 @@ export const Header = () => {
 
 	return (
 		<header
-			className={`frost fixed top-0 right-0 left-0 z-40 h-header border-b transition-colors duration-300 ${
-				scrolled ? 'border-line' : 'border-transparent'
+			className={`fixed top-0 right-0 left-0 z-40 h-[var(--header-total)] border-b pt-[env(safe-area-inset-top,0px)] transition-colors duration-300 ${
+				scrolled ? 'frost-strong border-line' : 'frost border-transparent'
 			}`}
 		>
-			<div className='mx-auto flex h-full max-w-gallery items-center gap-4 px-5 sm:px-8'>
+			<div className='mx-auto flex h-header max-w-gallery items-center gap-4 px-5 sm:px-8'>
 				<Logo />
 
 				<nav className='ml-8 hidden items-center gap-7 md:flex'>

@@ -136,8 +136,8 @@ export const PostDetail = ({ posts, index, onClose, onNavigate }: PostDetailProp
 			transitionProps={{ transition: 'fade', duration: 180 }}
 			withCloseButton={false}
 		>
-			<div className='relative flex h-full flex-col overflow-hidden lg:flex-row'>
-				{/* the artwork itself lights the room */}
+			<div className='relative h-full overflow-hidden'>
+				{/* the artwork itself lights the room — and stays lit while the rail scrolls */}
 				<img
 					alt=''
 					aria-hidden
@@ -147,11 +147,22 @@ export const PostDetail = ({ posts, index, onClose, onNavigate }: PostDetailProp
 				/>
 				<div className='pointer-events-none absolute inset-0 bg-bg-deep/60' />
 
-				<div className='relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden'>
-					<header className='flex h-14 shrink-0 items-center justify-between px-3 sm:px-5'>
+				{/*
+				  A phone reads this as one column it can scroll: artwork first, then the
+				  rail. Only from `lg` do the two become side-by-side panes that scroll
+				  independently — before that, a pane with its own scrollbar would trap
+				  the conversation below the fold.
+				*/}
+				<div className='relative z-10 flex h-full flex-col overflow-y-auto overscroll-contain lg:flex-row lg:overflow-hidden'>
+					{/*
+					  Sticky to the scrollport rather than to the artwork, so Close and the
+					  arrows stay put however far down the conversation you read. From `lg`
+					  the panes stop scrolling as one, and it simply floats over the artwork.
+					*/}
+					<header className='frost-strong sticky top-0 z-20 flex shrink-0 items-center justify-between px-3 pt-[env(safe-area-inset-top,0px)] sm:px-5 lg:absolute lg:right-[400px] lg:left-0 lg:bg-transparent lg:backdrop-blur-none'>
 						<button
 							aria-label={t('common.close')}
-							className='icon-btn h-9 w-9 text-ink-2'
+							className='icon-btn my-2 h-10 w-10 text-ink-2'
 							onClick={onClose}
 							type='button'
 						>
@@ -165,7 +176,7 @@ export const PostDetail = ({ posts, index, onClose, onNavigate }: PostDetailProp
 						<div className='flex items-center gap-1'>
 							<button
 								aria-label={t('components.post_detail.previous')}
-								className='icon-btn h-9 w-9 disabled:opacity-25'
+								className='icon-btn my-2 h-10 w-10 disabled:opacity-25'
 								disabled={!hasPrevious}
 								onClick={() => index !== null && onNavigate(index - 1)}
 								type='button'
@@ -174,7 +185,7 @@ export const PostDetail = ({ posts, index, onClose, onNavigate }: PostDetailProp
 							</button>
 							<button
 								aria-label={t('components.post_detail.next')}
-								className='icon-btn h-9 w-9 disabled:opacity-25'
+								className='icon-btn my-2 h-10 w-10 disabled:opacity-25'
 								disabled={!hasNext}
 								onClick={() => index !== null && onNavigate(index + 1)}
 								type='button'
@@ -184,115 +195,117 @@ export const PostDetail = ({ posts, index, onClose, onNavigate }: PostDetailProp
 						</div>
 					</header>
 
-					<figure className='flex h-[52vh] shrink-0 items-center justify-center px-4 pb-6 lg:h-auto lg:min-h-0 lg:flex-1 lg:px-12 lg:pb-12'>
-						{/*
+					<div className='flex shrink-0 flex-col lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:pt-14'>
+						<figure className='flex h-[52svh] shrink-0 items-center justify-center px-4 pb-6 lg:h-auto lg:min-h-0 lg:flex-1 lg:px-12 lg:pb-12'>
+							{/*
 						  Only the width is ever set, so the browser always derives the height from
 						  the artwork's own ratio — constraining the height too would clamp one axis
 						  on its own and stretch the picture. The three terms are the room across,
 						  the room down (via the query container), and twice the source's own
 						  resolution.
 						*/}
-						<div className='flex h-full w-full items-center justify-center [container-type:size]'>
-							{/* biome-ignore lint: onLoad is not a user interaction */}
-							<img
-								alt={post.prompt}
-								className={`max-w-full rounded-lg drop-shadow-[0_20px_50px_rgb(0_0_0/45%)] transition-all duration-700 ease-out ${
-									imageLoaded ? 'scale-100 opacity-100 blur-0' : 'scale-[1.02] opacity-0 blur-lg'
-								}`}
-								key={post.id}
-								onLoad={(event) => {
-									const { naturalWidth, naturalHeight } = event.currentTarget;
-									setLoadedPostId(post.id);
-									setIntrinsic({ width: naturalWidth, height: naturalHeight });
-								}}
-								src={post.photo}
-								style={
-									intrinsic && {
-										width: `min(100%, ${(intrinsic.width / intrinsic.height).toFixed(4)} * 100cqh, ${intrinsic.width * 2}px)`
+							<div className='flex h-full w-full items-center justify-center [container-type:size]'>
+								{/* biome-ignore lint: onLoad is not a user interaction */}
+								<img
+									alt={post.prompt}
+									className={`max-w-full rounded-lg drop-shadow-[0_20px_50px_rgb(0_0_0/45%)] transition-all duration-700 ease-out ${
+										imageLoaded ? 'scale-100 opacity-100 blur-0' : 'scale-[1.02] opacity-0 blur-lg'
+									}`}
+									key={post.id}
+									onLoad={(event) => {
+										const { naturalWidth, naturalHeight } = event.currentTarget;
+										setLoadedPostId(post.id);
+										setIntrinsic({ width: naturalWidth, height: naturalHeight });
+									}}
+									src={post.photo}
+									style={
+										intrinsic && {
+											width: `min(100%, ${(intrinsic.width / intrinsic.height).toFixed(4)} * 100cqh, ${intrinsic.width * 2}px)`
+										}
 									}
-								}
-							/>
-						</div>
-					</figure>
-				</div>
-
-				<aside className='flex w-full shrink-0 flex-col gap-7 border-line bg-bg/50 px-5 py-7 backdrop-blur-xl lg:z-10 lg:w-[400px] lg:overflow-y-auto lg:border-l lg:px-7'>
-					<div className='flex items-center justify-between gap-3'>
-						<Link
-							className='flex min-w-0 items-center gap-3 transition-opacity hover:opacity-75'
-							onClick={onClose}
-							to={routes.profile(post.user.username)}
-						>
-							<Initials name={post.user.username} size={40} src={post.user.photo} />
-							<div className='min-w-0'>
-								<p className='truncate font-medium text-[15px] text-ink leading-tight'>{post.user.username}</p>
-								<p className='mt-0.5 text-[12px] text-ink-3'>{formattedDate}</p>
+								/>
 							</div>
-						</Link>
-
-						<button
-							aria-label={t(
-								post.likedByCurrentUser ? 'components.post_card.unlike_post' : 'components.post_card.like_post'
-							)}
-							className={`flex h-10 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13px] transition-colors duration-150 ${
-								post.likedByCurrentUser
-									? 'bg-brand-tint-strong text-brand'
-									: 'border border-line text-ink-2 hover:bg-hover hover:text-ink'
-							}`}
-							onClick={toggleLike}
-							type='button'
-						>
-							{post.likedByCurrentUser ? <HeartFilledIcon size={17} /> : <HeartIcon size={17} />}
-							{post.likesCount}
-						</button>
+						</figure>
 					</div>
 
-					<div>
-						<div className='mb-2.5 flex items-center justify-between'>
-							<h3 className='eyebrow'>{t('components.post_detail.prompt')}</h3>
+					<aside className='flex w-full shrink-0 flex-col gap-7 border-line bg-bg/50 px-5 pt-7 pb-[calc(env(safe-area-inset-bottom,0px)+28px)] backdrop-blur-xl lg:z-10 lg:w-[400px] lg:overflow-y-auto lg:border-l lg:px-7 lg:pb-7'>
+						<div className='flex items-center justify-between gap-3'>
+							<Link
+								className='flex min-w-0 items-center gap-3 transition-opacity hover:opacity-75'
+								onClick={onClose}
+								to={routes.profile(post.user.username)}
+							>
+								<Initials name={post.user.username} size={40} src={post.user.photo} />
+								<div className='min-w-0'>
+									<p className='truncate font-medium text-[15px] text-ink leading-tight'>{post.user.username}</p>
+									<p className='mt-0.5 text-[12px] text-ink-3'>{formattedDate}</p>
+								</div>
+							</Link>
+
 							<button
-								className='flex items-center gap-1.5 text-[11px] text-ink-3 transition-colors hover:text-ink'
-								onClick={() => copyToClipboard(post.prompt, t('components.post_detail.prompt_copied'))}
+								aria-label={t(
+									post.likedByCurrentUser ? 'components.post_card.unlike_post' : 'components.post_card.like_post'
+								)}
+								className={`flex h-10 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13px] transition-colors duration-150 ${
+									post.likedByCurrentUser
+										? 'bg-brand-tint-strong text-brand'
+										: 'border border-line text-ink-2 hover:bg-hover hover:text-ink'
+								}`}
+								onClick={toggleLike}
 								type='button'
 							>
-								<CopyIcon size={13} />
-								{t('components.post_detail.copy')}
+								{post.likedByCurrentUser ? <HeartFilledIcon size={17} /> : <HeartIcon size={17} />}
+								{post.likesCount}
 							</button>
 						</div>
 
-						<p className='rounded-md border border-line bg-inset p-4 font-mono text-[13px] text-ink-2 leading-relaxed'>
-							{post.prompt}
-						</p>
-					</div>
+						<div>
+							<div className='mb-2.5 flex items-center justify-between'>
+								<h3 className='eyebrow'>{t('components.post_detail.prompt')}</h3>
+								<button
+									className='flex items-center gap-1.5 text-[11px] text-ink-3 transition-colors hover:text-ink'
+									onClick={() => copyToClipboard(post.prompt, t('components.post_detail.prompt_copied'))}
+									type='button'
+								>
+									<CopyIcon size={13} />
+									{t('components.post_detail.copy')}
+								</button>
+							</div>
 
-					<div className='flex gap-2'>
-						<DetailAction
-							icon={<DownloadIcon size={16} />}
-							label={t('components.post_detail.download')}
-							onClick={() => downloadImage(post.prompt, post.photo, post.user.username)}
-						/>
-						<DetailAction
-							icon={<ShareIcon size={16} />}
-							label={t('components.post_detail.share')}
-							onClick={() => sharePhoto(post.prompt, post.photo)}
-						/>
-						{canDelete && (
-							<button
-								aria-label={t('components.post_card.delete_post')}
-								className='flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-line text-danger transition-colors duration-150 hover:bg-danger-tint disabled:opacity-40'
-								disabled={isDeleting}
-								onClick={() => deletePost()}
-								type='button'
-							>
-								<TrashIcon size={16} />
-							</button>
-						)}
-					</div>
+							<p className='rounded-md border border-line bg-inset p-4 font-mono text-[13px] text-ink-2 leading-relaxed'>
+								{post.prompt}
+							</p>
+						</div>
 
-					<div className='border-line border-t pt-6'>
-						<CommentsPanel commentsCount={post.commentsCount} key={post.id} postId={post.id} />
-					</div>
-				</aside>
+						<div className='flex gap-2'>
+							<DetailAction
+								icon={<DownloadIcon size={16} />}
+								label={t('components.post_detail.download')}
+								onClick={() => downloadImage(post.prompt, post.photo, post.user.username)}
+							/>
+							<DetailAction
+								icon={<ShareIcon size={16} />}
+								label={t('components.post_detail.share')}
+								onClick={() => sharePhoto(post.prompt, post.photo)}
+							/>
+							{canDelete && (
+								<button
+									aria-label={t('components.post_card.delete_post')}
+									className='flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-line text-danger transition-colors duration-150 hover:bg-danger-tint disabled:opacity-40'
+									disabled={isDeleting}
+									onClick={() => deletePost()}
+									type='button'
+								>
+									<TrashIcon size={16} />
+								</button>
+							)}
+						</div>
+
+						<div className='border-line border-t pt-6'>
+							<CommentsPanel commentsCount={post.commentsCount} key={post.id} postId={post.id} />
+						</div>
+					</aside>
+				</div>
 			</div>
 		</Modal>
 	);

@@ -38,7 +38,7 @@ const App = () => {
 					<OnboardingProvider>
 						<Header />
 
-						<main className='min-h-dvh pt-header pb-tabbar md:pb-0'>
+						<main className='min-h-dvh pt-[var(--header-total)] pb-[var(--tabbar-total)] md:pb-0'>
 							<Routes>
 								<Route
 									element={

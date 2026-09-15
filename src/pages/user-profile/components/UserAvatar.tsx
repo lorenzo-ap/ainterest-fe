@@ -156,7 +156,13 @@ export const UserAvatar = ({ user, isCurrentUser }: UserAvatarProps) => {
 				htmlFor='uploadImage'
 				style={{ pointerEvents: isCurrentUser ? 'auto' : 'none' }}
 			>
-				<Initials name={user.username} size={96} src={isCurrentUser ? currentUser?.photo : user.photo} />
+				{/* the inline size is the desktop one; a phone gets a smaller disc so the name and stats stay on screen */}
+				<Initials
+					className='max-sm:!h-[72px] max-sm:!w-[72px] max-sm:!text-[28px]'
+					name={user.username}
+					size={96}
+					src={isCurrentUser ? currentUser?.photo : user.photo}
+				/>
 
 				{isCurrentUser && (
 					<span className='absolute inset-0 flex items-center justify-center bg-black/55 text-[11px] text-white opacity-0 backdrop-blur-[2px] transition-opacity duration-200 group-hover:opacity-100'>

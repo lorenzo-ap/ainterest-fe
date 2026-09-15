@@ -94,7 +94,7 @@ export const CreatePostPage = () => {
 	};
 
 	return (
-		<div className='mx-auto flex min-h-[calc(100dvh-var(--header-h)-var(--tabbar-h))] w-full max-w-[1120px] flex-col px-5 pt-4 pb-8 sm:px-8 md:min-h-[calc(100dvh-var(--header-h))]'>
+		<div className='mx-auto flex min-h-[calc(100dvh-var(--header-total)-var(--tabbar-total))] w-full max-w-[1120px] flex-col px-5 pt-4 pb-8 sm:px-8 md:min-h-[calc(100dvh-var(--header-total))]'>
 			<div className='flex flex-1 flex-col items-center justify-center gap-4 py-2'>
 				<GenerationCanvas
 					compact={hasResult}

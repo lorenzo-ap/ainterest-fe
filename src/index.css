@@ -62,6 +62,13 @@
 	/* layout */
 	--header-h: 64px;
 	--tabbar-h: 64px;
+	/*
+	  The viewport is `viewport-fit=cover`, so the page runs under the status bar
+	  and the home indicator. Every fixed bar — and everything that has to clear
+	  one — measures itself against these, never against the bare bar height.
+	*/
+	--header-total: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+	--tabbar-total: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px));
 
 	color-scheme: light;
 }
@@ -794,15 +801,16 @@
 /* Toasts clear the mobile tab bar */
 @media (max-width: 767px) {
 	.mantine-Notifications-root {
-		bottom: calc(
-			var(--tabbar-h) +
-			env(safe-area-inset-bottom) +
-			12px
-		) !important;
+		bottom: calc(var(--tabbar-total) + 12px) !important;
 		left: 12px !important;
 		right: 12px !important;
 		width: auto !important;
 	}
+}
+
+/* Bottom sheets stop above the home indicator, never under it */
+.mantine-Drawer-content[data-position="bottom"] .mantine-Drawer-body {
+	padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
 }
 
 /* Avatars ------------------------------------------------------------- */

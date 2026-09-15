@@ -101,7 +101,8 @@ export const DiscoveryBar = (props: DiscoveryBarProps) => {
 				</div>
 
 				<Drawer
-					classNames={{ content: 'rounded-t-xl bg-surface', body: 'px-4 pb-8 pt-1' }}
+					/* `size='auto'` alone still leaves a full-height flex-basis — release that too */
+					classNames={{ content: 'rounded-t-xl bg-surface !h-auto !max-h-[85%] !flex-none', body: 'px-4 pb-8 pt-1' }}
 					onClose={closeSheet}
 					opened={sheetOpened}
 					position='bottom'

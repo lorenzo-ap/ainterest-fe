@@ -55,8 +55,10 @@ export const MobileTabBar = () => {
 	const isProfile = pathname.startsWith('/u/');
 	const isCreate = pathname === routes.create;
 
+	// The height carries the home-indicator inset too — with a bare `h-tabbar` the
+	// padding eats into the row instead of sitting below it.
 	return (
-		<nav className='frost-strong fixed right-0 bottom-0 left-0 z-40 h-tabbar border-line border-t pb-[env(safe-area-inset-bottom)] md:hidden'>
+		<nav className='frost-strong fixed right-0 bottom-0 left-0 z-40 h-[var(--tabbar-total)] border-line border-t pb-[env(safe-area-inset-bottom,0px)] md:hidden'>
 			<div className='flex h-tabbar items-center justify-around px-2'>
 				<Tab active={pathname === '/'} icon={<GridIcon size={21} />} label={t('nav.explore')} to='/' />
 

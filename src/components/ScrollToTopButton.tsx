@@ -19,7 +19,7 @@ export const ScrollToTopButton = () => {
 		<button
 			aria-hidden={!isVisible}
 			aria-label={t('components.scroll_to_top_button.title')}
-			className={`fixed right-4 bottom-[calc(var(--tabbar-h)+1rem+env(safe-area-inset-bottom))] z-30 flex h-10 w-10 items-center justify-center rounded-full border border-line bg-surface text-ink-2 shadow-pop transition-all duration-300 hover:text-ink md:bottom-6 ${
+			className={`fixed right-4 bottom-[calc(var(--tabbar-total)+1rem)] z-30 flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface text-ink-2 shadow-pop transition-all duration-300 hover:text-ink md:bottom-6 md:h-10 md:w-10 ${
 				isVisible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0'
 			}`}
 			onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}

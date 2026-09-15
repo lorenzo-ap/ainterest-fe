@@ -5,12 +5,12 @@ import { UserRole } from '../../../types';
 import { UserAvatar } from './UserAvatar';
 
 export const ProfileHeaderSkeleton = () => (
-	<header className='mx-auto max-w-gallery px-5 pt-12 pb-8 sm:px-8'>
-		<div className='flex items-center gap-5'>
-			<div className='h-[88px] w-[88px] rounded-full bg-inset' />
+	<header className='mx-auto max-w-gallery px-5 pt-7 pb-6 sm:px-8 sm:pt-12 sm:pb-8'>
+		<div className='flex items-center gap-4 sm:gap-5'>
+			<div className='h-[72px] w-[72px] rounded-full bg-inset sm:h-24 sm:w-24' />
 			<div className='space-y-3'>
-				<div className='h-8 w-48 rounded-md bg-inset' />
-				<div className='h-3 w-40 rounded-md bg-inset' />
+				<div className='h-8 w-40 rounded-md bg-inset sm:w-48' />
+				<div className='h-3 w-32 rounded-md bg-inset sm:w-40' />
 			</div>
 		</div>
 	</header>
@@ -36,13 +36,13 @@ export const ProfileHeader = ({ username }: ProfileHeaderProps) => {
 	}, [username]);
 
 	return (
-		<header className='mx-auto max-w-gallery px-5 pt-12 pb-8 sm:px-8'>
-			<div className='flex items-center gap-5'>
+		<header className='mx-auto max-w-gallery px-5 pt-7 pb-6 sm:px-8 sm:pt-12 sm:pb-8'>
+			<div className='flex items-center gap-4 sm:gap-5'>
 				<UserAvatar isCurrentUser={isCurrentUser} user={user} />
 
 				<div className='min-w-0'>
-					<div className='flex flex-wrap items-center gap-3'>
-						<h1 className='break-all font-display text-4xl text-ink sm:text-5xl'>{user.username}</h1>
+					<div className='flex flex-wrap items-center gap-x-3 gap-y-2'>
+						<h1 className='break-all font-display text-3xl text-ink sm:text-5xl'>{user.username}</h1>
 
 						{user.role === UserRole.ADMIN && (
 							<span className='rounded-full bg-brand-tint-strong px-2.5 py-1 font-mono text-[10px] text-brand uppercase tracking-widest'>

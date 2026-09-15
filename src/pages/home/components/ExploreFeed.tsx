@@ -47,7 +47,7 @@ export const ExploreFeed = () => {
 			<Hero />
 
 			<section className='mx-auto max-w-gallery px-5 pb-24 sm:px-8' id='feed'>
-				<div className='frost sticky top-header z-30 -mx-5 border-line border-b px-5 py-4 sm:-mx-8 sm:px-8'>
+				<div className='frost-strong sticky top-[var(--header-total)] z-30 -mx-5 border-line border-b px-5 py-4 sm:-mx-8 sm:px-8'>
 					<DiscoveryBar
 						count={filteredPosts.length}
 						filters={filters}
