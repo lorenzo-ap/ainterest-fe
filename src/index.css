@@ -690,6 +690,13 @@
 	box-shadow: var(--shadow-float);
 }
 
+/* A full-screen modal has no edge to draw — the hairline would only eat 2px of
+   viewport height and hand the overlay a scrollbar it doesn't need. */
+.mantine-Modal-content[data-full-screen] {
+	border: none;
+	box-shadow: none;
+}
+
 .mantine-Modal-header {
 	background-color: transparent;
 	padding-bottom: 0;

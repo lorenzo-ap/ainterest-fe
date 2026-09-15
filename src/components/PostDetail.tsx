@@ -128,7 +128,7 @@ export const PostDetail = ({ posts, index, onClose, onNavigate }: PostDetailProp
 
 	return (
 		<Modal
-			classNames={{ content: 'bg-bg-deep', body: 'h-dvh p-0' }}
+			classNames={{ content: 'bg-bg-deep', body: 'h-full p-0' }}
 			fullScreen
 			onClose={onClose}
 			opened={index !== null}
@@ -136,7 +136,7 @@ export const PostDetail = ({ posts, index, onClose, onNavigate }: PostDetailProp
 			transitionProps={{ transition: 'fade', duration: 180 }}
 			withCloseButton={false}
 		>
-			<div className='relative flex h-dvh flex-col overflow-hidden lg:flex-row'>
+			<div className='relative flex h-full flex-col overflow-hidden lg:flex-row'>
 				{/* the artwork itself lights the room */}
 				<img
 					alt=''
