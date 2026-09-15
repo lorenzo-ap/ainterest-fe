@@ -120,7 +120,7 @@ export const GenerationCanvas = (props: GenerationCanvasProps) => {
 			)}
 
 			{expanded && (
-				<div className='fixed inset-0 z-[200] flex animate-fade items-center justify-center bg-bg-deep/95 p-6 backdrop-blur-xl'>
+				<div className='fixed inset-0 z-[200] flex animate-fade items-center justify-center bg-bg-deep/95 p-6 pt-[calc(env(safe-area-inset-top,0px)+24px)] pb-[calc(env(safe-area-inset-bottom,0px)+24px)] backdrop-blur-xl'>
 					<button
 						aria-label={t('common.close')}
 						className='absolute inset-0 h-full w-full cursor-zoom-out'
@@ -128,9 +128,10 @@ export const GenerationCanvas = (props: GenerationCanvasProps) => {
 						type='button'
 					/>
 
+					{/* clear of the status bar — `top-5` alone puts it under the notch */}
 					<button
 						aria-label={t('common.close')}
-						className='icon-btn absolute top-5 right-5 h-10 w-10'
+						className='icon-btn absolute top-[calc(env(safe-area-inset-top,0px)+20px)] right-5 h-10 w-10'
 						onClick={() => setExpanded(false)}
 						type='button'
 					>
