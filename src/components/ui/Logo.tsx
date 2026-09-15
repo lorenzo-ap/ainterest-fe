@@ -13,7 +13,12 @@ export const Wordmark = ({ className = '' }: WordmarkProps) => (
 );
 
 export const Logo = ({ className = '' }: WordmarkProps) => (
-	<Link aria-label='AInterest' className={`transition-opacity duration-150 hover:opacity-70 ${className}`} to='/'>
+	<Link
+		aria-label='AInterest'
+		/* the wordmark is only 26px tall — the padding is what makes it a comfortable tap */
+		className={`-my-2 flex items-center py-2 transition-opacity duration-150 hover:opacity-70 ${className}`}
+		to='/'
+	>
 		<Wordmark />
 	</Link>
 );

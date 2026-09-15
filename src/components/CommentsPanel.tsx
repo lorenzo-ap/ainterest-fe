@@ -68,7 +68,7 @@ const CommentsList = ({ postId }: { postId: string }) => {
 						<div className='min-w-0 flex-1'>
 							<div className='flex items-baseline gap-2'>
 								<Link
-									className='font-medium text-[13px] text-ink hover:underline'
+									className='-my-1 py-1 font-medium text-[13px] text-ink hover:underline'
 									onMouseEnter={prefetchUserData}
 									to={routes.profile(comment.author.username)}
 								>
@@ -153,7 +153,7 @@ export const CommentsPanel = ({ postId, commentsCount }: CommentsPanelProps) => 
 
 						<button
 							aria-label={t('components.comments_modal.post')}
-							className='absolute top-1/2 right-1.5 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-brand text-white transition-opacity duration-150 disabled:opacity-30'
+							className='absolute top-1/2 right-1 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-brand text-white transition-opacity duration-150 disabled:opacity-30'
 							disabled={!text.trim() || isPending}
 							type='submit'
 						>

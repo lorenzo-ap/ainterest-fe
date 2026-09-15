@@ -263,7 +263,7 @@ export const PostDetail = ({ posts, index, onClose, onNavigate }: PostDetailProp
 							<div className='mb-2.5 flex items-center justify-between'>
 								<h3 className='eyebrow'>{t('components.post_detail.prompt')}</h3>
 								<button
-									className='flex items-center gap-1.5 text-[11px] text-ink-3 transition-colors hover:text-ink'
+									className='-my-2 flex items-center gap-1.5 py-2 text-[11px] text-ink-3 transition-colors hover:text-ink'
 									onClick={() => copyToClipboard(post.prompt, t('components.post_detail.prompt_copied'))}
 									type='button'
 								>

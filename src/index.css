@@ -645,6 +645,9 @@
 	border-radius: var(--r-lg);
 	padding: 6px;
 	box-shadow: var(--shadow-float);
+	/* a short viewport (a phone on its side) is shorter than this menu is tall */
+	max-height: calc(100dvh - var(--header-total) - 16px);
+	overflow-y: auto;
 }
 
 .mantine-Popover-arrow,
