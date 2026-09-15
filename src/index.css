@@ -185,7 +185,7 @@
 	}
 
 	/* a placeholder too long for a narrow field should trail off, not be sliced */
-	::placeholder {
+	input {
 		text-overflow: ellipsis;
 	}
 
