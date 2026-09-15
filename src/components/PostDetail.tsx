@@ -196,7 +196,7 @@ export const PostDetail = ({ posts, index, onClose, onNavigate }: PostDetailProp
 					</header>
 
 					<div className='flex shrink-0 flex-col lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:pt-14'>
-						<figure className='flex h-[52svh] shrink-0 items-center justify-center px-4 pb-6 lg:h-auto lg:min-h-0 lg:flex-1 lg:px-12 lg:pb-12'>
+						<figure className='flex h-[52svh] shrink-0 items-center justify-center px-5 pt-3 pb-7 lg:h-auto lg:min-h-0 lg:flex-1 lg:px-12 lg:pt-0 lg:pb-12'>
 							{/*
 						  Only the width is ever set, so the browser always derives the height from
 						  the artwork's own ratio — constraining the height too would clamp one axis

@@ -52,7 +52,7 @@ export const Notifications = () => {
 					  keeps its full height unless the basis is released too — and three
 					  notifications in a full-height sheet is mostly empty surface.
 					*/
-					classNames={{ content: 'rounded-t-xl bg-surface !h-auto !max-h-[85%] !flex-none', body: 'p-0' }}
+					classNames={{ content: 'rounded-t-xl bg-surface !h-auto !max-h-[85%] !w-full !flex-none', body: 'p-0' }}
 					onClose={close}
 					opened={opened}
 					padding={0}

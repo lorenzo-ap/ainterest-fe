@@ -46,11 +46,14 @@ export const GenerationCanvas = (props: GenerationCanvasProps) => {
 	return (
 		<>
 			<figure
-				className={`group relative aspect-square w-[min(100%,max(260px,var(--canvas-room)))] shrink-0 overflow-hidden rounded-lg border transition-all duration-500 ${
+				className={`group relative aspect-square w-[min(100%,max(var(--canvas-min),var(--canvas-room)))] shrink-0 overflow-hidden rounded-lg border transition-all duration-500 [--canvas-min:200px] sm:[--canvas-min:260px] ${
 					props.compact
 						? '[--canvas-room:calc(100dvh-560px)] md:[--canvas-room:calc(100dvh-480px)]'
-						: '[--canvas-room:calc(100dvh-430px)] md:[--canvas-room:calc(100dvh-330px)]'
-				} ${props.isImageMissing ? 'border-danger' : 'border-line'} ${hasImage ? 'bg-bg-deep' : 'bg-inset'}`}
+						: '[--canvas-room:calc(100dvh-500px)] sm:[--canvas-room:calc(100dvh-430px)] md:[--canvas-room:calc(100dvh-330px)]'
+				} ${props.isImageMissing ? 'border-danger' : 'border-line'} ${
+					/* a phone shows this small, where the neutral fill just read as an empty slab */
+					hasImage ? 'bg-bg-deep' : 'bg-inset max-sm:bg-brand-tint'
+				}`}
 			>
 				{/* idle: a quiet, breathing field of brand light */}
 				{!(hasImage || props.isGenerating) && (
@@ -59,9 +62,11 @@ export const GenerationCanvas = (props: GenerationCanvasProps) => {
 							className='absolute top-1/2 left-1/2 h-3/5 w-3/5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/45 blur-[70px] dark:bg-brand/60'
 							style={{ animation: 'ai-breathe 6s ease-in-out infinite' }}
 						/>
-						<figcaption className='absolute inset-0 flex flex-col items-center justify-center gap-2 px-8 text-center'>
+						<figcaption className='absolute inset-0 flex flex-col items-center justify-center gap-1.5 px-6 text-center sm:gap-2 sm:px-8'>
 							<span className='eyebrow'>{t('pages.generate_image.canvas.empty_label')}</span>
-							<span className='max-w-xs text-[14px] text-ink-3'>{t('pages.generate_image.canvas.empty_hint')}</span>
+							<span className='max-w-xs text-[13px] text-ink-3 max-sm:text-ink-2 sm:text-[14px]'>
+								{t('pages.generate_image.canvas.empty_hint')}
+							</span>
 						</figcaption>
 					</>
 				)}

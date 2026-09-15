@@ -41,19 +41,20 @@ export const PromptComposer = (props: PromptComposerProps) => {
 					{t('pages.generate_image.prompt')}
 				</label>
 
+				{/* two rows on a phone — three left a dead field under the placeholder */}
 				<textarea
-					className='w-full resize-none bg-transparent px-4 pt-3.5 pb-2 text-[16px] text-ink leading-relaxed outline-none placeholder:text-ink-3 sm:text-[17px]'
+					className='w-full resize-none bg-transparent px-3.5 pt-3 pb-1.5 text-[16px] text-ink leading-relaxed outline-none placeholder:text-ink-3 sm:min-h-[5.75rem] sm:px-4 sm:pt-3.5 sm:pb-2 sm:text-[17px]'
 					disabled={props.isGenerating}
 					id='prompt'
 					maxLength={props.maxLength}
 					onChange={(event) => props.onPromptChange(event.target.value)}
 					onKeyDown={handleKeyDown}
 					placeholder={t('pages.generate_image.prompt_example')}
-					rows={3}
+					rows={2}
 					value={props.prompt}
 				/>
 
-				<div className='flex flex-wrap items-center gap-2 px-2 pt-1 pb-1'>
+				<div className='flex flex-wrap items-center gap-2 px-1.5 pt-1 pb-1 sm:px-2'>
 					<button className='pill h-9' disabled={props.isGenerating} onClick={props.onSurpriseMe} type='button'>
 						<ShuffleIcon size={15} />
 						{t('pages.generate_image.surprise_me')}

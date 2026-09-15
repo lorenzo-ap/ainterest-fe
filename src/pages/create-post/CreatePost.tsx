@@ -95,7 +95,9 @@ export const CreatePostPage = () => {
 
 	return (
 		<div className='mx-auto flex min-h-[calc(100dvh-var(--header-total)-var(--tabbar-total))] w-full max-w-[1120px] flex-col px-5 pt-4 pb-8 sm:px-8 md:min-h-[calc(100dvh-var(--header-total))]'>
-			<div className='flex flex-1 flex-col items-center justify-center gap-4 py-2'>
+			{/* phone: canvas near the top, composer anchored at the bottom. Centring it
+			    instead left the artwork floating in the middle of two voids. */}
+			<div className='flex flex-1 flex-col items-center justify-start gap-4 py-2 sm:justify-center'>
 				<GenerationCanvas
 					compact={hasResult}
 					image={generated.photo}

@@ -157,6 +157,21 @@
 		-webkit-tap-highlight-color: transparent;
 	}
 
+	/*
+	  iOS zooms the page in whenever a focused field is under 16px, and it ignores
+	  `user-scalable=no`, so the only way to stop it is to not be under 16px. The
+	  utilities that set 14px are single-class, so `[class]` is enough to outrank
+	  them without reaching for !important. Phone width only — the smaller type is
+	  deliberate from `sm` up, where nothing zooms.
+	*/
+	@media (max-width: 639px) {
+		input[class],
+		textarea[class],
+		select[class] {
+			font-size: 16px;
+		}
+	}
+
 	body {
 		background-color: var(--bg);
 		color: var(--ink);
@@ -167,6 +182,11 @@
 
 	::selection {
 		background: var(--brand-tint-strong);
+	}
+
+	/* a placeholder too long for a narrow field should trail off, not be sliced */
+	::placeholder {
+		text-overflow: ellipsis;
 	}
 
 	h1,

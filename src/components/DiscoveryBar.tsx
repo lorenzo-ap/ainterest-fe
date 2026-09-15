@@ -101,8 +101,15 @@ export const DiscoveryBar = (props: DiscoveryBarProps) => {
 				</div>
 
 				<Drawer
-					/* `size='auto'` alone still leaves a full-height flex-basis — release that too */
-					classNames={{ content: 'rounded-t-xl bg-surface !h-auto !max-h-[85%] !flex-none', body: 'px-4 pb-8 pt-1' }}
+					/*
+					  A bottom drawer sits in a row flex, so its flex-basis is the WIDTH.
+					  Releasing it to hug the content vertically costs the full width, which
+					  `w-full` has to give back explicitly.
+					*/
+					classNames={{
+						content: 'rounded-t-xl bg-surface !h-auto !max-h-[85%] !w-full !flex-none',
+						body: 'px-4 pb-8 pt-1'
+					}}
 					onClose={closeSheet}
 					opened={sheetOpened}
 					position='bottom'
